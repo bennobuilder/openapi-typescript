@@ -1,5 +1,111 @@
 # openapi-react-query
 
+## 0.5.4
+
+### Patch Changes
+
+- Updated dependencies [[`9350ddf`](https://github.com/openapi-ts/openapi-typescript/commit/9350ddfcd44b661a5288667ebfcf298868dd9784), [`a690e52`](https://github.com/openapi-ts/openapi-typescript/commit/a690e526b7693479bc2f2f002d71a020fa5e4e16)]:
+  - openapi-fetch@0.17.0
+  - openapi-typescript-helpers@0.1.0
+
+## 0.5.3
+
+### Patch Changes
+
+- Updated dependencies [[`9002418`](https://github.com/openapi-ts/openapi-typescript/commit/90024185c7a251b5dbedd148e4eb5d15b95409c8)]:
+  - openapi-fetch@0.16.0
+
+## 0.5.2
+
+### Patch Changes
+
+- [#2519](https://github.com/openapi-ts/openapi-typescript/pull/2519) [`681ac87`](https://github.com/openapi-ts/openapi-typescript/commit/681ac876c4c5c20ad27c43b0960aabdbc247c59a) Thanks [@sacha-c](https://github.com/sacha-c)! - fixes mutation results type
+
+## 0.5.1
+
+### Patch Changes
+
+- Updated dependencies [[`8f96eb5`](https://github.com/openapi-ts/openapi-typescript/commit/8f96eb50f5ec060e2e9100e9a43d3fe98e9795c5)]:
+  - openapi-fetch@0.15.0
+
+## 0.5.0
+
+### Minor Changes
+
+- [#2310](https://github.com/openapi-ts/openapi-typescript/pull/2310) [`e66b5ce`](https://github.com/openapi-ts/openapi-typescript/commit/e66b5ce63bfcdc57c6ee942e5ed4e7667e64c290) Thanks [@drwpow](https://github.com/drwpow)! - Build package with unbuild to improve CJS support
+
+### Patch Changes
+
+- Updated dependencies [[`e66b5ce`](https://github.com/openapi-ts/openapi-typescript/commit/e66b5ce63bfcdc57c6ee942e5ed4e7667e64c290)]:
+  - openapi-fetch@0.14.0
+
+## 0.4.2
+
+### Patch Changes
+
+- [#2235](https://github.com/openapi-ts/openapi-typescript/pull/2235) [`694522a`](https://github.com/openapi-ts/openapi-typescript/commit/694522a7ccf90767e9de29c786794f8ddcbc08bd) Thanks [@wheelebin](https://github.com/wheelebin)! - React query handle 204 or zero content length
+- Updated dependencies [[`81c031d`](https://github.com/openapi-ts/openapi-typescript/commit/81c031da8584ed49b033ebfc67bbb3e1ca258699)]:
+  - openapi-fetch@0.13.8
+
+## 0.4.1
+
+### Patch Changes
+
+- Updated dependencies [[`30c6da8`](https://github.com/openapi-ts/openapi-typescript/commit/30c6da800a00bda87da66dea6d04807e1379f06a)]:
+  - openapi-fetch@0.13.7
+
+## 0.4.0
+
+### Minor Changes
+
+- [#2169](https://github.com/openapi-ts/openapi-typescript/pull/2169) [`a76801c`](https://github.com/openapi-ts/openapi-typescript/commit/a76801cdc04fe9d2c28756a050861c6e673aa325) Thanks [@awmichel](https://github.com/awmichel)! - [#2169](https://github.com/openapi-ts/openapi-typescript/pull/2169): Infer returned `data` type from `select` option when used with the `useInfiniteQuery` method.
+
+## 0.3.2
+
+### Patch Changes
+
+- Updated dependencies [[`4966560`](https://github.com/openapi-ts/openapi-typescript/commit/4966560790ad49fabb06d718115a82a779a5b74a)]:
+  - openapi-fetch@0.13.6
+
+## 0.3.1
+
+### Patch Changes
+
+- Updated dependencies [[`ebe56f3`](https://github.com/openapi-ts/openapi-typescript/commit/ebe56f337561bfdd1bf1abdc56ba3d2f48c4d393)]:
+  - openapi-fetch@0.13.5
+
+## 0.3.0
+
+### Minor Changes
+
+- [#1881](https://github.com/openapi-ts/openapi-typescript/pull/1881) [`ccbc2e3`](https://github.com/openapi-ts/openapi-typescript/commit/ccbc2e3f68ced4d3038b9003064fe449925b55dc), [#2117](https://github.com/openapi-ts/openapi-typescript/pull/2117) [`3ef38b8`](https://github.com/openapi-ts/openapi-typescript/commit/3ef38b8b9371bc2a2ade202a6dc864b765446305) Thanks [@jungwoo3490](https://github.com/jungwoo3490), [@lukasedw](https://github.com/lukasedw)! - Implements useInfiniteQuery() in openapi-react-query
+
+### Patch Changes
+
+- [#2120](https://github.com/openapi-ts/openapi-typescript/pull/2120) [`efea325`](https://github.com/openapi-ts/openapi-typescript/commit/efea32521ffa1557547a0000051cc73157be5a61) Thanks [@drwpow](https://github.com/drwpow)! - Fix minor type error with latest version of TanStack Query
+
+- [#2061](https://github.com/openapi-ts/openapi-typescript/pull/2061) [`6871e73`](https://github.com/openapi-ts/openapi-typescript/commit/6871e73b4c004560ba514d19c0f1f948ba63f5c8) Thanks [@kevmo314](https://github.com/kevmo314)! - Drop init argument when not needed in query key
+
+- [#2114](https://github.com/openapi-ts/openapi-typescript/pull/2114) [`0c35b32`](https://github.com/openapi-ts/openapi-typescript/commit/0c35b321778afe0705d7fd7a8375c4e10d5f95c2) Thanks [@kerwanp](https://github.com/kerwanp)! - [#2098](https://github.com/openapi-ts/openapi-typescript/pull/2098): Fix CJS type issues by pointing to proper d.ts file
+
+- [#1945](https://github.com/openapi-ts/openapi-typescript/pull/1945) [`248195d`](https://github.com/openapi-ts/openapi-typescript/commit/248195df11f186e379005d487ad9113c3bdd32a9) Thanks [@freshgiammi](https://github.com/freshgiammi)! - Add MethodResponse to get the return type of an endpoint from an `OpenapiQueryClient` client.
+
+- Updated dependencies []:
+  - openapi-fetch@0.13.4
+
+## 0.2.10
+
+### Patch Changes
+
+- [#2105](https://github.com/openapi-ts/openapi-typescript/pull/2105) [`af0e72f`](https://github.com/openapi-ts/openapi-typescript/commit/af0e72f16f1515f2953a719d7f58c76ec27637ea) Thanks [@HagenMorano](https://github.com/HagenMorano)! - [#1845](https://github.com/openapi-ts/openapi-typescript/pull/2105): The return value of the `select` property is now considered when inferring the `data` type.
+
+## 0.2.9
+
+### Patch Changes
+
+- Updated dependencies [[`5935cd2`](https://github.com/openapi-ts/openapi-typescript/commit/5935cd25a05d3ec1f4c8bf222d65395a0b9ae5b4)]:
+  - openapi-fetch@0.13.4
+
 ## 0.2.8
 
 ### Patch Changes

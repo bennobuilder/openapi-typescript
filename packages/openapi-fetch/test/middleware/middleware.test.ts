@@ -194,16 +194,33 @@ test("executes in expected order", async () => {
         return request;
       },
       onResponse({ response }) {
-        response.headers.set("step", "C");
-        return response;
+        const headers = new Headers(response.headers);
+        headers.set("step", "C");
+        if (response.headers.get("step") === "D") {
+          return new Response(response.body, { ...response, headers });
+        }
       },
     },
   );
 
-  const { response } = await client.GET("/posts/{id}", { params: { path: { id: 123 } } });
+  const { response } = await client.GET("/posts/{id}", {
+    params: { path: { id: 123 } },
+    middleware: [
+      {
+        onRequest({ request }) {
+          request.headers.set("step", "D");
+          return request;
+        },
+        onResponse({ response }) {
+          response.headers.set("step", "D");
+          return response;
+        },
+      },
+    ],
+  });
 
   // assert requests ended up on step C (array order)
-  expect(actualRequest.headers.get("step")).toBe("C");
+  expect(actualRequest.headers.get("step")).toBe("D");
 
   // assert responses ended up on step A (reverse order)
   expect(response.headers.get("step")).toBe("A");
@@ -404,7 +421,7 @@ test("baseUrl can be overridden", async () => {
 });
 
 test("auth header", async () => {
-  let accessToken: string | undefined = undefined;
+  let accessToken: string | undefined;
   const authMiddleware: Middleware = {
     async onRequest({ request }) {
       if (accessToken) {
@@ -442,4 +459,86 @@ test("type error occurs only when neither onRequest nor onResponse is specified"
   assertType<Middleware>({ onRequest });
   assertType<Middleware>({ onResponse });
   assertType<Middleware>({ onRequest, onResponse });
+});
+
+test("can return response directly from onRequest", async () => {
+  const customResponse = Response.json({});
+
+  const client = createObservedClient<paths>({}, () => {
+    throw new Error("unexpected call to fetch");
+  });
+
+  client.use({
+    async onRequest() {
+      return customResponse;
+    },
+  });
+
+  const { response } = await client.GET("/posts/{id}", {
+    params: { path: { id: 123 } },
+  });
+
+  expect(response).toBe(customResponse);
+});
+
+test("skips subsequent onRequest handlers when response is returned", async () => {
+  let onRequestCalled = false;
+  const client = createObservedClient<paths>();
+
+  client.use(
+    {
+      async onRequest() {
+        return Response.json({});
+      },
+    },
+    {
+      async onRequest() {
+        onRequestCalled = true;
+        return undefined;
+      },
+    },
+  );
+
+  await client.GET("/posts/{id}", { params: { path: { id: 123 } } });
+
+  expect(onRequestCalled).toBe(false);
+});
+
+test("skips onResponse handlers when response is returned from onRequest", async () => {
+  let onResponseCalled = false;
+  const client = createObservedClient<paths>();
+
+  client.use({
+    async onRequest() {
+      return Response.json({});
+    },
+    async onResponse() {
+      onResponseCalled = true;
+      return undefined;
+    },
+  });
+
+  await client.GET("/posts/{id}", { params: { path: { id: 123 } } });
+
+  expect(onResponseCalled).toBe(false);
+});
+
+test("add middleware at the request level", async () => {
+  const customResponse = Response.json({});
+  const client = createObservedClient<paths>({}, async () => {
+    throw new Error("unexpected call to fetch");
+  });
+
+  const { response } = await client.GET("/posts/{id}", {
+    params: { path: { id: 123 } },
+    middleware: [
+      {
+        async onRequest() {
+          return customResponse;
+        },
+      },
+    ],
+  });
+
+  expect(response).toBe(customResponse);
 });

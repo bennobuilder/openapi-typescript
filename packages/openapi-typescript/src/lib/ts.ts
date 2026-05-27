@@ -1,5 +1,7 @@
+import type { OasRef, Referenced } from "@redocly/openapi-core";
 import { parseRef } from "@redocly/openapi-core/lib/ref-utils.js";
 import ts, { type LiteralTypeNode, type TypeLiteralNode } from "typescript";
+import type { ParameterObject } from "../types.js";
 
 export const JS_PROPERTY_INDEX_RE = /^[A-Za-z_$][A-Za-z_$0-9]*$/;
 export const JS_ENUM_INVALID_CHARS_RE = /[^A-Za-z_$0-9]+(.)?/g;
@@ -30,6 +32,7 @@ export interface AnnotatedSchemaObject {
   description?: string; // jsdoc with value
   enum?: unknown[]; // jsdoc without value
   example?: string; // jsdoc with value
+  examples?: unknown;
   format?: string; // not jsdoc
   nullable?: boolean; // Node information
   summary?: string; // not jsdoc
@@ -50,10 +53,10 @@ export function addJSDocComment(schemaObject: AnnotatedSchemaObject, node: ts.Pr
 
   // Not JSDoc tags: [title, format]
   if (schemaObject.title) {
-    output.push(schemaObject.title.replace(LB_RE, "\n *     "));
+    output.push(schemaObject.title.trim().replace(LB_RE, "\n *     "));
   }
   if (schemaObject.summary) {
-    output.push(schemaObject.summary.replace(LB_RE, "\n *     "));
+    output.push(schemaObject.summary.trim().replace(LB_RE, "\n *     "));
   }
   if (schemaObject.format) {
     output.push(`Format: ${schemaObject.format}`);
@@ -77,7 +80,14 @@ export function addJSDocComment(schemaObject: AnnotatedSchemaObject, node: ts.Pr
     }
     const serialized =
       typeof schemaObject[field] === "object" ? JSON.stringify(schemaObject[field], null, 2) : schemaObject[field];
-    output.push(`@${field} ${String(serialized).replace(LB_RE, "\n *     ")}`);
+    output.push(`@${field} ${String(serialized).trim().replace(LB_RE, "\n *     ")}`);
+  }
+
+  if (Array.isArray(schemaObject.examples)) {
+    for (const example of schemaObject.examples) {
+      const serialized = typeof example === "object" ? JSON.stringify(example, null, 2) : example;
+      output.push(`@example ${String(serialized).trim().replace(LB_RE, "\n *     ")}`);
+    }
   }
 
   // JSDoc 'Constant' without value
@@ -99,11 +109,11 @@ export function addJSDocComment(schemaObject: AnnotatedSchemaObject, node: ts.Pr
   // attach comment if it has content
 
   if (output.length) {
+    // Check if any output item contains multi-line content (has internal line breaks)
+    const hasMultiLineContent = output.some((item) => item.includes("\n"));
+
     let text =
-      output.length === 1
-        ? `* ${output.join("\n")} `
-        : `*
- * ${output.join("\n * ")}\n `;
+      output.length === 1 && !hasMultiLineContent ? `* ${output.join("\n")} ` : `*\n * ${output.join("\n * ")}\n `;
     text = text.replace(COMMENT_RE, "*\\/"); // prevent inner comments from leaking
 
     ts.addSyntheticLeadingComment(
@@ -115,33 +125,118 @@ export function addJSDocComment(schemaObject: AnnotatedSchemaObject, node: ts.Pr
   }
 }
 
-/** Convert OpenAPI ref into TS indexed access node (ex: `components["schemas"]["Foo"]`) */
-export function oapiRef(path: string): ts.TypeNode {
+function isOasRef<T>(obj: Referenced<T>): obj is OasRef {
+  return Boolean((obj as OasRef).$ref);
+}
+type OapiRefResolved = Referenced<ParameterObject>;
+
+function isParameterObject(obj: OapiRefResolved | undefined): obj is ParameterObject {
+  return Boolean(obj && !isOasRef(obj) && obj.in);
+}
+
+function addIndexedAccess(node: ts.TypeNode, ...segments: readonly string[]) {
+  return segments.reduce<ts.TypeNode>((acc, segment) => {
+    return ts.factory.createIndexedAccessTypeNode(
+      acc,
+      ts.factory.createLiteralTypeNode(
+        typeof segment === "number"
+          ? ts.factory.createNumericLiteral(segment)
+          : ts.factory.createStringLiteral(segment),
+      ),
+    );
+  }, node);
+}
+
+/**
+ * Wrap a type with Extract<T, { propertyName: unknown }> to narrow a union type
+ * before accessing a property that only exists on some variants.
+ */
+function wrapWithExtract(type: ts.TypeNode, propertyName: string): ts.TypeNode {
+  return ts.factory.createTypeReferenceNode(ts.factory.createIdentifier("Extract"), [
+    type,
+    ts.factory.createTypeLiteralNode([
+      ts.factory.createPropertySignature(
+        /* modifiers     */ undefined,
+        /* name          */ ts.factory.createIdentifier(propertyName),
+        /* questionToken */ undefined,
+        /* type          */ ts.factory.createKeywordTypeNode(ts.SyntaxKind.UnknownKeyword),
+      ),
+    ]),
+  ]);
+}
+
+export interface OapiRefOptions {
+  /** Whether to wrap with FlattenedDeepRequired<> (default: false) */
+  deep?: boolean;
+  /** Array of property names to wrap with Extract<> when accessing */
+  extractProperties?: string[];
+}
+
+/**
+ * Convert OpenAPI ref into TS indexed access node (ex: `components["schemas"]["Foo"]`)
+ * `path` is a JSON Pointer to a location within an OpenAPI document.
+ * Transform it into a TypeScript type reference into the generated types.
+ *
+ * In most cases the structures of the openapi-typescript generated types and the
+ * JSON Pointer paths into the OpenAPI document are the same. However, in some cases
+ * special transformations are necessary to account for the ways they differ.
+ *   * Object schemas
+ *       $refs into the `properties` of object schemas are valid, but openapi-typescript
+ *       flattens these objects, so we omit  so the index into the schema skips ["properties"]
+ *   * Parameters
+ *       $refs into the `parameters` of paths are valid, but openapi-ts represents
+ *       them according to their type; path, query, header, etc… so in these cases we
+ *       must check the parameter definition to determine the how to index into
+ *       the openapi-typescript type.
+ *   * Union variant properties (oneOf/anyOf)
+ *       When accessing properties that may only exist on some variants of a union type,
+ *       we use Extract<> to narrow the type before each property access.
+ **/
+export function oapiRef(path: string, resolved?: OapiRefResolved, options: OapiRefOptions = {}): ts.TypeNode {
   const { pointer } = parseRef(path);
   if (pointer.length === 0) {
     throw new Error(`Error parsing $ref: ${path}. Is this a valid $ref?`);
   }
-  let t: ts.TypeReferenceNode | ts.IndexedAccessTypeNode = ts.factory.createTypeReferenceNode(
-    ts.factory.createIdentifier(String(pointer[0])),
+
+  const parametersObject = isParameterObject(resolved);
+  const extractSet = new Set(options.extractProperties ?? []);
+
+  // Initial segments are handled in a fixed , then remaining segments are treated
+  // according to heuristics based on the initial segments
+  const initialSegment = pointer[0];
+  const leadingSegments = pointer.slice(1, 3);
+  const restSegments = pointer.slice(3);
+
+  const leadingType = addIndexedAccess(
+    ts.factory.createTypeReferenceNode(
+      ts.factory.createIdentifier(
+        options.deep ? `FlattenedDeepRequired<${String(initialSegment)}>` : String(initialSegment),
+      ),
+    ),
+    ...leadingSegments,
   );
-  if (pointer.length > 1) {
-    for (let i = 1; i < pointer.length; i++) {
-      // Skip `properties` items when in the middle of the pointer
-      // See: https://github.com/openapi-ts/openapi-typescript/issues/1742
-      if (i > 2 && i < pointer.length - 1 && pointer[i] === "properties") {
-        continue;
-      }
-      t = ts.factory.createIndexedAccessTypeNode(
-        t,
-        ts.factory.createLiteralTypeNode(
-          typeof pointer[i] === "number"
-            ? ts.factory.createNumericLiteral(pointer[i])
-            : ts.factory.createStringLiteral(pointer[i] as string),
-        ),
-      );
+
+  return restSegments.reduce<ts.TypeNode>((acc, segment, index, original) => {
+    // Skip `properties` items when in the middle of the pointer
+    // See: https://github.com/openapi-ts/openapi-typescript/issues/1742
+    if (segment === "properties") {
+      return acc;
     }
-  }
-  return t;
+
+    if (parametersObject && index === original.length - 1) {
+      return addIndexedAccess(acc, resolved.in, resolved.name);
+    }
+
+    // If this segment is in the extractProperties list,
+    // wrap the current type with Extract<T, { segment: unknown }> before accessing.
+    // This narrows union types to variants that have this property.
+    if (extractSet.has(segment)) {
+      const narrowedType = wrapWithExtract(acc, segment);
+      return addIndexedAccess(narrowedType, segment);
+    }
+
+    return addIndexedAccess(acc, segment);
+  }, leadingType);
 }
 
 export interface AstToStringOptions {
@@ -214,7 +309,7 @@ export const enumCache = new Map<string, ts.EnumDeclaration>();
 export function tsEnum(
   name: string,
   members: (string | number)[],
-  metadata?: { name?: string; description?: string }[],
+  metadata?: { name?: string; description?: string | null }[],
   options?: { export?: boolean; shouldCache?: boolean },
 ) {
   let enumName = sanitizeMemberName(name);
@@ -250,6 +345,18 @@ export function tsArrayLiteralExpression(
 ) {
   let variableName = sanitizeMemberName(name);
   variableName = `${variableName[0].toLowerCase()}${variableName.substring(1)}`;
+
+  if (
+    options?.injectFooter &&
+    !options.injectFooter.some(
+      (node) => ts.isTypeAliasDeclaration(node) && node?.name?.escapedText === "FlattenedDeepRequired",
+    )
+  ) {
+    const helper = stringToAST(
+      "type FlattenedDeepRequired<T> = { [K in keyof T]-?: FlattenedDeepRequired<T[K] extends unknown[] | undefined | null ? Extract<T[K], unknown[]>[number] : T[K]>; };",
+    )[0] as any;
+    options.injectFooter.push(helper);
+  }
 
   const arrayType = options?.readonly
     ? tsReadonlyArray(elementType, options.injectFooter)
@@ -298,7 +405,7 @@ function sanitizeMemberName(name: string) {
 }
 
 /** Sanitize TS enum member expression */
-export function tsEnumMember(value: string | number, metadata: { name?: string; description?: string } = {}) {
+export function tsEnumMember(value: string | number, metadata: { name?: string; description?: string | null } = {}) {
   let name = metadata.name ?? String(value);
   if (!JS_PROPERTY_INDEX_RE.test(name)) {
     if (Number(name[0]) >= 0) {
@@ -334,16 +441,12 @@ export function tsEnumMember(value: string | number, metadata: { name?: string; 
     member = ts.factory.createEnumMember(name, ts.factory.createStringLiteral(value));
   }
 
-  if (metadata.description === undefined) {
+  const trimmedDescription = metadata.description?.trim();
+  if (trimmedDescription === undefined || trimmedDescription === null || trimmedDescription === "") {
     return member;
   }
 
-  return ts.addSyntheticLeadingComment(
-    member,
-    ts.SyntaxKind.SingleLineCommentTrivia,
-    " ".concat(metadata.description.trim()),
-    true,
-  );
+  return ts.addSyntheticLeadingComment(member, ts.SyntaxKind.SingleLineCommentTrivia, ` ${trimmedDescription}`, true);
 }
 
 /** Create an intersection type */
@@ -419,10 +522,7 @@ export function tsLiteral(value: unknown): ts.TypeNode {
 }
 
 /** Modifiers (readonly) */
-export function tsModifiers(modifiers: {
-  readonly?: boolean;
-  export?: boolean;
-}): ts.Modifier[] {
+export function tsModifiers(modifiers: { readonly?: boolean; export?: boolean }): ts.Modifier[] {
   const typeMods: ts.Modifier[] = [];
   if (modifiers.export) {
     typeMods.push(ts.factory.createModifier(ts.SyntaxKind.ExportKeyword));
@@ -508,7 +608,7 @@ export function tsReadonlyArray(type: ts.TypeNode, injectFooter?: ts.Node[]): ts
     !injectFooter.some((node) => ts.isTypeAliasDeclaration(node) && node?.name?.escapedText === "ReadonlyArray")
   ) {
     const helper = stringToAST(
-      "type ReadonlyArray<T> = [Exclude<T, undefined>] extends [any[]] ? Readonly<Exclude<T, undefined>> : Readonly<Exclude<T, undefined>[]>;",
+      "type ReadonlyArray<T> = [Exclude<T, undefined>] extends [unknown[]] ? Readonly<Exclude<T, undefined>> : Readonly<Exclude<T, undefined>[]>;",
     )[0] as any;
     injectFooter.push(helper);
   }

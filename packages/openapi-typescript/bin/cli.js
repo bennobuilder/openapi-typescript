@@ -1,11 +1,12 @@
 #!/usr/bin/env node
 
-import { createConfig, findConfig, loadConfig } from "@redocly/openapi-core";
 import fs from "node:fs";
 import path from "node:path";
 import { performance } from "node:perf_hooks";
+import { createConfig, findConfig, loadConfig } from "@redocly/openapi-core";
+import { kebabCase } from "scule";
 import parser from "yargs-parser";
-import openapiTS, { COMMENT_HEADER, astToString, c, error, formatTime, warn } from "../dist/index.js";
+import openapiTS, { astToString, COMMENT_HEADER, c, error, formatTime, warn } from "../dist/index.mjs";
 
 const HELP = `Usage
   $ openapi-typescript [input] [options]
@@ -17,6 +18,7 @@ Options
   --output, -o               Specify output file (if not specified in redocly.yaml)
   --enum                     Export true TS enums instead of unions
   --enum-values              Export enum values as arrays
+  --conditional-enums        Only generate true TS enums when enum metadata is available (default: false)
   --dedupe-enums             Dedupe enum types when \`--enum=true\` is set
   --check                    Check that the generated types are up-to-date. (default: false)
   --export-type, -t          Export top-level \`type\` instead of \`interface\`
@@ -30,10 +32,12 @@ Options
   --path-params-as-types     Convert paths to template literal types
   --alphabetize              Sort object keys alphabetically
   --exclude-deprecated       Exclude deprecated types
-  --root-types (optional)    Export schemas types at root level
-  --root-types-no-schema-prefix (optional)
+  --root-types               Export schemas types at root level
+  --root-types-no-schema-prefix
                              Do not add "Schema" prefix to types at the root level (should only be used with --root-types)
+  --root-types-keep-casing   Keep casing of root types (should only be used with --root-types)
   --make-paths-enum          Generate ApiPaths enum for all paths
+  --read-write-markers       Generate $Read/$Write markers for readOnly/writeOnly properties
 `;
 
 const OUTPUT_FILE = "FILE";
@@ -60,31 +64,42 @@ if (args.includes("--redoc")) {
   errorAndExit(`The --redoc config flag has been renamed to "--redocly" (or -c as shorthand).`);
 }
 if (args.includes("--root-types-no-schema-prefix") && !args.includes("--root-types")) {
+  // biome-ignore lint/suspicious/noConsole: this is a CLI
   console.warn("--root-types-no-schema-prefix has no effect without --root-types flag");
 }
+if (args.includes("--root-types-keep-casing") && !args.includes("--root-types")) {
+  // biome-ignore lint/suspicious/noConsole: this is a CLI
+  console.warn("--root-types-keep-casing has no effect without --root-types flag");
+}
+
+const BOOLEAN_FLAGS = [
+  "additionalProperties",
+  "alphabetize",
+  "arrayLength",
+  "check",
+  "conditionalEnums",
+  "contentNever",
+  "dedupeEnums",
+  "defaultNonNullable",
+  "emptyObjectsUnknown",
+  "enum",
+  "enumValues",
+  "excludeDeprecated",
+  "exportType",
+  "generatePathParams",
+  "help",
+  "immutable",
+  "makePathsEnum",
+  "pathParamsAsTypes",
+  "propertiesRequiredByDefault",
+  "readWriteMarkers",
+  "rootTypes",
+  "rootTypesKeepCasing",
+  "rootTypesNoSchemaPrefix",
+];
 
 const flags = parser(args, {
-  boolean: [
-    "additionalProperties",
-    "alphabetize",
-    "arrayLength",
-    "contentNever",
-    "defaultNonNullable",
-    "propertiesRequiredByDefault",
-    "emptyObjectsUnknown",
-    "enum",
-    "enumValues",
-    "dedupeEnums",
-    "check",
-    "excludeDeprecated",
-    "exportType",
-    "help",
-    "immutable",
-    "pathParamsAsTypes",
-    "rootTypes",
-    "rootTypesNoSchemaPrefix",
-    "makePathsEnum",
-  ],
+  boolean: BOOLEAN_FLAGS,
   string: ["output", "redocly"],
   alias: {
     redocly: ["c"],
@@ -124,32 +139,10 @@ function checkStaleOutput(current, outputPath) {
 
 /**
  * @param {string | URL} schema
- * @param {@type import('@redocly/openapi-core').Config} redocly
+ * @param {@type import('@redocly/openapi-core').Config} config
  */
-async function generateSchema(schema, { redocly, silent = false }) {
-  return `${COMMENT_HEADER}${astToString(
-    await openapiTS(schema, {
-      additionalProperties: flags.additionalProperties,
-      alphabetize: flags.alphabetize,
-      arrayLength: flags.arrayLength,
-      contentNever: flags.contentNever,
-      propertiesRequiredByDefault: flags.propertiesRequiredByDefault,
-      defaultNonNullable: flags.defaultNonNullable,
-      emptyObjectsUnknown: flags.emptyObjectsUnknown,
-      enum: flags.enum,
-      enumValues: flags.enumValues,
-      dedupeEnums: flags.dedupeEnums,
-      excludeDeprecated: flags.excludeDeprecated,
-      exportType: flags.exportType,
-      immutable: flags.immutable,
-      pathParamsAsTypes: flags.pathParamsAsTypes,
-      rootTypes: flags.rootTypes,
-      rootTypesNoSchemaPrefix: flags.rootTypesNoSchemaPrefix,
-      makePathsEnum: flags.makePathsEnum,
-      redocly,
-      silent,
-    }),
-  )}`;
+async function generateSchema(schema, config) {
+  return `${COMMENT_HEADER}${astToString(await openapiTS(schema, config))}`;
 }
 
 /** pretty-format error message but also throw */
@@ -160,32 +153,49 @@ function errorAndExit(message) {
 
 function done(input, output, time) {
   // final console output
-  // biome-ignore lint/suspicious/noConsoleLog: this is a CLI and is expected to show output
+  // biome-ignore lint/suspicious/noConsole: this is a CLI
   console.log(`🚀 ${c.green(`${input} → ${c.bold(output)}`)} ${c.dim(`[${formatTime(time)}]`)}`);
+}
+
+function findRedocConfigPath() {
+  if (!flags.redocly) {
+    return findConfig();
+  }
+  const explicitPath = path.resolve(flags.redocly);
+  if (!fs.existsSync(explicitPath)) {
+    return undefined;
+  }
+  const stat = fs.statSync(explicitPath);
+  return stat.isDirectory() ? findConfig(explicitPath) : explicitPath;
 }
 
 async function main() {
   if ("help" in flags) {
+    // biome-ignore lint/suspicious/noConsole: this is a CLI
     console.info(HELP);
     process.exit(0);
   }
   const packageJSON = JSON.parse(fs.readFileSync(new URL("../package.json", import.meta.url), "utf8"));
   if ("version" in flags) {
+    // biome-ignore lint/suspicious/noConsole: this is a CLI
     console.info(`v${packageJSON.version}`);
     process.exit(0);
   }
 
   const outputType = flags.output ? OUTPUT_FILE : OUTPUT_STDOUT; // FILE or STDOU
   if (outputType !== OUTPUT_STDOUT) {
+    // biome-ignore lint/suspicious/noConsole: this is a CLI
     console.info(`✨ ${c.bold(`openapi-typescript ${packageJSON.version}`)}`);
   }
 
   const input = flags._[0];
 
-  // load Redocly config
-  const maybeRedoc = findConfig(flags.redocly ? path.dirname(flags.redocly) : undefined);
-  const redocly = maybeRedoc
-    ? await loadConfig({ configPath: maybeRedoc })
+  const redocConfigPath = findRedocConfigPath();
+  if (flags.redocly && !redocConfigPath) {
+    errorAndExit(`Redocly config not found at: ${flags.redocly}`);
+  }
+  const redocly = redocConfigPath
+    ? await loadConfig({ configPath: redocConfigPath })
     : await createConfig({}, { extends: ["minimal"] });
 
   // handle Redoc APIs
@@ -197,6 +207,8 @@ async function main() {
     await Promise.all(
       Object.entries(redocly.apis).map(async ([name, api]) => {
         let configRoot = CWD;
+
+        const config = { ...flags, redocly };
         if (redocly.configFile) {
           // note: this will be absolute if --redoc is passed; otherwise, relative
           configRoot = path.isAbsolute(redocly.configFile)
@@ -208,7 +220,18 @@ async function main() {
             `API ${name} is missing an \`${REDOC_CONFIG_KEY}.output\` key. See https://openapi-ts.dev/cli/#multiple-schemas.`,
           );
         }
-        const result = await generateSchema(new URL(api.root, configRoot), { redocly });
+
+        if (api[REDOC_CONFIG_KEY]) {
+          for (const name of BOOLEAN_FLAGS) {
+            if (typeof api[REDOC_CONFIG_KEY][name] === "boolean") {
+              config[name] = api[REDOC_CONFIG_KEY][name];
+            } else if (typeof api[REDOC_CONFIG_KEY][kebabCase(name)] === "boolean") {
+              config[name] = api[REDOC_CONFIG_KEY][kebabCase(name)];
+            }
+          }
+        }
+        const result = await generateSchema(new URL(api.root, configRoot), config);
+
         const outFile = new URL(api[REDOC_CONFIG_KEY].output, configRoot);
         checkStaleOutput(result, outFile);
         fs.mkdirSync(new URL(".", outFile), { recursive: true });
@@ -221,6 +244,7 @@ async function main() {
   // handle stdin
   else if (!input) {
     const result = await generateSchema(process.stdin, {
+      ...flags,
       redocly,
       silent: outputType === OUTPUT_STDOUT,
     });
@@ -245,6 +269,7 @@ async function main() {
       );
     }
     const result = await generateSchema(new URL(input, CWD), {
+      ...flags,
       redocly,
       silent: outputType === OUTPUT_STDOUT,
     });

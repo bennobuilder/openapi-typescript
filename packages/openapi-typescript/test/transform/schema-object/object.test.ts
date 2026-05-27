@@ -29,6 +29,23 @@ describe("transformSchemaObject > object", () => {
       },
     ],
     [
+      "property > boolean",
+      {
+        given: {
+          type: "object",
+          required: ["truthy", "falsy"],
+          properties: {
+            truthy: true,
+            falsy: false,
+          },
+        },
+        want: `{
+    truthy: unknown;
+    falsy: never;
+}`,
+      },
+    ],
+    [
       "empty",
       {
         given: { type: "object" },
@@ -80,6 +97,95 @@ describe("transformSchemaObject > object", () => {
     [key: string]: unknown;
 }`,
         // options: DEFAULT_OPTIONS,
+      },
+    ],
+    [
+      "patternProperties > empty object",
+      {
+        given: { type: "object", patternProperties: {} },
+        want: "Record<string, never>",
+      },
+    ],
+    [
+      "patternProperties > empty object with options.additionalProperties=true",
+      {
+        given: { type: "object", patternProperties: {} },
+        want: `{
+    [key: string]: unknown;
+}`,
+        options: {
+          ...DEFAULT_OPTIONS,
+          ctx: { ...DEFAULT_CTX, additionalProperties: true },
+        },
+      },
+    ],
+    [
+      "patternProperties > basic",
+      {
+        given: { type: "object", patternProperties: { "^a": { type: "string" } } },
+        want: `{
+    [key: string]: string;
+}`,
+      },
+    ],
+    [
+      "patternProperties > enum",
+      {
+        given: { type: "object", patternProperties: { "^a": { type: "string", enum: ["a", "b", "c"] } } },
+        want: `{
+    [key: string]: "a" | "b" | "c";
+}`,
+      },
+    ],
+    [
+      "patternProperties > multiple patterns",
+      {
+        given: { type: "object", patternProperties: { "^a": { type: "string" }, "^b": { type: "number" } } },
+        want: `{
+    [key: string]: string | number;
+}`,
+      },
+    ],
+    [
+      "patternProperties > additional=true and patterns",
+      {
+        given: {
+          type: "object",
+          additionalProperties: true,
+          patternProperties: { "^a": { type: "string" } },
+        },
+        want: `{
+    [key: string]: unknown | string;
+}`,
+      },
+    ],
+    [
+      "patternProperties > additional and patterns",
+      {
+        given: {
+          type: "object",
+          additionalProperties: { type: "number" },
+          patternProperties: { "^a": { type: "string" } },
+        },
+        want: `{
+    [key: string]: number | string;
+}`,
+      },
+    ],
+    [
+      "patternProperties > patterns with options.additionalProperties=true",
+      {
+        given: {
+          type: "object",
+          patternProperties: { "^a": { type: "string" } },
+        },
+        want: `{
+    [key: string]: unknown | string;
+}`,
+        options: {
+          ...DEFAULT_OPTIONS,
+          ctx: { ...DEFAULT_CTX, additionalProperties: true },
+        },
       },
     ],
     [
@@ -411,6 +517,113 @@ describe("transformSchemaObject > object", () => {
         },
       },
     ],
+    [
+      "options > readWriteMarkers: true (readOnly)",
+      {
+        given: {
+          type: "object",
+          properties: {
+            id: { type: "number", readOnly: true },
+            name: { type: "string" },
+          },
+        },
+        want: `{
+    id?: $Read<number>;
+    name?: string;
+}`,
+        options: {
+          ...DEFAULT_OPTIONS,
+          ctx: { ...DEFAULT_OPTIONS.ctx, readWriteMarkers: true },
+        },
+      },
+    ],
+    [
+      "options > readWriteMarkers: true (writeOnly)",
+      {
+        given: {
+          type: "object",
+          properties: {
+            name: { type: "string" },
+            password: { type: "string", writeOnly: true },
+          },
+        },
+        want: `{
+    name?: string;
+    password?: $Write<string>;
+}`,
+        options: {
+          ...DEFAULT_OPTIONS,
+          ctx: { ...DEFAULT_OPTIONS.ctx, readWriteMarkers: true },
+        },
+      },
+    ],
+    [
+      "options > readWriteMarkers: true (both)",
+      {
+        given: {
+          type: "object",
+          properties: {
+            id: { type: "number", readOnly: true },
+            name: { type: "string" },
+            password: { type: "string", writeOnly: true },
+          },
+          required: ["name"],
+        },
+        want: `{
+    id?: $Read<number>;
+    name: string;
+    password?: $Write<string>;
+}`,
+        options: {
+          ...DEFAULT_OPTIONS,
+          ctx: { ...DEFAULT_OPTIONS.ctx, readWriteMarkers: true },
+        },
+      },
+    ],
+    [
+      "options > readWriteMarkers: false (default, no markers)",
+      {
+        given: {
+          type: "object",
+          properties: {
+            id: { type: "number", readOnly: true },
+            password: { type: "string", writeOnly: true },
+          },
+        },
+        want: `{
+    readonly id?: number;
+    password?: string;
+}`,
+      },
+    ],
+    [
+      "options > readWriteMarkers: true ($defs)",
+      {
+        given: {
+          type: "object",
+          properties: {
+            foo: { type: "string" },
+          },
+          $defs: {
+            readOnlyDef: { type: "string", readOnly: true },
+            writeOnlyDef: { type: "number", writeOnly: true },
+            normalDef: { type: "boolean" },
+          },
+        },
+        want: `{
+    foo?: string;
+    $defs: {
+        readOnlyDef: $Read<string>;
+        writeOnlyDef: $Write<number>;
+        normalDef: boolean;
+    };
+}`,
+        options: {
+          ...DEFAULT_OPTIONS,
+          ctx: { ...DEFAULT_OPTIONS.ctx, readWriteMarkers: true },
+        },
+      },
+    ],
   ];
 
   for (const [testName, { given, want, options = DEFAULT_OPTIONS, ci }] of tests) {
@@ -419,7 +632,7 @@ describe("transformSchemaObject > object", () => {
       async () => {
         const result = astToString(transformSchemaObject(given, options));
         if (want instanceof URL) {
-          expect(result).toMatchFileSnapshot(fileURLToPath(want));
+          await expect(result).toMatchFileSnapshot(fileURLToPath(want));
         } else {
           expect(result).toBe(`${want}\n`);
         }

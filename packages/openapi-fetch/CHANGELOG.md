@@ -1,5 +1,86 @@
 # openapi-fetch
 
+## 0.17.0
+
+### Minor Changes
+
+- [#2549](https://github.com/openapi-ts/openapi-typescript/pull/2549) [`a690e52`](https://github.com/openapi-ts/openapi-typescript/commit/a690e526b7693479bc2f2f002d71a020fa5e4e16) Thanks [@abumalick](https://github.com/abumalick)! - Add readOnly/writeOnly support via `--read-write-markers` flag. When enabled, readOnly properties are wrapped with `$Read<T>` and writeOnly properties with `$Write<T>`. openapi-fetch uses `Readable<T>` and `Writable<T>` helpers to exclude these properties from responses and request bodies respectively.
+
+### Patch Changes
+
+- [#2572](https://github.com/openapi-ts/openapi-typescript/pull/2572) [`9350ddf`](https://github.com/openapi-ts/openapi-typescript/commit/9350ddfcd44b661a5288667ebfcf298868dd9784) Thanks [@luis-guideti](https://github.com/luis-guideti)! - Do not treat Content-Length=0 as empty when Transfer-Encoding is chunked
+
+- Updated dependencies [[`a690e52`](https://github.com/openapi-ts/openapi-typescript/commit/a690e526b7693479bc2f2f002d71a020fa5e4e16)]:
+  - openapi-typescript-helpers@0.1.0
+
+## 0.16.0
+
+### Minor Changes
+
+- [#2362](https://github.com/openapi-ts/openapi-typescript/pull/2362) [`9002418`](https://github.com/openapi-ts/openapi-typescript/commit/90024185c7a251b5dbedd148e4eb5d15b95409c8) Thanks [@luxass](https://github.com/luxass)! - Added support for setting a custom path serializers either globally or per request. This allows you to customize how path parameters are serialized in the URL. E.g. you can use a custom serializer to prevent encoding of a path parameter, if you need to pass a value that should not be encoded.
+
+## 0.15.2
+
+### Patch Changes
+
+- [#2508](https://github.com/openapi-ts/openapi-typescript/pull/2508) [`89843b0`](https://github.com/openapi-ts/openapi-typescript/commit/89843b06296ac1b227cc27546009e79b3a749aaa) Thanks [@srbarba](https://github.com/srbarba)! - Use text() when no content-length is provided to avoid errors parsing empty bodies (200 with no content)
+
+## 0.15.1
+
+### Patch Changes
+
+- [#2556](https://github.com/openapi-ts/openapi-typescript/pull/2556) [`36c0fb8`](https://github.com/openapi-ts/openapi-typescript/commit/36c0fb8a0504b27284843daaa9f49f80e2cfad0d) Thanks [@justAnArthur](https://github.com/justAnArthur)! - fix omit serializing for already serialized data
+
+## 0.15.0
+
+### Minor Changes
+
+- [#2465](https://github.com/openapi-ts/openapi-typescript/pull/2465) [`8f96eb5`](https://github.com/openapi-ts/openapi-typescript/commit/8f96eb50f5ec060e2e9100e9a43d3fe98e9795c5) Thanks [@Kauabunga](https://github.com/Kauabunga)! - Enable request level middlewares option
+
+## 0.14.1
+
+### Patch Changes
+
+- [#2407](https://github.com/openapi-ts/openapi-typescript/pull/2407) [`7527d1e`](https://github.com/openapi-ts/openapi-typescript/commit/7527d1e7502cd1e9621922f028b4736d85f25800) Thanks [@jthacker](https://github.com/jthacker)! - Fix Request parameter being ignored by client methods
+
+## 0.14.0
+
+### Minor Changes
+
+- [#2310](https://github.com/openapi-ts/openapi-typescript/pull/2310) [`e66b5ce`](https://github.com/openapi-ts/openapi-typescript/commit/e66b5ce63bfcdc57c6ee942e5ed4e7667e64c290) Thanks [@drwpow](https://github.com/drwpow)! - Build package with unbuild. Also remove the minified version (openapi-fetch is only useful in a TypeScript/bundler environment, so there’s no sense in loading it from a CDN clientside).
+
+## 0.13.8
+
+### Patch Changes
+
+- [#2096](https://github.com/openapi-ts/openapi-typescript/pull/2096) [`0058128`](https://github.com/openapi-ts/openapi-typescript/commit/0058128afa258180793ae2071022d89a688d8ddc) Thanks [@obulat](https://github.com/obulat)! - Encode the request body if `Content-Type` header is `x-www-form-urlencoded`
+- [#2157](https://github.com/openapi-ts/openapi-typescript/pull/2157) [`419d9ac`](https://github.com/openapi-ts/openapi-typescript/commit/419d9ac6851cf780b81060ddc05c231c5225a17b) Thanks [@Rendez](https://github.com/Rendez)! - Fix overriding baseUrl per request without overriding default baseUrl
+- [#2308](https://github.com/openapi-ts/openapi-typescript/pull/2308) [`81c031d`](https://github.com/openapi-ts/openapi-typescript/commit/81c031da8584ed49b033ebfc67bbb3e1ca258699) Thanks [@drwpow](https://github.com/drwpow)! - Improve header handling
+
+## 0.13.7
+
+### Patch Changes
+
+- [#2256](https://github.com/openapi-ts/openapi-typescript/pull/2256) [`30c6da8`](https://github.com/openapi-ts/openapi-typescript/commit/30c6da800a00bda87da66dea6d04807e1379f06a) Thanks [@KajSzy](https://github.com/KajSzy)! - fix dynamic access to methods using wrapAsPathBasedClient
+
+## 0.13.6
+
+### Patch Changes
+
+- [#2205](https://github.com/openapi-ts/openapi-typescript/pull/2205) [`4966560`](https://github.com/openapi-ts/openapi-typescript/commit/4966560790ad49fabb06d718115a82a779a5b74a) Thanks [@live-small](https://github.com/live-small)! - Fix HEAD method requests to prevent body parsing regardless of Content-Length header value
+
+## 0.13.5
+
+### Patch Changes
+
+- [#2091](https://github.com/openapi-ts/openapi-typescript/pull/2091) [`ebe56f3`](https://github.com/openapi-ts/openapi-typescript/commit/ebe56f337561bfdd1bf1abdc56ba3d2f48c4d393) Thanks [@p-dubovitsky](https://github.com/p-dubovitsky)! - Allow returning Response from onRequest callback
+
+## 0.13.4
+
+### Patch Changes
+
+- [#2063](https://github.com/openapi-ts/openapi-typescript/pull/2063) [`5935cd2`](https://github.com/openapi-ts/openapi-typescript/commit/5935cd25a05d3ec1f4c8bf222d65395a0b9ae5b4) Thanks [@kerwanp](https://github.com/kerwanp)! - add support for arbitrary method
+
 ## 0.13.3
 
 ### Patch Changes

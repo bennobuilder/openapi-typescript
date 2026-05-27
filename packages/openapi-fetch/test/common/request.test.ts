@@ -1,6 +1,6 @@
 import { describe, expect, test, vi } from "vitest";
-import { createObservedClient, headersToObj } from "../helpers.js";
 import createClient, { type BodySerializer, type FetchOptions } from "../../src/index.js";
+import { createObservedClient, headersToObj } from "../helpers.js";
 import type { components, paths } from "./schemas/common.js";
 
 type Resource = components["schemas"]["Resource"];
@@ -265,6 +265,19 @@ describe("request", () => {
       expect(bodyUsed).toBe(true);
       expect(bodyText).toBe("0");
     });
+
+    test("`application/x-www-form-urlencoded` body", async () => {
+      const { bodyUsed, bodyText } = await fireRequestAndGetBodyInformation({
+        method: "POST",
+        fetchOptions: {
+          body: { key1: "value1", key2: "value2" },
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        },
+      });
+
+      expect(bodyUsed).toBe(true);
+      expect(bodyText).toBe("key1=value1&key2=value2");
+    });
   });
 
   test("cookie header is preserved", async () => {
@@ -283,7 +296,7 @@ describe("request", () => {
   });
 
   test("uses provided Request class", async () => {
-    // santity check to make sure the profided fetch function is actually called
+    // sanity check to make sure the provided fetch function is actually called
     expect.assertions(1);
 
     class SpecialRequestImplementation extends Request {}
@@ -303,12 +316,33 @@ describe("request", () => {
     await client.GET("/resources");
   });
 
+  test("Can use custom Request class", async () => {
+    // sanity check to make sure the provided fetch function is actually called
+    expect.assertions(1);
+
+    class SpecialRequestImplementation extends Request {}
+
+    const customFetch = async (input: Request) => {
+      // make sure that the request is actually an instance of the custom request we provided
+      expect(input).instanceOf(SpecialRequestImplementation);
+      return Promise.resolve(Response.json({ hello: "world" }));
+    };
+
+    const client = createClient<paths>({
+      baseUrl: "https://fakeurl.example",
+      fetch: customFetch,
+    });
+
+    await client.GET("/resources", { Request: SpecialRequestImplementation });
+  });
+
   test("can attach custom properties to request", async () => {
     function createCustomFetch(data: any) {
       const response = {
         clone: () => ({ ...response }),
         headers: new Headers(),
         json: async () => data,
+        text: async () => JSON.stringify(data),
         status: 200,
         ok: true,
       } as Response;

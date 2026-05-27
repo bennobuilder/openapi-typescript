@@ -1,7 +1,7 @@
 import { fileURLToPath } from "node:url";
 import ts from "typescript";
-import { NULL, astToString } from "../../src/lib/ts.js";
-import transformComponentsObject from "../../src/transform/components-object.js";
+import { astToString, NULL } from "../../src/lib/ts.js";
+import transformComponentsObject, { isEnumSchema } from "../../src/transform/components-object.js";
 import type { GlobalContext } from "../../src/types.js";
 import { DEFAULT_CTX, type TestCase } from "../test-helpers.js";
 
@@ -757,7 +757,49 @@ export type Item = components['schemas']['Item'];
 export type Document = components['schemas']['Document'];
 export type Error = components['schemas']['Error'];
 `,
-        options: { ...DEFAULT_OPTIONS, rootTypes: true, rootTypesNoSchemaPrefix: true },
+        options: {
+          ...DEFAULT_OPTIONS,
+          rootTypes: true,
+          rootTypesNoSchemaPrefix: true,
+        },
+      },
+    ],
+    [
+      "options > rootTypes: true but keep casing",
+      {
+        given: {
+          schemas: {
+            ItemDTO: {
+              type: "object",
+              required: ["name", "url"],
+              properties: {
+                name: { type: "string" },
+                url: { type: "string" },
+              },
+            },
+          },
+        },
+        want: `{
+    schemas: {
+        ItemDTO: {
+            name: string;
+            url: string;
+        };
+    };
+    responses: never;
+    parameters: never;
+    requestBodies: never;
+    headers: never;
+    pathItems: never;
+}
+export type ItemDTO = components['schemas']['ItemDTO'];
+`,
+        options: {
+          ...DEFAULT_OPTIONS,
+          rootTypes: true,
+          rootTypesNoSchemaPrefix: true,
+          rootTypesKeepCasing: true,
+        },
       },
     ],
     [
@@ -862,7 +904,7 @@ export type Error = components['schemas']['Error'];
       async () => {
         const result = astToString(transformComponentsObject(given, options ?? DEFAULT_OPTIONS));
         if (want instanceof URL) {
-          expect(result).toMatchFileSnapshot(fileURLToPath(want));
+          await expect(result).toMatchFileSnapshot(fileURLToPath(want));
         } else {
           expect(result.trim()).toBe(want.trim());
         }
@@ -870,4 +912,70 @@ export type Error = components['schemas']['Error'];
       ci?.timeout,
     );
   }
+});
+
+describe("isEnumSchema", () => {
+  test("returns true for string enum schema", () => {
+    const schema = {
+      type: "string",
+      enum: ["active", "inactive", "pending"],
+    };
+    expect(isEnumSchema(schema)).toBe(true);
+  });
+
+  test("returns true for number enum schema", () => {
+    const schema = {
+      type: "number",
+      enum: [1, 2, 3],
+    };
+    expect(isEnumSchema(schema)).toBe(true);
+  });
+
+  test("returns true for mixed enum schema without explicit type", () => {
+    const schema = {
+      enum: ["high", 0, null],
+    };
+    expect(isEnumSchema(schema)).toBe(true);
+  });
+
+  test("returns false for object schema with properties", () => {
+    const schema = {
+      type: "object",
+      properties: {
+        name: { type: "string" },
+      },
+    };
+    expect(isEnumSchema(schema)).toBe(false);
+  });
+
+  test("returns false for object schema with enum (object enums not supported)", () => {
+    const schema = {
+      type: "object",
+      enum: [{ value: "test" }],
+    };
+    expect(isEnumSchema(schema)).toBe(false);
+  });
+
+  test("returns false for schema with additionalProperties", () => {
+    const schema = {
+      enum: ["test"],
+      additionalProperties: true,
+    };
+    expect(isEnumSchema(schema)).toBe(false);
+  });
+
+  test("returns false for schema without enum", () => {
+    const schema = {
+      type: "string",
+    };
+    expect(isEnumSchema(schema)).toBe(false);
+  });
+
+  test("returns false for null, undefined, or non-object inputs", () => {
+    expect(isEnumSchema(null)).toBe(false);
+    expect(isEnumSchema(undefined)).toBe(false);
+    expect(isEnumSchema("string")).toBe(false);
+    expect(isEnumSchema(123)).toBe(false);
+    expect(isEnumSchema([])).toBe(false);
+  });
 });

@@ -1,5 +1,4 @@
 import { fileURLToPath } from "node:url";
-import ts from "typescript";
 import { astToString } from "../../src/lib/ts.js";
 import transformRequestBodyObject from "../../src/transform/request-body-object.js";
 import { DEFAULT_CTX, type TestCase } from "../test-helpers.js";
@@ -164,7 +163,7 @@ describe("transformRequestBodyObject", () => {
       async () => {
         const result = astToString(transformRequestBodyObject(given, options));
         if (want instanceof URL) {
-          expect(result).toMatchFileSnapshot(fileURLToPath(want));
+          await expect(result).toMatchFileSnapshot(fileURLToPath(want));
         } else {
           expect(result).toBe(`${want}\n`);
         }

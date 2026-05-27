@@ -1,6 +1,6 @@
-import { execa } from "execa";
 import os from "node:os";
 import { fileURLToPath } from "node:url";
+import { execa } from "execa";
 
 const TIMEOUT = 10_000;
 
@@ -89,7 +89,7 @@ export interface operations {
     };
 }`);
     },
-    { timeout: TIMEOUT },
+    TIMEOUT,
   );
 
   test(
@@ -174,6 +174,6 @@ export interface operations {
     };
 }`);
     },
-    { timeout: TIMEOUT },
+    TIMEOUT,
   );
 });

@@ -1763,6 +1763,164 @@ export interface paths {
         readonly patch?: never;
         readonly trace?: never;
     };
+    readonly "/orgs/{org}/actions/hosted-runners": {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        /**
+         * List GitHub-hosted runners for an organization
+         * @description Lists all GitHub-hosted runners configured in an organization.
+         *
+         *     OAuth app tokens and personal access tokens (classic) need the `manage_runner:org` scope to use this endpoint.
+         */
+        readonly get: operations["actions/list-hosted-runners-for-org"];
+        readonly put?: never;
+        /**
+         * Create a GitHub-hosted runner for an organization
+         * @description Creates a GitHub-hosted runner for an organization.
+         *     OAuth tokens and personal access tokens (classic) need the `manage_runners:org` scope to use this endpoint.
+         */
+        readonly post: operations["actions/create-hosted-runner-for-org"];
+        readonly delete?: never;
+        readonly options?: never;
+        readonly head?: never;
+        readonly patch?: never;
+        readonly trace?: never;
+    };
+    readonly "/orgs/{org}/actions/hosted-runners/images/github-owned": {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        /**
+         * Get GitHub-owned images for GitHub-hosted runners in an organization
+         * @description Get the list of GitHub-owned images available for GitHub-hosted runners for an organization.
+         */
+        readonly get: operations["actions/get-hosted-runners-github-owned-images-for-org"];
+        readonly put?: never;
+        readonly post?: never;
+        readonly delete?: never;
+        readonly options?: never;
+        readonly head?: never;
+        readonly patch?: never;
+        readonly trace?: never;
+    };
+    readonly "/orgs/{org}/actions/hosted-runners/images/partner": {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        /**
+         * Get partner images for GitHub-hosted runners in an organization
+         * @description Get the list of partner images available for GitHub-hosted runners for an organization.
+         */
+        readonly get: operations["actions/get-hosted-runners-partner-images-for-org"];
+        readonly put?: never;
+        readonly post?: never;
+        readonly delete?: never;
+        readonly options?: never;
+        readonly head?: never;
+        readonly patch?: never;
+        readonly trace?: never;
+    };
+    readonly "/orgs/{org}/actions/hosted-runners/limits": {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        /**
+         * Get limits on GitHub-hosted runners for an organization
+         * @description Get the GitHub-hosted runners limits for an organization.
+         */
+        readonly get: operations["actions/get-hosted-runners-limits-for-org"];
+        readonly put?: never;
+        readonly post?: never;
+        readonly delete?: never;
+        readonly options?: never;
+        readonly head?: never;
+        readonly patch?: never;
+        readonly trace?: never;
+    };
+    readonly "/orgs/{org}/actions/hosted-runners/machine-sizes": {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        /**
+         * Get GitHub-hosted runners machine specs for an organization
+         * @description Get the list of machine specs available for GitHub-hosted runners for an organization.
+         */
+        readonly get: operations["actions/get-hosted-runners-machine-specs-for-org"];
+        readonly put?: never;
+        readonly post?: never;
+        readonly delete?: never;
+        readonly options?: never;
+        readonly head?: never;
+        readonly patch?: never;
+        readonly trace?: never;
+    };
+    readonly "/orgs/{org}/actions/hosted-runners/platforms": {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        /**
+         * Get platforms for GitHub-hosted runners in an organization
+         * @description Get the list of platforms available for GitHub-hosted runners for an organization.
+         */
+        readonly get: operations["actions/get-hosted-runners-platforms-for-org"];
+        readonly put?: never;
+        readonly post?: never;
+        readonly delete?: never;
+        readonly options?: never;
+        readonly head?: never;
+        readonly patch?: never;
+        readonly trace?: never;
+    };
+    readonly "/orgs/{org}/actions/hosted-runners/{hosted_runner_id}": {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        /**
+         * Get a GitHub-hosted runner for an organization
+         * @description Gets a GitHub-hosted runner configured in an organization.
+         *
+         *     OAuth app tokens and personal access tokens (classic) need the `manage_runners:org` scope to use this endpoint.
+         */
+        readonly get: operations["actions/get-hosted-runner-for-org"];
+        readonly put?: never;
+        readonly post?: never;
+        /**
+         * Delete a GitHub-hosted runner for an organization
+         * @description Deletes a GitHub-hosted runner for an organization.
+         */
+        readonly delete: operations["actions/delete-hosted-runner-for-org"];
+        readonly options?: never;
+        readonly head?: never;
+        /**
+         * Update a GitHub-hosted runner for an organization
+         * @description Updates a GitHub-hosted runner for an organization.
+         *     OAuth app tokens and personal access tokens (classic) need the `manage_runners:org` scope to use this endpoint.
+         */
+        readonly patch: operations["actions/update-hosted-runner-for-org"];
+        readonly trace?: never;
+    };
     readonly "/orgs/{org}/actions/oidc/customization/sub": {
         readonly parameters: {
             readonly query?: never;
@@ -1996,6 +2154,28 @@ export interface paths {
          *     OAuth app tokens and personal access tokens (classic) need the `admin:org` scope to use this endpoint.
          */
         readonly patch: operations["actions/update-self-hosted-runner-group-for-org"];
+        readonly trace?: never;
+    };
+    readonly "/orgs/{org}/actions/runner-groups/{runner_group_id}/hosted-runners": {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        /**
+         * List GitHub-hosted runners in a group for an organization
+         * @description Lists the GitHub-hosted runners in an organization group.
+         *
+         *     OAuth app tokens and personal access tokens (classic) need the `admin:org` scope to use this endpoint.
+         */
+        readonly get: operations["actions/list-github-hosted-runners-in-group-for-org"];
+        readonly put?: never;
+        readonly post?: never;
+        readonly delete?: never;
+        readonly options?: never;
+        readonly head?: never;
+        readonly patch?: never;
         readonly trace?: never;
     };
     readonly "/orgs/{org}/actions/runner-groups/{runner_group_id}/repositories": {
@@ -5622,6 +5802,90 @@ export interface paths {
         readonly patch?: never;
         readonly trace?: never;
     };
+    readonly "/orgs/{org}/settings/network-configurations": {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        /**
+         * List hosted compute network configurations for an organization
+         * @description Lists all hosted compute network configurations configured in an organization.
+         *
+         *     OAuth app tokens and personal access tokens (classic) need the `read:network_configurations` scope to use this endpoint.
+         */
+        readonly get: operations["hosted-compute/list-network-configurations-for-org"];
+        readonly put?: never;
+        /**
+         * Create a hosted compute network configuration for an organization
+         * @description Creates a hosted compute network configuration for an organization.
+         *
+         *     OAuth app tokens and personal access tokens (classic) need the `write:network_configurations` scope to use this endpoint.
+         */
+        readonly post: operations["hosted-compute/create-network-configuration-for-org"];
+        readonly delete?: never;
+        readonly options?: never;
+        readonly head?: never;
+        readonly patch?: never;
+        readonly trace?: never;
+    };
+    readonly "/orgs/{org}/settings/network-configurations/{network_configuration_id}": {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        /**
+         * Get a hosted compute network configuration for an organization
+         * @description Gets a hosted compute network configuration configured in an organization.
+         *
+         *     OAuth app tokens and personal access tokens (classic) need the `read:network_configurations` scope to use this endpoint.
+         */
+        readonly get: operations["hosted-compute/get-network-configuration-for-org"];
+        readonly put?: never;
+        readonly post?: never;
+        /**
+         * Delete a hosted compute network configuration from an organization
+         * @description Deletes a hosted compute network configuration from an organization.
+         *
+         *     OAuth app tokens and personal access tokens (classic) need the `write:network_configurations` scope to use this endpoint.
+         */
+        readonly delete: operations["hosted-compute/delete-network-configuration-from-org"];
+        readonly options?: never;
+        readonly head?: never;
+        /**
+         * Update a hosted compute network configuration for an organization
+         * @description Updates a hosted compute network configuration for an organization.
+         *
+         *     OAuth app tokens and personal access tokens (classic) need the `write:network_configurations` scope to use this endpoint.
+         */
+        readonly patch: operations["hosted-compute/update-network-configuration-for-org"];
+        readonly trace?: never;
+    };
+    readonly "/orgs/{org}/settings/network-settings/{network_settings_id}": {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path?: never;
+            readonly cookie?: never;
+        };
+        /**
+         * Get a hosted compute network settings resource for an organization
+         * @description Gets a hosted compute network settings resource configured for an organization.
+         *
+         *     OAuth app tokens and personal access tokens (classic) need the `read:network_configurations` scope to use this endpoint.
+         */
+        readonly get: operations["hosted-compute/get-network-settings-for-org"];
+        readonly put?: never;
+        readonly post?: never;
+        readonly delete?: never;
+        readonly options?: never;
+        readonly head?: never;
+        readonly patch?: never;
+        readonly trace?: never;
+    };
     readonly "/orgs/{org}/team/{team_slug}/copilot/metrics": {
         readonly parameters: {
             readonly query?: never;
@@ -8205,19 +8469,19 @@ export interface paths {
             readonly cookie?: never;
         };
         /**
-         * Check if automated security fixes are enabled for a repository
-         * @description Shows whether automated security fixes are enabled, disabled or paused for a repository. The authenticated user must have admin read access to the repository. For more information, see "[Configuring automated security fixes](https://docs.github.com/articles/configuring-automated-security-fixes)".
+         * Check if Dependabot security updates are enabled for a repository
+         * @description Shows whether Dependabot security updates are enabled, disabled or paused for a repository. The authenticated user must have admin read access to the repository. For more information, see "[Configuring Dependabot security updates](https://docs.github.com/articles/configuring-automated-security-fixes)".
          */
         readonly get: operations["repos/check-automated-security-fixes"];
         /**
-         * Enable automated security fixes
-         * @description Enables automated security fixes for a repository. The authenticated user must have admin access to the repository. For more information, see "[Configuring automated security fixes](https://docs.github.com/articles/configuring-automated-security-fixes)".
+         * Enable Dependabot security updates
+         * @description Enables Dependabot security updates for a repository. The authenticated user must have admin access to the repository. For more information, see "[Configuring Dependabot security updates](https://docs.github.com/articles/configuring-automated-security-fixes)".
          */
         readonly put: operations["repos/enable-automated-security-fixes"];
         readonly post?: never;
         /**
-         * Disable automated security fixes
-         * @description Disables automated security fixes for a repository. The authenticated user must have admin access to the repository. For more information, see "[Configuring automated security fixes](https://docs.github.com/articles/configuring-automated-security-fixes)".
+         * Disable Dependabot security updates
+         * @description Disables Dependabot security updates for a repository. The authenticated user must have admin access to the repository. For more information, see "[Configuring Dependabot security updates](https://docs.github.com/articles/configuring-automated-security-fixes)".
          */
         readonly delete: operations["repos/disable-automated-security-fixes"];
         readonly options?: never;
@@ -14299,7 +14563,7 @@ export interface paths {
         };
         /**
          * Get secret scanning scan history for a repository
-         * @description Lists the latest incremental and backfill scans by type for a repository.
+         * @description Lists the latest default incremental and backfill scans by type for a repository. Scans from Copilot Secret Scanning are not included.
          *
          *     OAuth app tokens and personal access tokens (classic) need the `repo` or `security_events` scope to use this endpoint. If this endpoint is only used with public repositories, the token can use the `public_repo` scope instead.
          */
@@ -14526,8 +14790,7 @@ export interface paths {
         };
         /**
          * Get all contributor commit activity
-         * @description
-         *     Returns the `total` number of commits authored by the contributor. In addition, the response includes a Weekly Hash (`weeks` array) with the following information:
+         * @description Returns the `total` number of commits authored by the contributor. In addition, the response includes a Weekly Hash (`weeks` array) with the following information:
          *
          *     *   `w` - Start of the week, given as a [Unix timestamp](https://en.wikipedia.org/wiki/Unix_time).
          *     *   `a` - Number of additions
@@ -17347,9 +17610,11 @@ export interface paths {
          * Get a user using their ID
          * @description Provides publicly available information about someone with a GitHub account. This method takes their durable user `ID` instead of their `login`, which can change over time.
          *
-         *     The `email` key in the following response is the publicly visible email address from your GitHub [profile page](https://github.com/settings/profile). When setting up your profile, you can select a primary email address to be “public” which provides an email entry for this endpoint. If you do not set a public email address for `email`, then it will have a value of `null`. You only see publicly visible email addresses when authenticated with GitHub. For more information, see [Authentication](https://docs.github.com/rest/guides/getting-started-with-the-rest-api#authentication).
+         *     If you are requesting information about an [Enterprise Managed User](https://docs.github.com/enterprise-cloud@latest/admin/managing-iam/understanding-iam-for-enterprises/about-enterprise-managed-users), or a GitHub App bot that is installed in an organization that uses Enterprise Managed Users, your requests must be authenticated as a user or GitHub App that has access to the organization to view that account's information. If you are not authorized, the request will return a `404 Not Found` status.
          *
-         *     The Emails API enables you to list all of your email addresses, and toggle a primary email to be visible publicly. For more information, see "[Emails API](https://docs.github.com/rest/users/emails)".
+         *     The `email` key in the following response is the publicly visible email address from your GitHub [profile page](https://github.com/settings/profile). When setting up your profile, you can select a primary email address to be public which provides an email entry for this endpoint. If you do not set a public email address for `email`, then it will have a value of `null`. You only see publicly visible email addresses when authenticated with GitHub. For more information, see [Authentication](https://docs.github.com/rest/guides/getting-started-with-the-rest-api#authentication).
+         *
+         *     The Emails API enables you to list all of your email addresses, and toggle a primary email to be visible publicly. For more information, see [Emails API](https://docs.github.com/rest/users/emails).
          */
         readonly get: operations["users/get-by-id"];
         readonly put?: never;
@@ -17393,9 +17658,11 @@ export interface paths {
          * Get a user
          * @description Provides publicly available information about someone with a GitHub account.
          *
-         *     The `email` key in the following response is the publicly visible email address from your GitHub [profile page](https://github.com/settings/profile). When setting up your profile, you can select a primary email address to be “public” which provides an email entry for this endpoint. If you do not set a public email address for `email`, then it will have a value of `null`. You only see publicly visible email addresses when authenticated with GitHub. For more information, see [Authentication](https://docs.github.com/rest/guides/getting-started-with-the-rest-api#authentication).
+         *     If you are requesting information about an [Enterprise Managed User](https://docs.github.com/enterprise-cloud@latest/admin/managing-iam/understanding-iam-for-enterprises/about-enterprise-managed-users), or a GitHub App bot that is installed in an organization that uses Enterprise Managed Users, your requests must be authenticated as a user or GitHub App that has access to the organization to view that account's information. If you are not authorized, the request will return a `404 Not Found` status.
          *
-         *     The Emails API enables you to list all of your email addresses, and toggle a primary email to be visible publicly. For more information, see "[Emails API](https://docs.github.com/rest/users/emails)".
+         *     The `email` key in the following response is the publicly visible email address from your GitHub [profile page](https://github.com/settings/profile). When setting up your profile, you can select a primary email address to be public which provides an email entry for this endpoint. If you do not set a public email address for `email`, then it will have a value of `null`. You only see publicly visible email addresses when authenticated with GitHub. For more information, see [Authentication](https://docs.github.com/rest/guides/getting-started-with-the-rest-api#authentication).
+         *
+         *     The Emails API enables you to list all of your email addresses, and toggle a primary email to be visible publicly. For more information, see [Emails API](https://docs.github.com/rest/users/emails).
          */
         readonly get: operations["users/get-by-username"];
         readonly put?: never;
@@ -18254,6 +18521,11 @@ export interface components {
                 readonly score: number | null;
             } | null;
         } | null;
+        /** @description The EPSS scores as calculated by the [Exploit Prediction Scoring System](https://www.first.org/epss). */
+        readonly "security-advisory-epss": {
+            readonly percentage?: number;
+            readonly percentile?: number;
+        } | null;
         /**
          * Simple User
          * @description A GitHub user.
@@ -18415,16 +18687,13 @@ export interface components {
                 readonly score: number | null;
             } | null;
             readonly cvss_severities?: components["schemas"]["cvss-severities"];
+            readonly epss?: components["schemas"]["security-advisory-epss"];
             readonly cwes: readonly {
                 /** @description The Common Weakness Enumeration (CWE) identifier. */
                 readonly cwe_id: string;
                 /** @description The name of the CWE. */
                 readonly name: string;
             }[] | null;
-            readonly epss?: {
-                readonly percentage?: number;
-                readonly percentile?: number;
-            } | null;
             /** @description The users who contributed to the advisory. */
             readonly credits: readonly {
                 readonly user: components["schemas"]["simple-user"];
@@ -18451,79 +18720,52 @@ export interface components {
             readonly errors?: readonly string[];
         };
         /**
-         * Simple User
-         * @description A GitHub user.
+         * Enterprise
+         * @description An enterprise on GitHub.
          */
-        readonly "nullable-simple-user": {
-            readonly name?: string | null;
-            readonly email?: string | null;
-            /** @example octocat */
-            readonly login: string;
-            /**
-             * Format: int64
-             * @example 1
-             */
-            readonly id: number;
-            /** @example MDQ6VXNlcjE= */
-            readonly node_id: string;
+        readonly enterprise: {
+            /** @description A short description of the enterprise. */
+            readonly description?: string | null;
             /**
              * Format: uri
-             * @example https://github.com/images/error/octocat_happy.gif
-             */
-            readonly avatar_url: string;
-            /** @example 41d064eb2195891e12d0413f63227ea7 */
-            readonly gravatar_id: string | null;
-            /**
-             * Format: uri
-             * @example https://api.github.com/users/octocat
-             */
-            readonly url: string;
-            /**
-             * Format: uri
-             * @example https://github.com/octocat
+             * @example https://github.com/enterprises/octo-business
              */
             readonly html_url: string;
             /**
              * Format: uri
-             * @example https://api.github.com/users/octocat/followers
+             * @description The enterprise's website URL.
              */
-            readonly followers_url: string;
-            /** @example https://api.github.com/users/octocat/following{/other_user} */
-            readonly following_url: string;
-            /** @example https://api.github.com/users/octocat/gists{/gist_id} */
-            readonly gists_url: string;
-            /** @example https://api.github.com/users/octocat/starred{/owner}{/repo} */
-            readonly starred_url: string;
+            readonly website_url?: string | null;
             /**
-             * Format: uri
-             * @example https://api.github.com/users/octocat/subscriptions
+             * @description Unique identifier of the enterprise
+             * @example 42
              */
-            readonly subscriptions_url: string;
+            readonly id: number;
+            /** @example MDEwOlJlcG9zaXRvcnkxMjk2MjY5 */
+            readonly node_id: string;
             /**
-             * Format: uri
-             * @example https://api.github.com/users/octocat/orgs
+             * @description The name of the enterprise.
+             * @example Octo Business
              */
-            readonly organizations_url: string;
+            readonly name: string;
             /**
-             * Format: uri
-             * @example https://api.github.com/users/octocat/repos
+             * @description The slug url identifier for the enterprise.
+             * @example octo-business
              */
-            readonly repos_url: string;
-            /** @example https://api.github.com/users/octocat/events{/privacy} */
-            readonly events_url: string;
+            readonly slug: string;
             /**
-             * Format: uri
-             * @example https://api.github.com/users/octocat/received_events
+             * Format: date-time
+             * @example 2019-01-26T19:01:12Z
              */
-            readonly received_events_url: string;
-            /** @example User */
-            readonly type: string;
-            readonly site_admin: boolean;
-            /** @example "2020-07-09T00:17:55Z" */
-            readonly starred_at?: string;
-            /** @example public */
-            readonly user_view_type?: string;
-        } | null;
+            readonly created_at: string | null;
+            /**
+             * Format: date-time
+             * @example 2019-01-26T19:14:43Z
+             */
+            readonly updated_at: string | null;
+            /** Format: uri */
+            readonly avatar_url: string;
+        };
         /**
          * GitHub app
          * @description GitHub apps are a new way to extend GitHub. They can be installed directly on organizations and user accounts and granted access to specific repositories. They come with granular permissions and built-in webhooks. GitHub apps are first class actors within GitHub.
@@ -18543,7 +18785,7 @@ export interface components {
             readonly node_id: string;
             /** @example "Iv1.25b5d1e65ffc4022" */
             readonly client_id?: string;
-            readonly owner: components["schemas"]["nullable-simple-user"];
+            readonly owner: components["schemas"]["simple-user"] | components["schemas"]["enterprise"];
             /**
              * @description The name of the GitHub app
              * @example Probot Owners
@@ -18822,53 +19064,6 @@ export interface components {
             };
         };
         /**
-         * Enterprise
-         * @description An enterprise on GitHub.
-         */
-        readonly enterprise: {
-            /** @description A short description of the enterprise. */
-            readonly description?: string | null;
-            /**
-             * Format: uri
-             * @example https://github.com/enterprises/octo-business
-             */
-            readonly html_url: string;
-            /**
-             * Format: uri
-             * @description The enterprise's website URL.
-             */
-            readonly website_url?: string | null;
-            /**
-             * @description Unique identifier of the enterprise
-             * @example 42
-             */
-            readonly id: number;
-            /** @example MDEwOlJlcG9zaXRvcnkxMjk2MjY5 */
-            readonly node_id: string;
-            /**
-             * @description The name of the enterprise.
-             * @example Octo Business
-             */
-            readonly name: string;
-            /**
-             * @description The slug url identifier for the enterprise.
-             * @example octo-business
-             */
-            readonly slug: string;
-            /**
-             * Format: date-time
-             * @example 2019-01-26T19:01:12Z
-             */
-            readonly created_at: string | null;
-            /**
-             * Format: date-time
-             * @example 2019-01-26T19:14:43Z
-             */
-            readonly updated_at: string | null;
-            /** Format: uri */
-            readonly avatar_url: string;
-        };
-        /**
          * Integration Installation Request
          * @description Request to install an integration on a target
          */
@@ -19141,6 +19336,80 @@ export interface components {
             readonly starring?: "read" | "write";
         };
         /**
+         * Simple User
+         * @description A GitHub user.
+         */
+        readonly "nullable-simple-user": {
+            readonly name?: string | null;
+            readonly email?: string | null;
+            /** @example octocat */
+            readonly login: string;
+            /**
+             * Format: int64
+             * @example 1
+             */
+            readonly id: number;
+            /** @example MDQ6VXNlcjE= */
+            readonly node_id: string;
+            /**
+             * Format: uri
+             * @example https://github.com/images/error/octocat_happy.gif
+             */
+            readonly avatar_url: string;
+            /** @example 41d064eb2195891e12d0413f63227ea7 */
+            readonly gravatar_id: string | null;
+            /**
+             * Format: uri
+             * @example https://api.github.com/users/octocat
+             */
+            readonly url: string;
+            /**
+             * Format: uri
+             * @example https://github.com/octocat
+             */
+            readonly html_url: string;
+            /**
+             * Format: uri
+             * @example https://api.github.com/users/octocat/followers
+             */
+            readonly followers_url: string;
+            /** @example https://api.github.com/users/octocat/following{/other_user} */
+            readonly following_url: string;
+            /** @example https://api.github.com/users/octocat/gists{/gist_id} */
+            readonly gists_url: string;
+            /** @example https://api.github.com/users/octocat/starred{/owner}{/repo} */
+            readonly starred_url: string;
+            /**
+             * Format: uri
+             * @example https://api.github.com/users/octocat/subscriptions
+             */
+            readonly subscriptions_url: string;
+            /**
+             * Format: uri
+             * @example https://api.github.com/users/octocat/orgs
+             */
+            readonly organizations_url: string;
+            /**
+             * Format: uri
+             * @example https://api.github.com/users/octocat/repos
+             */
+            readonly repos_url: string;
+            /** @example https://api.github.com/users/octocat/events{/privacy} */
+            readonly events_url: string;
+            /**
+             * Format: uri
+             * @example https://api.github.com/users/octocat/received_events
+             */
+            readonly received_events_url: string;
+            /** @example User */
+            readonly type: string;
+            readonly site_admin: boolean;
+            /** @example "2020-07-09T00:17:55Z" */
+            readonly starred_at?: string;
+            /** @example public */
+            readonly user_view_type?: string;
+        } | null;
+        /**
          * Installation
          * @description Installation
          */
@@ -19187,10 +19456,12 @@ export interface components {
             readonly single_file_name: string | null;
             /** @example true */
             readonly has_multiple_single_files?: boolean;
-            /** @example [
+            /**
+             * @example [
              *       "config.yml",
              *       ".github/issue_TEMPLATE.md"
-             *     ] */
+             *     ]
+             */
             readonly single_file_paths?: readonly string[];
             /** @example github-actions */
             readonly app_slug: string;
@@ -19593,10 +19864,12 @@ export interface components {
             readonly single_file?: string;
             /** @example true */
             readonly has_multiple_single_files?: boolean;
-            /** @example [
+            /**
+             * @example [
              *       "config.yml",
              *       ".github/issue_TEMPLATE.md"
-             *     ] */
+             *     ]
+             */
             readonly single_file_paths?: readonly string[];
         };
         /** Scoped Installation */
@@ -19611,10 +19884,12 @@ export interface components {
             readonly single_file_name: string | null;
             /** @example true */
             readonly has_multiple_single_files?: boolean;
-            /** @example [
+            /**
+             * @example [
              *       "config.yml",
              *       ".github/issue_TEMPLATE.md"
-             *     ] */
+             *     ]
+             */
             readonly single_file_paths?: readonly string[];
             /**
              * Format: uri
@@ -20049,7 +20324,8 @@ export interface components {
              * @example https://api.github.com/codes_of_conduct/contributor_covenant
              */
             readonly url: string;
-            /** @example # Contributor Covenant Code of Conduct
+            /**
+             * @example # Contributor Covenant Code of Conduct
              *
              *     ## Our Pledge
              *
@@ -20094,7 +20370,7 @@ export interface components {
              *     ## Attribution
              *
              *     This Code of Conduct is adapted from the [Contributor Covenant](http://contributor-covenant.org), version 1.4, available at [http://contributor-covenant.org/version/1/4](http://contributor-covenant.org/version/1/4/).
-             *      */
+             */
             readonly body?: string;
             /** Format: uri */
             readonly html_url: string | null;
@@ -20540,6 +20816,7 @@ export interface components {
                 readonly vector_string: string | null;
             };
             readonly cvss_severities?: components["schemas"]["cvss-severities"];
+            readonly epss?: components["schemas"]["security-advisory-epss"];
             /** @description Details for the advisory pertaining to Common Weakness Enumeration. */
             readonly cwes: readonly {
                 /** @description The unique CWE ID. */
@@ -20690,8 +20967,10 @@ export interface components {
             readonly resolved_by?: components["schemas"]["nullable-simple-user"];
             /** @description The type of secret that secret scanning detected. */
             readonly secret_type?: string;
-            /** @description User-friendly name for the detected secret, matching the `secret_type`.
-             *     For a list of built-in patterns, see "[Supported secret scanning patterns](https://docs.github.com/code-security/secret-scanning/introduction/supported-secret-scanning-patterns#supported-secrets)." */
+            /**
+             * @description User-friendly name for the detected secret, matching the `secret_type`.
+             *     For a list of built-in patterns, see "[Supported secret scanning patterns](https://docs.github.com/code-security/secret-scanning/introduction/supported-secret-scanning-patterns#supported-secrets)."
+             */
             readonly secret_type_display_name?: string;
             /** @description The secret that was detected. */
             readonly secret?: string;
@@ -20828,7 +21107,7 @@ export interface components {
             readonly node_id: string;
             /** @example "Iv1.25b5d1e65ffc4022" */
             readonly client_id?: string;
-            readonly owner: components["schemas"]["nullable-simple-user"];
+            readonly owner: components["schemas"]["simple-user"] | components["schemas"]["enterprise"];
             /**
              * @description The name of the GitHub app
              * @example Probot Owners
@@ -21124,9 +21403,11 @@ export interface components {
             readonly current_user_actor_url?: string;
             /** @example https://github.com/octocat-org */
             readonly current_user_organization_url?: string;
-            /** @example [
+            /**
+             * @example [
              *       "https://github.com/organizations/github/octocat.private.atom?token=abc123"
-             *     ] */
+             *     ]
+             */
             readonly current_user_organization_urls?: readonly string[];
             /** @example https://github.com/security-advisories */
             readonly security_advisories_url?: string;
@@ -21193,6 +21474,7 @@ export interface components {
             readonly updated_at: string;
             readonly description: string | null;
             readonly comments: number;
+            readonly comments_enabled?: boolean;
             readonly user: components["schemas"]["nullable-simple-user"];
             /** Format: uri */
             readonly comments_url: string;
@@ -21344,6 +21626,7 @@ export interface components {
                 readonly updated_at: string;
                 readonly description: string | null;
                 readonly comments: number;
+                readonly comments_enabled?: boolean;
                 readonly user: components["schemas"]["nullable-simple-user"];
                 /** Format: uri */
                 readonly comments_url: string;
@@ -21381,6 +21664,7 @@ export interface components {
             readonly updated_at?: string;
             readonly description?: string | null;
             readonly comments?: number;
+            readonly comments_enabled?: boolean;
             readonly user?: string | null;
             readonly comments_url?: string;
             readonly owner?: components["schemas"]["simple-user"];
@@ -21449,7 +21733,8 @@ export interface components {
         readonly "gitignore-template": {
             /** @example C */
             readonly name: string;
-            /** @example # Object files
+            /**
+             * @example # Object files
              *     *.o
              *
              *     # Libraries
@@ -21466,7 +21751,7 @@ export interface components {
              *     *.exe
              *     *.out
              *     *.app
-             *      */
+             */
             readonly source: string;
         };
         /**
@@ -21517,25 +21802,30 @@ export interface components {
             readonly description: string;
             /** @example Create a text file (typically named LICENSE or LICENSE.txt) in the root of your source code and copy the text of the license into the file. Replace [year] with the current year and [fullname] with the name (or names) of the copyright holders. */
             readonly implementation: string;
-            /** @example [
+            /**
+             * @example [
              *       "commercial-use",
              *       "modifications",
              *       "distribution",
              *       "sublicense",
              *       "private-use"
-             *     ] */
+             *     ]
+             */
             readonly permissions: readonly string[];
-            /** @example [
+            /**
+             * @example [
              *       "include-copyright"
-             *     ] */
+             *     ]
+             */
             readonly conditions: readonly string[];
-            /** @example [
+            /**
+             * @example [
              *       "no-liability"
-             *     ] */
+             *     ]
+             */
             readonly limitations: readonly string[];
-            /** @example
-             *
-             *     The MIT License (MIT)
+            /**
+             * @example The MIT License (MIT)
              *
              *     Copyright (c) [year] [fullname]
              *
@@ -21556,7 +21846,7 @@ export interface components {
              *     LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
              *     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
              *     SOFTWARE.
-             *      */
+             */
             readonly body: string;
             /** @example true */
             readonly featured: boolean;
@@ -21598,10 +21888,12 @@ export interface components {
             readonly unit_name: string | null;
             /** @example published */
             readonly state: string;
-            /** @example [
+            /**
+             * @example [
              *       "Up to 25 private repositories",
              *       "11 concurrent builds"
-             *     ] */
+             *     ]
+             */
             readonly bullets: readonly string[];
         };
         /**
@@ -21646,61 +21938,89 @@ export interface components {
                 readonly SHA256_ECDSA?: string;
                 readonly SHA256_ED25519?: string;
             };
-            /** @example [
+            /**
+             * @example [
              *       "ssh-ed25519 ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-             *     ] */
+             *     ]
+             */
             readonly ssh_keys?: readonly string[];
-            /** @example [
+            /**
+             * @example [
              *       "192.0.2.1"
-             *     ] */
+             *     ]
+             */
             readonly hooks?: readonly string[];
-            /** @example [
+            /**
+             * @example [
              *       "192.0.2.1"
-             *     ] */
+             *     ]
+             */
             readonly github_enterprise_importer?: readonly string[];
-            /** @example [
+            /**
+             * @example [
              *       "192.0.2.1"
-             *     ] */
+             *     ]
+             */
             readonly web?: readonly string[];
-            /** @example [
+            /**
+             * @example [
              *       "192.0.2.1"
-             *     ] */
+             *     ]
+             */
             readonly api?: readonly string[];
-            /** @example [
+            /**
+             * @example [
              *       "192.0.2.1"
-             *     ] */
+             *     ]
+             */
             readonly git?: readonly string[];
-            /** @example [
+            /**
+             * @example [
              *       "192.0.2.1"
-             *     ] */
+             *     ]
+             */
             readonly packages?: readonly string[];
-            /** @example [
+            /**
+             * @example [
              *       "192.0.2.1"
-             *     ] */
+             *     ]
+             */
             readonly pages?: readonly string[];
-            /** @example [
+            /**
+             * @example [
              *       "192.0.2.1"
-             *     ] */
+             *     ]
+             */
             readonly importer?: readonly string[];
-            /** @example [
+            /**
+             * @example [
              *       "192.0.2.1"
-             *     ] */
+             *     ]
+             */
             readonly actions?: readonly string[];
-            /** @example [
+            /**
+             * @example [
              *       "192.0.2.1"
-             *     ] */
+             *     ]
+             */
             readonly actions_macos?: readonly string[];
-            /** @example [
+            /**
+             * @example [
              *       "192.0.2.1"
-             *     ] */
+             *     ]
+             */
             readonly codespaces?: readonly string[];
-            /** @example [
+            /**
+             * @example [
              *       "192.0.2.1"
-             *     ] */
+             *     ]
+             */
             readonly dependabot?: readonly string[];
-            /** @example [
+            /**
+             * @example [
              *       "192.0.2.1"
-             *     ] */
+             *     ]
+             */
             readonly copilot?: readonly string[];
             readonly domains?: {
                 readonly website?: readonly string[];
@@ -21713,9 +22033,11 @@ export interface components {
                     readonly wildcard_domains?: readonly string[];
                 };
                 readonly artifact_attestations?: {
-                    /** @example [
+                    /**
+                     * @example [
                      *       "example"
-                     *     ] */
+                     *     ]
+                     */
                     readonly trust_domain?: string;
                     readonly services?: readonly string[];
                 };
@@ -22321,6 +22643,186 @@ export interface components {
             readonly active_caches_count: number;
         };
         /**
+         * GitHub-hosted runner image details.
+         * @description Provides details of a hosted runner image
+         */
+        readonly "nullable-actions-hosted-runner-pool-image": {
+            /**
+             * @description The ID of the image. Use this ID for the `image` parameter when creating a new larger runner.
+             * @example ubuntu-20.04
+             */
+            readonly id: string;
+            /**
+             * @description Image size in GB.
+             * @example 86
+             */
+            readonly size_gb: number;
+            /**
+             * @description Display name for this image.
+             * @example 20.04
+             */
+            readonly display_name: string;
+            /**
+             * @description The image provider.
+             * @enum {string}
+             */
+            readonly source: "github" | "partner" | "custom";
+            /**
+             * @description The image version of the hosted runner pool.
+             * @example latest
+             */
+            readonly version: string;
+        } | null;
+        /**
+         * Github-owned VM details.
+         * @description Provides details of a particular machine spec.
+         */
+        readonly "actions-hosted-runner-machine-spec": {
+            /**
+             * @description The ID used for the `size` parameter when creating a new runner.
+             * @example 8-core
+             */
+            readonly id: string;
+            /**
+             * @description The number of cores.
+             * @example 8
+             */
+            readonly cpu_cores: number;
+            /**
+             * @description The available RAM for the machine spec.
+             * @example 32
+             */
+            readonly memory_gb: number;
+            /**
+             * @description The available SSD storage for the machine spec.
+             * @example 300
+             */
+            readonly storage_gb: number;
+        };
+        /**
+         * Public IP for a GitHub-hosted larger runners.
+         * @description Provides details of Public IP for a GitHub-hosted larger runners
+         */
+        readonly "public-ip": {
+            /**
+             * @description Whether public IP is enabled.
+             * @example true
+             */
+            readonly enabled?: boolean;
+            /**
+             * @description The prefix for the public IP.
+             * @example 20.80.208.150
+             */
+            readonly prefix?: string;
+            /**
+             * @description The length of the IP prefix.
+             * @example 28
+             */
+            readonly length?: number;
+        };
+        /**
+         * GitHub-hosted hosted runner
+         * @description A Github-hosted hosted runner.
+         */
+        readonly "actions-hosted-runner": {
+            /**
+             * @description The unique identifier of the hosted runner.
+             * @example 5
+             */
+            readonly id: number;
+            /**
+             * @description The name of the hosted runner.
+             * @example my-github-hosted-runner
+             */
+            readonly name: string;
+            /**
+             * @description The unique identifier of the group that the hosted runner belongs to.
+             * @example 2
+             */
+            readonly runner_group_id?: number;
+            readonly image_details: components["schemas"]["nullable-actions-hosted-runner-pool-image"];
+            readonly machine_size_details: components["schemas"]["actions-hosted-runner-machine-spec"];
+            /**
+             * @description The status of the runner.
+             * @example Ready
+             * @enum {string}
+             */
+            readonly status: "Ready" | "Provisioning" | "Shutdown" | "Deleting" | "Stuck";
+            /**
+             * @description The operating system of the image.
+             * @example linux-x64
+             */
+            readonly platform: string;
+            /**
+             * @description The maximum amount of hosted runners. Runners will not scale automatically above this number. Use this setting to limit your cost.
+             * @default 10
+             * @example 5
+             */
+            readonly maximum_runners: number;
+            /**
+             * @description Whether public IP is enabled for the hosted runners.
+             * @example true
+             */
+            readonly public_ip_enabled: boolean;
+            /** @description The public IP ranges when public IP is enabled for the hosted runners. */
+            readonly public_ips?: readonly components["schemas"]["public-ip"][];
+            /**
+             * Format: date-time
+             * @description The time at which the runner was last used, in ISO 8601 format.
+             * @example 2022-10-09T23:39:01Z
+             */
+            readonly last_active_on?: string | null;
+        };
+        /**
+         * GitHub-hosted runner image details.
+         * @description Provides details of a hosted runner image
+         */
+        readonly "actions-hosted-runner-image": {
+            /**
+             * @description The ID of the image. Use this ID for the `image` parameter when creating a new larger runner.
+             * @example ubuntu-20.04
+             */
+            readonly id: string;
+            /**
+             * @description The operating system of the image.
+             * @example linux-x64
+             */
+            readonly platform: string;
+            /**
+             * @description Image size in GB.
+             * @example 86
+             */
+            readonly size_gb: number;
+            /**
+             * @description Display name for this image.
+             * @example 20.04
+             */
+            readonly display_name: string;
+            /**
+             * @description The image provider.
+             * @enum {string}
+             */
+            readonly source: "github" | "partner" | "custom";
+        };
+        readonly "actions-hosted-runner-limits": {
+            /**
+             * Static public IP Limits for GitHub-hosted Hosted Runners.
+             * @description Provides details of static public IP limits for GitHub-hosted Hosted Runners
+             */
+            readonly public_ips: {
+                /**
+                 * @description The maximum number of static public IP addresses that can be used for Hosted Runners.
+                 * @example 50
+                 */
+                readonly maximum: number;
+                /**
+                 * @description The current number of static public IP addresses in use by Hosted Runners.
+                 * @example 17
+                 */
+                readonly current_usage: number;
+            };
+        };
+        /**
          * Actions OIDC Subject customization
          * @description Actions OIDC Subject customization
          */
@@ -22357,10 +22859,12 @@ export interface components {
             readonly github_owned_allowed?: boolean;
             /** @description Whether actions from GitHub Marketplace verified creators are allowed. Set to `true` to allow all actions by GitHub Marketplace verified creators. */
             readonly verified_allowed?: boolean;
-            /** @description Specifies a list of string-matching patterns to allow specific action(s) and reusable workflow(s). Wildcards, tags, and SHAs are allowed. For example, `monalisa/octocat@*`, `monalisa/octocat@v2`, `monalisa/*`.
+            /**
+             * @description Specifies a list of string-matching patterns to allow specific action(s) and reusable workflow(s). Wildcards, tags, and SHAs are allowed. For example, `monalisa/octocat@*`, `monalisa/octocat@v2`, `monalisa/*`.
              *
              *     > [!NOTE]
-             *     > The `patterns_allowed` setting only applies to public repositories. */
+             *     > The `patterns_allowed` setting only applies to public repositories.
+             */
             readonly patterns_allowed?: readonly string[];
         };
         /**
@@ -22387,6 +22891,8 @@ export interface components {
             readonly selected_repositories_url?: string;
             readonly runners_url: string;
             readonly hosted_runners_url?: string;
+            /** @description The identifier of a hosted compute network configuration. */
+            readonly network_configuration_id?: string;
             readonly inherited: boolean;
             readonly inherited_allows_public_repositories?: boolean;
             readonly allows_public_repositories: boolean;
@@ -22480,10 +22986,12 @@ export interface components {
              * @example 2016-07-11T22:14:10Z
              */
             readonly expires_at: string;
-            /** @example {
+            /**
+             * @example {
              *       "issues": "read",
              *       "deployments": "write"
-             *     } */
+             *     }
+             */
             readonly permissions?: Record<string, never>;
             /** @description The repositories this token has access to */
             readonly repositories?: readonly components["schemas"]["repository"][];
@@ -22646,8 +23154,10 @@ export interface components {
             readonly version?: components["schemas"]["code-scanning-analysis-tool-version"];
             readonly guid?: components["schemas"]["code-scanning-analysis-tool-guid"];
         };
-        /** @description The Git reference, formatted as `refs/pull/<number>/merge`, `refs/pull/<number>/head`,
-         *     `refs/heads/<branch name>` or simply `<branch name>`. */
+        /**
+         * @description The Git reference, formatted as `refs/pull/<number>/merge`, `refs/pull/<number>/head`,
+         *     `refs/heads/<branch name>` or simply `<branch name>`.
+         */
         readonly "code-scanning-ref": string;
         /** @description Identifies the configuration under which the analysis was executed. For example, in GitHub Actions this includes the workflow filename and job name. */
         readonly "code-scanning-analysis-analysis-key": string;
@@ -22680,8 +23190,10 @@ export interface components {
             };
             readonly location?: components["schemas"]["code-scanning-alert-location"];
             readonly html_url?: string;
-            /** @description Classifications that have been applied to the file that triggered the alert.
-             *     For example identifying it as documentation, or a generated file. */
+            /**
+             * @description Classifications that have been applied to the file that triggered the alert.
+             *     For example identifying it as documentation, or a generated file.
+             */
             readonly classifications?: readonly components["schemas"]["code-scanning-alert-classification"][];
         };
         readonly "code-scanning-organization-alert-items": {
@@ -23163,6 +23675,8 @@ export interface components {
             readonly sync_to_organizations: string;
             /** @example 62ab9291-fae2-468e-974b-7e45096d5021 */
             readonly group_id?: string | null;
+            /** @example Justice League */
+            readonly group_name?: string | null;
             /**
              * Format: uri
              * @example https://github.com/enterprises/dc/teams/justice-league
@@ -23746,10 +24260,12 @@ export interface components {
             readonly deliveries_url?: string;
             /** @example web */
             readonly name: string;
-            /** @example [
+            /**
+             * @example [
              *       "push",
              *       "pull_request"
-             *     ] */
+             *     ]
+             */
             readonly events: readonly string[];
             /** @example true */
             readonly active: boolean;
@@ -24482,8 +24998,10 @@ export interface components {
             readonly default_value?: (string | readonly string[]) | null;
             /** @description Short description of the property */
             readonly description?: string | null;
-            /** @description An ordered list of the allowed values of the property.
-             *     The property can have up to 200 allowed values. */
+            /**
+             * @description An ordered list of the allowed values of the property.
+             *     The property can have up to 200 allowed values.
+             */
             readonly allowed_values?: readonly string[] | null;
             /**
              * @description Who can edit the values of the property
@@ -24509,8 +25027,10 @@ export interface components {
             readonly default_value?: (string | readonly string[]) | null;
             /** @description Short description of the property */
             readonly description?: string | null;
-            /** @description An ordered list of the allowed values of the property.
-             *     The property can have up to 200 allowed values. */
+            /**
+             * @description An ordered list of the allowed values of the property.
+             *     The property can have up to 200 allowed values.
+             */
             readonly allowed_values?: readonly string[] | null;
         };
         /**
@@ -25095,12 +25615,14 @@ export interface components {
             readonly open_issues_count: number;
             /** @example true */
             readonly is_template?: boolean;
-            /** @example [
+            /**
+             * @example [
              *       "octocat",
              *       "atom",
              *       "electron",
              *       "API"
-             *     ] */
+             *     ]
+             */
             readonly topics?: readonly string[];
             /** @example true */
             readonly has_issues: boolean;
@@ -26008,6 +26530,69 @@ export interface components {
             readonly estimated_paid_storage_for_month: number;
             /** @description Estimated sum of free and paid storage space (GB) used in billing cycle. */
             readonly estimated_storage_for_month: number;
+        };
+        /**
+         * Hosted compute network configuration
+         * @description A hosted compute network configuration.
+         */
+        readonly "network-configuration": {
+            /**
+             * @description The unique identifier of the network configuration.
+             * @example 123ABC456DEF789
+             */
+            readonly id: string;
+            /**
+             * @description The name of the network configuration.
+             * @example my-network-configuration
+             */
+            readonly name: string;
+            /**
+             * @description The hosted compute service the network configuration supports.
+             * @enum {string}
+             */
+            readonly compute_service?: "none" | "actions" | "codespaces";
+            /**
+             * @description The unique identifier of each network settings in the configuration.
+             * @example 123ABC456DEF789
+             */
+            readonly network_settings_ids?: readonly string[];
+            /**
+             * Format: date-time
+             * @description The time at which the network configuration was created, in ISO 8601 format.
+             * @example 2024-04-26T11:31:07Z
+             */
+            readonly created_on: string | null;
+        };
+        /**
+         * Hosted compute network settings resource
+         * @description A hosted compute network settings resource.
+         */
+        readonly "network-settings": {
+            /**
+             * @description The unique identifier of the network settings resource.
+             * @example 220F78DACB92BBFBC5E6F22DE1CCF52309D
+             */
+            readonly id: string;
+            /**
+             * @description The identifier of the network configuration that is using this settings resource.
+             * @example 934E208B3EE0BD60CF5F752C426BFB53562
+             */
+            readonly network_configuration_id?: string;
+            /**
+             * @description The name of the network settings resource.
+             * @example my-network-settings
+             */
+            readonly name: string;
+            /**
+             * @description The subnet this network settings resource is configured for.
+             * @example /subscriptions/14839728-3ad9-43ab-bd2b-fa6ad0f75e2a/resourceGroups/my-rg/providers/Microsoft.Network/virtualNetworks/my-vnet/subnets/my-subnet
+             */
+            readonly subnet_id: string;
+            /**
+             * @description The location of the subnet this network settings resource is configured for.
+             * @example eastus
+             */
+            readonly region: string;
         };
         /**
          * Team Organization
@@ -27709,17 +28294,17 @@ export interface components {
             readonly is_alphanumeric: boolean;
         };
         /**
-         * Check Automated Security Fixes
-         * @description Check Automated Security Fixes
+         * Check Dependabot security updates
+         * @description Check Dependabot security updates
          */
         readonly "check-automated-security-fixes": {
             /**
-             * @description Whether automated security fixes are enabled for the repository.
+             * @description Whether Dependabot security updates are enabled for the repository.
              * @example true
              */
             readonly enabled: boolean;
             /**
-             * @description Whether automated security fixes are paused for the repository.
+             * @description Whether Dependabot security updates are paused for the repository.
              * @example false
              */
             readonly paused: boolean;
@@ -28135,9 +28720,11 @@ export interface components {
             readonly url: string;
             /** @example true */
             readonly strict: boolean;
-            /** @example [
+            /**
+             * @example [
              *       "continuous-integration/travis-ci"
-             *     ] */
+             *     ]
+             */
             readonly contexts: readonly string[];
             readonly checks: readonly {
                 /** @example continuous-integration/travis-ci */
@@ -28823,6 +29410,16 @@ export interface components {
             /** @description Languages to be analyzed. */
             readonly languages?: readonly ("actions" | "c-cpp" | "csharp" | "go" | "java-kotlin" | "javascript-typescript" | "javascript" | "python" | "ruby" | "typescript" | "swift")[];
             /**
+             * @description Runner type to be used.
+             * @enum {string|null}
+             */
+            readonly runner_type?: "standard" | "labeled" | null;
+            /**
+             * @description Runner label to be used if the runner type is labeled.
+             * @example code-scanning
+             */
+            readonly runner_label?: string | null;
+            /**
              * @description CodeQL query suite to be used.
              * @enum {string}
              */
@@ -28864,8 +29461,10 @@ export interface components {
             /** @description CodeQL languages to be analyzed. */
             readonly languages?: readonly ("actions" | "c-cpp" | "csharp" | "go" | "java-kotlin" | "javascript-typescript" | "python" | "ruby" | "swift")[];
         };
-        /** @description You can use `run_url` to track the status of the run. This includes a property status and conclusion.
-         *     You should not rely on this always being an actions workflow run object. */
+        /**
+         * @description You can use `run_url` to track the status of the run. This includes a property status and conclusion.
+         *     You should not rely on this always being an actions workflow run object.
+         */
         readonly "code-scanning-default-setup-update-response": {
             /** @description ID of the corresponding run. */
             readonly run_id?: number;
@@ -31698,7 +32297,7 @@ export interface components {
              * @default RIGHT
              * @enum {string|null}
              */
-            readonly start_side: "LEFT" | "RIGHT";
+            readonly start_side: "LEFT" | "RIGHT" | null;
             /**
              * @description The line of the blob to which the comment applies. The last line of the range for a multi-line comment
              * @example 2
@@ -32473,7 +33072,7 @@ export interface components {
              * @default RIGHT
              * @enum {string|null}
              */
-            readonly start_side: "LEFT" | "RIGHT";
+            readonly start_side: "LEFT" | "RIGHT" | null;
             /**
              * @description The line of the blob to which the comment applies. The last line of the range for a multi-line comment
              * @example 2
@@ -32638,8 +33237,10 @@ export interface components {
             readonly resolution_comment?: string | null;
             /** @description The type of secret that secret scanning detected. */
             readonly secret_type?: string;
-            /** @description User-friendly name for the detected secret, matching the `secret_type`.
-             *     For a list of built-in patterns, see "[Supported secret scanning patterns](https://docs.github.com/code-security/secret-scanning/introduction/supported-secret-scanning-patterns#supported-secrets)." */
+            /**
+             * @description User-friendly name for the detected secret, matching the `secret_type`.
+             *     For a list of built-in patterns, see "[Supported secret scanning patterns](https://docs.github.com/code-security/secret-scanning/introduction/supported-secret-scanning-patterns#supported-secrets)."
+             */
             readonly secret_type_display_name?: string;
             /** @description The secret that was detected. */
             readonly secret?: string;
@@ -33034,7 +33635,8 @@ export interface components {
          * @description Commit Activity
          */
         readonly "commit-activity": {
-            /** @example [
+            /**
+             * @example [
              *       0,
              *       3,
              *       26,
@@ -33042,7 +33644,8 @@ export interface components {
              *       39,
              *       1,
              *       0
-             *     ] */
+             *     ]
+             */
             readonly days: readonly number[];
             /** @example 89 */
             readonly total: number;
@@ -33057,14 +33660,16 @@ export interface components {
             readonly author: components["schemas"]["nullable-simple-user"];
             /** @example 135 */
             readonly total: number;
-            /** @example [
+            /**
+             * @example [
              *       {
              *         "w": "1367712000",
              *         "a": 6898,
              *         "d": 77,
              *         "c": 10
              *       }
-             *     ] */
+             *     ]
+             */
             readonly weeks: readonly {
                 readonly w?: number;
                 readonly a?: number;
@@ -33239,10 +33844,12 @@ export interface components {
             readonly language?: string | null;
             /** Format: date-time */
             readonly last_modified_at?: string;
-            /** @example [
+            /**
+             * @example [
              *       "73..77",
              *       "77..78"
-             *     ] */
+             *     ]
+             */
             readonly line_numbers?: readonly string[];
             readonly text_matches?: components["schemas"]["search-result-text-matches"];
         };
@@ -34010,17 +34617,20 @@ export interface components {
             readonly key_id: string;
             /** @example xsBNBFayYZ... */
             readonly public_key: string;
-            /** @example [
+            /**
+             * @example [
              *       {
              *         "email": "octocat@users.noreply.github.com",
              *         "verified": true
              *       }
-             *     ] */
+             *     ]
+             */
             readonly emails: readonly {
                 readonly email?: string;
                 readonly verified?: boolean;
             }[];
-            /** @example [
+            /**
+             * @example [
              *       {
              *         "id": 4,
              *         "primary_key_id": 3,
@@ -34035,7 +34645,8 @@ export interface components {
              *         "expires_at": null,
              *         "revoked": false
              *       }
-             *     ] */
+             *     ]
+             */
             readonly subkeys: readonly {
                 /** Format: int64 */
                 readonly id?: number;
@@ -39485,8 +40096,10 @@ export interface components {
             readonly resolution_comment?: string | null;
             /** @description The type of secret that secret scanning detected. */
             readonly secret_type?: string;
-            /** @description User-friendly name for the detected secret, matching the `secret_type`.
-             *     For a list of built-in patterns, see "[Supported secret scanning patterns](https://docs.github.com/code-security/secret-scanning/introduction/supported-secret-scanning-patterns#supported-secrets)." */
+            /**
+             * @description User-friendly name for the detected secret, matching the `secret_type`.
+             *     For a list of built-in patterns, see "[Supported secret scanning patterns](https://docs.github.com/code-security/secret-scanning/introduction/supported-secret-scanning-patterns#supported-secrets)."
+             */
             readonly secret_type_display_name?: string;
             /**
              * @description The token status as of the latest validity check.
@@ -40713,11 +41326,14 @@ export interface components {
                     readonly url?: string;
                     readonly user_view_type?: string;
                 } | null;
+                readonly dismissed_comment?: components["schemas"]["code-scanning-alert-dismissed-comment"];
                 /**
                  * @description The reason for dismissing or closing the alert.
                  * @enum {string|null}
                  */
                 readonly dismissed_reason: "false positive" | "won't fix" | "used in tests" | null;
+                /** @description The time that the alert was fixed in ISO 8601 format: `YYYY-MM-DDTHH:MM:SSZ`. */
+                readonly fixed_at?: unknown;
                 /**
                  * Format: uri
                  * @description The GitHub URL of the alert resource.
@@ -40765,10 +41381,10 @@ export interface components {
                     readonly severity: "none" | "note" | "warning" | "error" | null;
                 };
                 /**
-                 * @description State of a code scanning alert.
-                 * @enum {string}
+                 * @description State of a code scanning alert. Events for alerts found outside the default branch will return a `null` value until they are dismissed or fixed.
+                 * @enum {string|null}
                  */
-                readonly state: "open" | "dismissed" | "fixed";
+                readonly state: "open" | "dismissed" | "fixed" | null;
                 readonly tool: {
                     /** @description The name of the tool used to generate the code scanning analysis alert. */
                     readonly name: string;
@@ -40840,11 +41456,14 @@ export interface components {
                     readonly url?: string;
                     readonly user_view_type?: string;
                 } | null;
+                readonly dismissed_comment?: components["schemas"]["code-scanning-alert-dismissed-comment"];
                 /**
                  * @description The reason for dismissing or closing the alert.
                  * @enum {string|null}
                  */
                 readonly dismissed_reason: "false positive" | "won't fix" | "used in tests" | null;
+                /** @description The time that the alert was fixed in ISO 8601 format: `YYYY-MM-DDTHH:MM:SSZ`. */
+                readonly fixed_at?: unknown;
                 /**
                  * Format: uri
                  * @description The GitHub URL of the alert resource.
@@ -40937,6 +41556,7 @@ export interface components {
                 readonly dismissed_comment?: components["schemas"]["code-scanning-alert-dismissed-comment"];
                 /** @description The reason for dismissing or closing the alert. Can be one of: `false positive`, `won't fix`, and `used in tests`. */
                 readonly dismissed_reason: unknown;
+                /** @description The time that the alert was fixed in ISO 8601 format: `YYYY-MM-DDTHH:MM:SSZ`. */
                 readonly fixed_at?: unknown;
                 /**
                  * Format: uri
@@ -40992,7 +41612,7 @@ export interface components {
                     readonly tags?: readonly string[] | null;
                 };
                 /**
-                 * @description State of a code scanning alert.
+                 * @description State of a code scanning alert. Events for alerts found outside the default branch will return a `null` value until they are dismissed or fixed.
                  * @enum {string|null}
                  */
                 readonly state: "open" | "dismissed" | null;
@@ -41069,11 +41689,14 @@ export interface components {
                     readonly url?: string;
                     readonly user_view_type?: string;
                 } | null;
+                readonly dismissed_comment?: components["schemas"]["code-scanning-alert-dismissed-comment"];
                 /**
                  * @description The reason for dismissing or closing the alert.
                  * @enum {string|null}
                  */
                 readonly dismissed_reason: "false positive" | "won't fix" | "used in tests" | null;
+                /** @description The time that the alert was fixed in ISO 8601 format: `YYYY-MM-DDTHH:MM:SSZ`. */
+                readonly fixed_at?: unknown;
                 /**
                  * Format: uri
                  * @description The GitHub URL of the alert resource.
@@ -41129,10 +41752,10 @@ export interface components {
                     readonly tags?: readonly string[] | null;
                 };
                 /**
-                 * @description State of a code scanning alert.
-                 * @enum {string}
+                 * @description State of a code scanning alert. Events for alerts found outside the default branch will return a `null` value until they are dismissed or fixed.
+                 * @enum {string|null}
                  */
-                readonly state: "fixed";
+                readonly state: "fixed" | null;
                 readonly tool: {
                     readonly guid?: string | null;
                     /** @description The name of the tool used to generate the code scanning analysis alert. */
@@ -41164,9 +41787,12 @@ export interface components {
                 readonly created_at: string;
                 /** @description The time that the alert was dismissed in ISO 8601 format: `YYYY-MM-DDTHH:MM:SSZ`. */
                 readonly dismissed_at: string | null;
-                readonly dismissed_by: Record<string, never>;
+                readonly dismissed_by: Record<string, never> | null;
+                readonly dismissed_comment?: components["schemas"]["code-scanning-alert-dismissed-comment"];
                 /** @description The reason for dismissing or closing the alert. Can be one of: `false positive`, `won't fix`, and `used in tests`. */
                 readonly dismissed_reason: string | null;
+                /** @description The time that the alert was fixed in ISO 8601 format: `YYYY-MM-DDTHH:MM:SSZ`. */
+                readonly fixed_at?: unknown;
                 /**
                  * Format: uri
                  * @description The GitHub URL of the alert resource.
@@ -41220,10 +41846,10 @@ export interface components {
                     readonly tags?: readonly string[] | null;
                 };
                 /**
-                 * @description State of a code scanning alert.
-                 * @enum {string}
+                 * @description State of a code scanning alert. Events for alerts found outside the default branch will return a `null` value until they are dismissed or fixed.
+                 * @enum {string|null}
                  */
-                readonly state: "open" | "dismissed" | "fixed";
+                readonly state: "open" | "dismissed" | "fixed" | null;
                 readonly tool: {
                     readonly guid?: string | null;
                     /** @description The name of the tool used to generate the code scanning analysis alert. */
@@ -41258,8 +41884,11 @@ export interface components {
                 /** @description The time that the alert was dismissed in ISO 8601 format: `YYYY-MM-DDTHH:MM:SSZ`. */
                 readonly dismissed_at: unknown;
                 readonly dismissed_by: unknown;
+                readonly dismissed_comment?: components["schemas"]["code-scanning-alert-dismissed-comment"];
                 /** @description The reason for dismissing or closing the alert. Can be one of: `false positive`, `won't fix`, and `used in tests`. */
                 readonly dismissed_reason: unknown;
+                /** @description The time that the alert was fixed in ISO 8601 format: `YYYY-MM-DDTHH:MM:SSZ`. */
+                readonly fixed_at?: unknown;
                 /**
                  * Format: uri
                  * @description The GitHub URL of the alert resource.
@@ -41307,10 +41936,10 @@ export interface components {
                     readonly severity: "none" | "note" | "warning" | "error" | null;
                 };
                 /**
-                 * @description State of a code scanning alert.
-                 * @enum {string}
+                 * @description State of a code scanning alert. Events for alerts found outside the default branch will return a `null` value until they are dismissed or fixed.
+                 * @enum {string|null}
                  */
-                readonly state: "open" | "fixed";
+                readonly state: "open" | "fixed" | null;
                 readonly tool: {
                     /** @description The name of the tool used to generate the code scanning analysis alert. */
                     readonly name: string;
@@ -42189,7 +42818,7 @@ export interface components {
                 readonly display_title: string;
                 readonly event: string;
                 readonly head_branch: string;
-                readonly head_commit?: Record<string, never>;
+                readonly head_commit?: Record<string, never> | null;
                 readonly head_repository?: {
                     readonly archive_url?: string;
                     readonly assignees_url?: string;
@@ -42496,7 +43125,7 @@ export interface components {
                 readonly created_at: string;
                 readonly event: string;
                 readonly head_branch: string;
-                readonly head_commit?: Record<string, never>;
+                readonly head_commit?: Record<string, never> | null;
                 readonly head_repository?: {
                     readonly archive_url?: string;
                     readonly assignees_url?: string;
@@ -42844,7 +43473,7 @@ export interface components {
                 readonly created_at: string;
                 readonly event: string;
                 readonly head_branch: string;
-                readonly head_commit?: Record<string, never>;
+                readonly head_commit?: Record<string, never> | null;
                 readonly head_repository?: {
                     readonly archive_url?: string;
                     readonly assignees_url?: string;
@@ -44324,7 +44953,7 @@ export interface components {
                 readonly labels_url?: string;
                 readonly language?: unknown;
                 readonly languages_url?: string;
-                readonly license?: Record<string, never>;
+                readonly license?: Record<string, never> | null;
                 readonly merges_url?: string;
                 readonly milestones_url?: string;
                 readonly mirror_url?: unknown;
@@ -45131,7 +45760,7 @@ export interface components {
                     readonly url?: string;
                     readonly user_view_type?: string;
                 } | null;
-                readonly assignees?: readonly Record<string, never>[];
+                readonly assignees?: readonly (Record<string, never> | null)[];
                 readonly author_association?: string;
                 readonly body?: string | null;
                 readonly closed_at?: string | null;
@@ -45158,10 +45787,10 @@ export interface components {
                 }[];
                 readonly labels_url?: string;
                 readonly locked: boolean;
-                readonly milestone?: Record<string, never>;
+                readonly milestone?: Record<string, never> | null;
                 readonly node_id?: string;
                 readonly number?: number;
-                readonly performed_via_github_app?: Record<string, never>;
+                readonly performed_via_github_app?: Record<string, never> | null;
                 readonly reactions?: {
                     readonly "+1"?: number;
                     readonly "-1"?: number;
@@ -45675,7 +46304,7 @@ export interface components {
                     readonly url?: string;
                     readonly user_view_type?: string;
                 } | null;
-                readonly assignees?: readonly Record<string, never>[];
+                readonly assignees?: readonly (Record<string, never> | null)[];
                 readonly author_association?: string;
                 readonly body?: string | null;
                 readonly closed_at?: string | null;
@@ -45702,10 +46331,10 @@ export interface components {
                 }[];
                 readonly labels_url?: string;
                 readonly locked: boolean;
-                readonly milestone?: Record<string, never>;
+                readonly milestone?: Record<string, never> | null;
                 readonly node_id?: string;
                 readonly number?: number;
-                readonly performed_via_github_app?: Record<string, never>;
+                readonly performed_via_github_app?: Record<string, never> | null;
                 readonly reactions?: {
                     readonly "+1"?: number;
                     readonly "-1"?: number;
@@ -46221,7 +46850,7 @@ export interface components {
                     readonly url?: string;
                     readonly user_view_type?: string;
                 } | null;
-                readonly assignees?: readonly Record<string, never>[];
+                readonly assignees?: readonly (Record<string, never> | null)[];
                 readonly author_association?: string;
                 readonly body?: string | null;
                 readonly closed_at?: string | null;
@@ -46248,10 +46877,10 @@ export interface components {
                 }[];
                 readonly labels_url?: string;
                 readonly locked: boolean;
-                readonly milestone?: Record<string, never>;
+                readonly milestone?: Record<string, never> | null;
                 readonly node_id?: string;
                 readonly number?: number;
-                readonly performed_via_github_app?: Record<string, never>;
+                readonly performed_via_github_app?: Record<string, never> | null;
                 readonly reactions?: {
                     readonly "+1"?: number;
                     readonly "-1"?: number;
@@ -46744,8 +47373,8 @@ export interface components {
                 } | null;
             } & {
                 readonly active_lock_reason?: string | null;
-                readonly assignee?: Record<string, never>;
-                readonly assignees?: readonly Record<string, never>[];
+                readonly assignee?: Record<string, never> | null;
+                readonly assignees?: readonly (Record<string, never> | null)[];
                 readonly author_association?: string;
                 readonly body?: string | null;
                 readonly closed_at: string | null;
@@ -46755,13 +47384,13 @@ export interface components {
                 readonly events_url?: string;
                 readonly html_url?: string;
                 readonly id?: number;
-                readonly labels?: readonly Record<string, never>[];
+                readonly labels?: readonly (Record<string, never> | null)[];
                 readonly labels_url?: string;
                 readonly locked?: boolean;
-                readonly milestone?: Record<string, never>;
+                readonly milestone?: Record<string, never> | null;
                 readonly node_id?: string;
                 readonly number?: number;
-                readonly performed_via_github_app?: Record<string, never>;
+                readonly performed_via_github_app?: Record<string, never> | null;
                 readonly reactions?: {
                     readonly "+1"?: number;
                     readonly "-1"?: number;
@@ -52305,10 +52934,12 @@ export interface components {
             /** @enum {string} */
             readonly action: "added";
             readonly changes?: {
-                /** @description This field is included for legacy purposes; use the `role_name` field instead. The `maintain`
+                /**
+                 * @description This field is included for legacy purposes; use the `role_name` field instead. The `maintain`
                  *     role is mapped to `write` and the `triage` role is mapped to `read`. To determine the role
                  *     assigned to the collaborator, use the `role_name` field instead, which will provide the full
-                 *     role name, including custom roles. */
+                 *     role name, including custom roles.
+                 */
                 readonly permission?: {
                     /** @enum {string} */
                     readonly to: "write" | "admin" | "read";
@@ -52843,8 +53474,8 @@ export interface components {
                     readonly body?: string | Record<string, never>;
                     readonly body_html?: string;
                     readonly container_metadata?: {
-                        readonly labels?: Record<string, never>;
-                        readonly manifest?: Record<string, never>;
+                        readonly labels?: Record<string, never> | null;
+                        readonly manifest?: Record<string, never> | null;
                         readonly tag?: {
                             readonly digest?: string;
                             readonly name?: string;
@@ -52869,19 +53500,19 @@ export interface components {
                         readonly name?: string;
                         readonly version?: string;
                         readonly npm_user?: string;
-                        readonly author?: Record<string, never>;
-                        readonly bugs?: Record<string, never>;
+                        readonly author?: Record<string, never> | null;
+                        readonly bugs?: Record<string, never> | null;
                         readonly dependencies?: Record<string, never>;
                         readonly dev_dependencies?: Record<string, never>;
                         readonly peer_dependencies?: Record<string, never>;
                         readonly optional_dependencies?: Record<string, never>;
                         readonly description?: string;
-                        readonly dist?: Record<string, never>;
+                        readonly dist?: Record<string, never> | null;
                         readonly git_head?: string;
                         readonly homepage?: string;
                         readonly license?: string;
                         readonly main?: string;
-                        readonly repository?: Record<string, never>;
+                        readonly repository?: Record<string, never> | null;
                         readonly scripts?: Record<string, never>;
                         readonly id?: string;
                         readonly node_version?: string;
@@ -52894,7 +53525,7 @@ export interface components {
                         readonly files?: readonly string[];
                         readonly bin?: Record<string, never>;
                         readonly man?: Record<string, never>;
-                        readonly directories?: Record<string, never>;
+                        readonly directories?: Record<string, never> | null;
                         readonly os?: readonly string[];
                         readonly cpu?: readonly string[];
                         readonly readme?: string;
@@ -53799,8 +54430,10 @@ export interface components {
         readonly "webhook-projects-v2-item-edited": {
             /** @enum {string} */
             readonly action: "edited";
-            /** @description The changes made to the item may involve modifications in the item's fields and draft issue body.
-             *     It includes altered values for text, number, date, single select, and iteration fields, along with the GraphQL node ID of the changed field. */
+            /**
+             * @description The changes made to the item may involve modifications in the item's fields and draft issue body.
+             *     It includes altered values for text, number, date, single select, and iteration fields, along with the GraphQL node ID of the changed field.
+             */
             readonly changes?: {
                 readonly field_value: {
                     readonly field_node_id?: string;
@@ -82202,8 +82835,8 @@ export interface components {
                     readonly body?: string | Record<string, never>;
                     readonly body_html?: string;
                     readonly container_metadata?: {
-                        readonly labels?: Record<string, never>;
-                        readonly manifest?: Record<string, never>;
+                        readonly labels?: Record<string, never> | null;
+                        readonly manifest?: Record<string, never> | null;
                         readonly tag?: {
                             readonly digest?: string;
                             readonly name?: string;
@@ -82470,7 +83103,7 @@ export interface components {
                     readonly updated_at: string;
                     readonly version: string;
                 };
-                readonly registry: Record<string, never>;
+                readonly registry: Record<string, never> | null;
                 readonly updated_at: string;
             };
             readonly repository?: components["schemas"]["repository-webhooks"];
@@ -85136,7 +85769,7 @@ export interface components {
                 readonly head_branch?: string | null;
                 /** @description The name of the workflow. */
                 readonly workflow_name?: string | null;
-                readonly steps?: readonly Record<string, never>[];
+                readonly steps?: readonly (Record<string, never> | null)[];
                 readonly url?: string;
             };
             readonly deployment?: components["schemas"]["deployment"];
@@ -87033,33 +87666,55 @@ export interface components {
         readonly enterprise: string;
         /** @description The unique identifier of the code security configuration. */
         readonly "configuration-id": number;
-        /** @description A comma-separated list of states. If specified, only alerts with these states will be returned.
+        /**
+         * @description A comma-separated list of states. If specified, only alerts with these states will be returned.
          *
-         *     Can be: `auto_dismissed`, `dismissed`, `fixed`, `open` */
+         *     Can be: `auto_dismissed`, `dismissed`, `fixed`, `open`
+         */
         readonly "dependabot-alert-comma-separated-states": string;
-        /** @description A comma-separated list of severities. If specified, only alerts with these severities will be returned.
+        /**
+         * @description A comma-separated list of severities. If specified, only alerts with these severities will be returned.
          *
-         *     Can be: `low`, `medium`, `high`, `critical` */
+         *     Can be: `low`, `medium`, `high`, `critical`
+         */
         readonly "dependabot-alert-comma-separated-severities": string;
-        /** @description A comma-separated list of ecosystems. If specified, only alerts for these ecosystems will be returned.
+        /**
+         * @description A comma-separated list of ecosystems. If specified, only alerts for these ecosystems will be returned.
          *
-         *     Can be: `composer`, `go`, `maven`, `npm`, `nuget`, `pip`, `pub`, `rubygems`, `rust` */
+         *     Can be: `composer`, `go`, `maven`, `npm`, `nuget`, `pip`, `pub`, `rubygems`, `rust`
+         */
         readonly "dependabot-alert-comma-separated-ecosystems": string;
         /** @description A comma-separated list of package names. If specified, only alerts for these packages will be returned. */
         readonly "dependabot-alert-comma-separated-packages": string;
+        /**
+         * @description CVE Exploit Prediction Scoring System (EPSS) percentage. Can be specified as:
+         *     - An exact number (`n`)
+         *     - Comparators such as `>n`, `<n`, `>=n`, `<=n`
+         *     - A range like `n..n`, where `n` is a number from 0.0 to 1.0
+         *
+         *     Filters the list of alerts based on EPSS percentages. If specified, only alerts with the provided EPSS percentages will be returned.
+         */
+        readonly "dependabot-alert-comma-separated-epss": string;
         /** @description The scope of the vulnerable dependency. If specified, only alerts with this scope will be returned. */
         readonly "dependabot-alert-scope": "development" | "runtime";
-        /** @description The property by which to sort the results.
+        /**
+         * @description The property by which to sort the results.
          *     `created` means when the alert was created.
-         *     `updated` means when the alert's state last changed. */
-        readonly "dependabot-alert-sort": "created" | "updated";
-        /** @description **Deprecated**. The number of results per page (max 100), starting from the first matching result.
+         *     `updated` means when the alert's state last changed.
+         *     `epss_percentage` sorts alerts by the Exploit Prediction Scoring System (EPSS) percentage.
+         */
+        readonly "dependabot-alert-sort": "created" | "updated" | "epss_percentage";
+        /**
+         * @description **Deprecated**. The number of results per page (max 100), starting from the first matching result.
          *     This parameter must not be used in combination with `last`.
-         *     Instead, use `per_page` in combination with `after` to fetch the first page of results. */
+         *     Instead, use `per_page` in combination with `after` to fetch the first page of results.
+         */
         readonly "pagination-first": number;
-        /** @description **Deprecated**. The number of results per page (max 100), starting from the last matching result.
+        /**
+         * @description **Deprecated**. The number of results per page (max 100), starting from the last matching result.
          *     This parameter must not be used in combination with `first`.
-         *     Instead, use `per_page` in combination with `before` to fetch the last page of results. */
+         *     Instead, use `per_page` in combination with `before` to fetch the last page of results.
+         */
         readonly "pagination-last": number;
         /** @description Set to `open` or `resolved` to only list secret scanning alerts in a specific state. */
         readonly "secret-scanning-alert-state": "open" | "resolved";
@@ -87111,6 +87766,8 @@ export interface components {
         readonly "billing-usage-report-day": number;
         /** @description If specified, only return results for a single hour. The value of `hour` is an integer between `0` and `23`. */
         readonly "billing-usage-report-hour": number;
+        /** @description Unique identifier of the GitHub-hosted runner. */
+        readonly "hosted-runner-id": number;
         /** @description The unique identifier of the repository. */
         readonly "repository-id": number;
         /** @description Only return runner groups that are allowed to be used by this repository. */
@@ -87169,10 +87826,12 @@ export interface components {
         readonly "team-slug": string;
         /** @description The unique identifier of the role. */
         readonly "role-id": number;
-        /** @description The selected visibility of the packages.  This parameter is optional and only filters an existing result set.
+        /**
+         * @description The selected visibility of the packages.  This parameter is optional and only filters an existing result set.
          *
          *     The `internal` visibility is only supported for GitHub Packages registries that allow for granular permissions. For other ecosystems `internal` is synonymous with `private`.
-         *     For the list of GitHub Packages registries that support granular permissions, see "[About permissions for GitHub Packages](https://docs.github.com/packages/learn-github-packages/about-permissions-for-github-packages#granular-permissions-for-userorganization-scoped-packages)." */
+         *     For the list of GitHub Packages registries that support granular permissions, see "[About permissions for GitHub Packages](https://docs.github.com/packages/learn-github-packages/about-permissions-for-github-packages#granular-permissions-for-userorganization-scoped-packages)."
+         */
         readonly "package-visibility": "public" | "private" | "internal";
         /** @description The type of supported package. Packages in GitHub's Gradle registry have the type `maven`. Docker images pushed to GitHub's Container registry (`ghcr.io`) have the type `container`. You can use the type `docker` to find images that were pushed to GitHub's Docker registry (`docker.pkg.github.com`), even if these have now been migrated to the Container registry. */
         readonly "package-type": "npm" | "maven" | "rubygems" | "docker" | "nuget" | "container";
@@ -87196,32 +87855,41 @@ export interface components {
         readonly "fine-grained-personal-access-token-id": number;
         /** @description The custom property name */
         readonly "custom-property-name": string;
-        /** @description A comma-separated list of rule targets to filter by.
+        /**
+         * @description A comma-separated list of rule targets to filter by.
          *     If provided, only rulesets that apply to the specified targets will be returned.
          *     For example, `branch,tag,push`.
-         *      */
+         */
         readonly "ruleset-targets": string;
         /** @description The name of the ref. Cannot contain wildcard characters. Optionally prefix with `refs/heads/` to limit to branches or `refs/tags/` to limit to tags. Omit the prefix to search across all refs. When specified, only rule evaluations triggered for this ref will be returned. */
         readonly "ref-in-query": string;
         /** @description The name of the repository to filter on. */
         readonly "repository-name-in-query": string;
-        /** @description The time period to filter by.
+        /**
+         * @description The time period to filter by.
          *
-         *     For example, `day` will filter for rule suites that occurred in the past 24 hours, and `week` will filter for insights that occurred in the past 7 days (168 hours). */
+         *     For example, `day` will filter for rule suites that occurred in the past 24 hours, and `week` will filter for insights that occurred in the past 7 days (168 hours).
+         */
         readonly "time-period": "hour" | "day" | "week" | "month";
         /** @description The handle for the GitHub user account to filter on. When specified, only rule evaluations triggered by this actor will be returned. */
         readonly "actor-name-in-query": string;
         /** @description The rule results to filter on. When specified, only suites with this result will be returned. */
         readonly "rule-suite-result": "pass" | "fail" | "bypass" | "all";
-        /** @description The unique identifier of the rule suite result.
+        /**
+         * @description The unique identifier of the rule suite result.
          *     To get this ID, you can use [GET /repos/{owner}/{repo}/rulesets/rule-suites](https://docs.github.com/rest/repos/rule-suites#list-repository-rule-suites)
          *     for repositories and [GET /orgs/{org}/rulesets/rule-suites](https://docs.github.com/rest/orgs/rule-suites#list-organization-rule-suites)
-         *     for organizations. */
+         *     for organizations.
+         */
         readonly "rule-suite-id": number;
         /** @description A cursor, as given in the [Link header](https://docs.github.com/rest/guides/using-pagination-in-the-rest-api#using-link-headers). If specified, the query only searches for events before this cursor. To receive an initial cursor on your first request, include an empty "before" query string. */
         readonly "secret-scanning-pagination-before-org-repo": string;
         /** @description A cursor, as given in the [Link header](https://docs.github.com/rest/guides/using-pagination-in-the-rest-api#using-link-headers). If specified, the query only searches for events after this cursor.  To receive an initial cursor on your first request, include an empty "after" query string. */
         readonly "secret-scanning-pagination-after-org-repo": string;
+        /** @description Unique identifier of the hosted compute network configuration. */
+        readonly "network-configuration-id": string;
+        /** @description Unique identifier of the hosted compute network settings. */
+        readonly "network-settings-id": string;
         /** @description The number that identifies the discussion. */
         readonly "discussion-number": number;
         /** @description The number that identifies the comment. */
@@ -87232,10 +87900,12 @@ export interface components {
         readonly "project-id": number;
         /** @description The security feature to enable or disable. */
         readonly "security-product": "dependency_graph" | "dependabot_alerts" | "dependabot_security_updates" | "advanced_security" | "code_scanning_default_setup" | "secret_scanning" | "secret_scanning_push_protection";
-        /** @description The action to take.
+        /**
+         * @description The action to take.
          *
          *     `enable_all` means to enable the specified security feature for all repositories in the organization.
-         *     `disable_all` means to disable the specified security feature for all repositories in the organization. */
+         *     `disable_all` means to disable the specified security feature for all repositories in the organization.
+         */
         readonly "org-security-product-enablement": "enable_all" | "disable_all";
         /** @description The unique identifier of the card. */
         readonly "card-id": number;
@@ -87303,10 +87973,12 @@ export interface components {
         readonly "commit-ref": string;
         /** @description A comma-separated list of full manifest paths. If specified, only alerts for these manifests will be returned. */
         readonly "dependabot-alert-comma-separated-manifests": string;
-        /** @description The number that identifies a Dependabot alert in its repository.
+        /**
+         * @description The number that identifies a Dependabot alert in its repository.
          *     You can find this at the end of the URL for a Dependabot alert within GitHub,
          *     or in `number` fields in the response from the
-         *     `GET /repos/{owner}/{repo}/dependabot/alerts` operation. */
+         *     `GET /repos/{owner}/{repo}/dependabot/alerts` operation.
+         */
         readonly "dependabot-alert-number": components["schemas"]["alert-number"];
         /** @description The full path, relative to the repository root, of the dependency manifest file. */
         readonly "manifest-path": string;
@@ -87420,34 +88092,48 @@ export interface operations {
                 readonly ecosystem?: components["schemas"]["security-advisory-ecosystems"];
                 /** @description If specified, only advisories with these severities will be returned. */
                 readonly severity?: "unknown" | "low" | "medium" | "high" | "critical";
-                /** @description If specified, only advisories with these Common Weakness Enumerations (CWEs) will be returned.
+                /**
+                 * @description If specified, only advisories with these Common Weakness Enumerations (CWEs) will be returned.
                  *
-                 *     Example: `cwes=79,284,22` or `cwes[]=79&cwes[]=284&cwes[]=22` */
+                 *     Example: `cwes=79,284,22` or `cwes[]=79&cwes[]=284&cwes[]=22`
+                 */
                 readonly cwes?: string | readonly string[];
                 /** @description Whether to only return advisories that have been withdrawn. */
                 readonly is_withdrawn?: boolean;
-                /** @description If specified, only return advisories that affect any of `package` or `package@version`. A maximum of 1000 packages can be specified.
+                /**
+                 * @description If specified, only return advisories that affect any of `package` or `package@version`. A maximum of 1000 packages can be specified.
                  *     If the query parameter causes the URL to exceed the maximum URL length supported by your client, you must specify fewer packages.
                  *
-                 *     Example: `affects=package1,package2@1.0.0,package3@^2.0.0` or `affects[]=package1&affects[]=package2@1.0.0` */
+                 *     Example: `affects=package1,package2@1.0.0,package3@^2.0.0` or `affects[]=package1&affects[]=package2@1.0.0`
+                 */
                 readonly affects?: string | readonly string[];
-                /** @description If specified, only return advisories that were published on a date or date range.
+                /**
+                 * @description If specified, only return advisories that were published on a date or date range.
                  *
-                 *     For more information on the syntax of the date range, see "[Understanding the search syntax](https://docs.github.com/search-github/getting-started-with-searching-on-github/understanding-the-search-syntax#query-for-dates)." */
+                 *     For more information on the syntax of the date range, see "[Understanding the search syntax](https://docs.github.com/search-github/getting-started-with-searching-on-github/understanding-the-search-syntax#query-for-dates)."
+                 */
                 readonly published?: string;
-                /** @description If specified, only return advisories that were updated on a date or date range.
+                /**
+                 * @description If specified, only return advisories that were updated on a date or date range.
                  *
-                 *     For more information on the syntax of the date range, see "[Understanding the search syntax](https://docs.github.com/search-github/getting-started-with-searching-on-github/understanding-the-search-syntax#query-for-dates)." */
+                 *     For more information on the syntax of the date range, see "[Understanding the search syntax](https://docs.github.com/search-github/getting-started-with-searching-on-github/understanding-the-search-syntax#query-for-dates)."
+                 */
                 readonly updated?: string;
-                /** @description If specified, only show advisories that were updated or published on a date or date range.
+                /**
+                 * @description If specified, only show advisories that were updated or published on a date or date range.
                  *
-                 *     For more information on the syntax of the date range, see "[Understanding the search syntax](https://docs.github.com/search-github/getting-started-with-searching-on-github/understanding-the-search-syntax#query-for-dates)." */
+                 *     For more information on the syntax of the date range, see "[Understanding the search syntax](https://docs.github.com/search-github/getting-started-with-searching-on-github/understanding-the-search-syntax#query-for-dates)."
+                 */
                 readonly modified?: string;
-                /** @description If specified, only return advisories that have an EPSS percentage score that matches the provided value.
-                 *     The EPSS percentage represents the likelihood of a CVE being exploited. */
+                /**
+                 * @description If specified, only return advisories that have an EPSS percentage score that matches the provided value.
+                 *     The EPSS percentage represents the likelihood of a CVE being exploited.
+                 */
                 readonly epss_percentage?: string;
-                /** @description If specified, only return advisories that have an EPSS percentile score that matches the provided value.
-                 *     The EPSS percentile represents the relative rank of the CVE's likelihood of being exploited compared to other CVEs. */
+                /**
+                 * @description If specified, only return advisories that have an EPSS percentile score that matches the provided value.
+                 *     The EPSS percentile represents the relative rank of the CVE's likelihood of being exploited compared to other CVEs.
+                 */
                 readonly epss_percentile?: string;
                 /** @description A cursor, as given in the [Link header](https://docs.github.com/rest/guides/using-pagination-in-the-rest-api#using-link-headers). If specified, the query only searches for results before this cursor. For more information, see "[Using pagination in the REST API](https://docs.github.com/rest/using-the-rest-api/using-pagination-in-the-rest-api)." */
                 readonly before?: components["parameters"]["pagination-before"];
@@ -88696,9 +89382,11 @@ export interface operations {
                 readonly before?: components["parameters"]["pagination-before"];
                 /** @description A cursor, as given in the [Link header](https://docs.github.com/rest/guides/using-pagination-in-the-rest-api#using-link-headers). If specified, the query only searches for results after this cursor. For more information, see "[Using pagination in the REST API](https://docs.github.com/rest/using-the-rest-api/using-pagination-in-the-rest-api)." */
                 readonly after?: components["parameters"]["pagination-after"];
-                /** @description A comma-separated list of statuses. If specified, only repositories with these attachment statuses will be returned.
+                /**
+                 * @description A comma-separated list of statuses. If specified, only repositories with these attachment statuses will be returned.
                  *
-                 *     Can be: `all`, `attached`, `attaching`, `removed`, `enforced`, `failed`, `updating`, `removed_by_enterprise` */
+                 *     Can be: `all`, `attached`, `attaching`, `removed`, `enforced`, `failed`, `updating`, `removed_by_enterprise`
+                 */
                 readonly status?: string;
             };
             readonly header?: never;
@@ -88728,25 +89416,43 @@ export interface operations {
     readonly "dependabot/list-alerts-for-enterprise": {
         readonly parameters: {
             readonly query?: {
-                /** @description A comma-separated list of states. If specified, only alerts with these states will be returned.
+                /**
+                 * @description A comma-separated list of states. If specified, only alerts with these states will be returned.
                  *
-                 *     Can be: `auto_dismissed`, `dismissed`, `fixed`, `open` */
+                 *     Can be: `auto_dismissed`, `dismissed`, `fixed`, `open`
+                 */
                 readonly state?: components["parameters"]["dependabot-alert-comma-separated-states"];
-                /** @description A comma-separated list of severities. If specified, only alerts with these severities will be returned.
+                /**
+                 * @description A comma-separated list of severities. If specified, only alerts with these severities will be returned.
                  *
-                 *     Can be: `low`, `medium`, `high`, `critical` */
+                 *     Can be: `low`, `medium`, `high`, `critical`
+                 */
                 readonly severity?: components["parameters"]["dependabot-alert-comma-separated-severities"];
-                /** @description A comma-separated list of ecosystems. If specified, only alerts for these ecosystems will be returned.
+                /**
+                 * @description A comma-separated list of ecosystems. If specified, only alerts for these ecosystems will be returned.
                  *
-                 *     Can be: `composer`, `go`, `maven`, `npm`, `nuget`, `pip`, `pub`, `rubygems`, `rust` */
+                 *     Can be: `composer`, `go`, `maven`, `npm`, `nuget`, `pip`, `pub`, `rubygems`, `rust`
+                 */
                 readonly ecosystem?: components["parameters"]["dependabot-alert-comma-separated-ecosystems"];
                 /** @description A comma-separated list of package names. If specified, only alerts for these packages will be returned. */
                 readonly package?: components["parameters"]["dependabot-alert-comma-separated-packages"];
+                /**
+                 * @description CVE Exploit Prediction Scoring System (EPSS) percentage. Can be specified as:
+                 *     - An exact number (`n`)
+                 *     - Comparators such as `>n`, `<n`, `>=n`, `<=n`
+                 *     - A range like `n..n`, where `n` is a number from 0.0 to 1.0
+                 *
+                 *     Filters the list of alerts based on EPSS percentages. If specified, only alerts with the provided EPSS percentages will be returned.
+                 */
+                readonly epss_percentage?: components["parameters"]["dependabot-alert-comma-separated-epss"];
                 /** @description The scope of the vulnerable dependency. If specified, only alerts with this scope will be returned. */
                 readonly scope?: components["parameters"]["dependabot-alert-scope"];
-                /** @description The property by which to sort the results.
+                /**
+                 * @description The property by which to sort the results.
                  *     `created` means when the alert was created.
-                 *     `updated` means when the alert's state last changed. */
+                 *     `updated` means when the alert's state last changed.
+                 *     `epss_percentage` sorts alerts by the Exploit Prediction Scoring System (EPSS) percentage.
+                 */
                 readonly sort?: components["parameters"]["dependabot-alert-sort"];
                 /** @description The direction to sort the results by. */
                 readonly direction?: components["parameters"]["direction"];
@@ -88754,13 +89460,17 @@ export interface operations {
                 readonly before?: components["parameters"]["pagination-before"];
                 /** @description A cursor, as given in the [Link header](https://docs.github.com/rest/guides/using-pagination-in-the-rest-api#using-link-headers). If specified, the query only searches for results after this cursor. For more information, see "[Using pagination in the REST API](https://docs.github.com/rest/using-the-rest-api/using-pagination-in-the-rest-api)." */
                 readonly after?: components["parameters"]["pagination-after"];
-                /** @description **Deprecated**. The number of results per page (max 100), starting from the first matching result.
+                /**
+                 * @description **Deprecated**. The number of results per page (max 100), starting from the first matching result.
                  *     This parameter must not be used in combination with `last`.
-                 *     Instead, use `per_page` in combination with `after` to fetch the first page of results. */
+                 *     Instead, use `per_page` in combination with `after` to fetch the first page of results.
+                 */
                 readonly first?: components["parameters"]["pagination-first"];
-                /** @description **Deprecated**. The number of results per page (max 100), starting from the last matching result.
+                /**
+                 * @description **Deprecated**. The number of results per page (max 100), starting from the last matching result.
                  *     This parameter must not be used in combination with `first`.
-                 *     Instead, use `per_page` in combination with `before` to fetch the last page of results. */
+                 *     Instead, use `per_page` in combination with `before` to fetch the last page of results.
+                 */
                 readonly last?: components["parameters"]["pagination-last"];
                 /** @description The number of results per page (max 100). For more information, see "[Using pagination in the REST API](https://docs.github.com/rest/using-the-rest-api/using-pagination-in-the-rest-api)." */
                 readonly per_page?: components["parameters"]["per-page"];
@@ -90593,6 +91303,306 @@ export interface operations {
             };
         };
     };
+    readonly "actions/list-hosted-runners-for-org": {
+        readonly parameters: {
+            readonly query?: {
+                /** @description The number of results per page (max 100). For more information, see "[Using pagination in the REST API](https://docs.github.com/rest/using-the-rest-api/using-pagination-in-the-rest-api)." */
+                readonly per_page?: components["parameters"]["per-page"];
+                /** @description The page number of the results to fetch. For more information, see "[Using pagination in the REST API](https://docs.github.com/rest/using-the-rest-api/using-pagination-in-the-rest-api)." */
+                readonly page?: components["parameters"]["page"];
+            };
+            readonly header?: never;
+            readonly path: {
+                /** @description The organization name. The name is not case sensitive. */
+                readonly org: components["parameters"]["org"];
+            };
+            readonly cookie?: never;
+        };
+        readonly requestBody?: never;
+        readonly responses: {
+            /** @description Response */
+            readonly 200: {
+                headers: {
+                    readonly Link: components["headers"]["link"];
+                    readonly [name: string]: unknown;
+                };
+                content: {
+                    readonly "application/json": {
+                        readonly total_count: number;
+                        readonly runners: readonly components["schemas"]["actions-hosted-runner"][];
+                    };
+                };
+            };
+        };
+    };
+    readonly "actions/create-hosted-runner-for-org": {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path: {
+                /** @description The organization name. The name is not case sensitive. */
+                readonly org: components["parameters"]["org"];
+            };
+            readonly cookie?: never;
+        };
+        readonly requestBody: {
+            readonly content: {
+                readonly "application/json": {
+                    /** @description Name of the runner. Must be between 1 and 64 characters and may only contain upper and lowercase letters a-z, numbers 0-9, '.', '-', and '_'. */
+                    readonly name: string;
+                    /** @description The image of runner. To list all available images, use `GET /actions/hosted-runners/images/github-owned` or `GET /actions/hosted-runners/images/partner`. */
+                    readonly image: {
+                        /** @description The unique identifier of the runner image. */
+                        readonly id?: string;
+                        /**
+                         * @description The source of the runner image.
+                         * @enum {string}
+                         */
+                        readonly source?: "github" | "partner" | "custom";
+                        /** @description The version of the runner image to deploy. This is relevant only for runners using custom images. */
+                        readonly version?: string | null;
+                    };
+                    /** @description The machine size of the runner. To list available sizes, use `GET actions/hosted-runners/machine-sizes` */
+                    readonly size: string;
+                    /** @description The existing runner group to add this runner to. */
+                    readonly runner_group_id: number;
+                    /** @description The maximum amount of runners to scale up to. Runners will not auto-scale above this number. Use this setting to limit your cost. */
+                    readonly maximum_runners?: number;
+                    /** @description Whether this runner should be created with a static public IP. Note limit on account. To list limits on account, use `GET actions/hosted-runners/limits` */
+                    readonly enable_static_ip?: boolean;
+                };
+            };
+        };
+        readonly responses: {
+            /** @description Response */
+            readonly 201: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content: {
+                    readonly "application/json": components["schemas"]["actions-hosted-runner"];
+                };
+            };
+        };
+    };
+    readonly "actions/get-hosted-runners-github-owned-images-for-org": {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path: {
+                /** @description The organization name. The name is not case sensitive. */
+                readonly org: components["parameters"]["org"];
+            };
+            readonly cookie?: never;
+        };
+        readonly requestBody?: never;
+        readonly responses: {
+            /** @description Response */
+            readonly 200: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content: {
+                    readonly "application/json": {
+                        readonly total_count: number;
+                        readonly images: readonly components["schemas"]["actions-hosted-runner-image"][];
+                    };
+                };
+            };
+        };
+    };
+    readonly "actions/get-hosted-runners-partner-images-for-org": {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path: {
+                /** @description The organization name. The name is not case sensitive. */
+                readonly org: components["parameters"]["org"];
+            };
+            readonly cookie?: never;
+        };
+        readonly requestBody?: never;
+        readonly responses: {
+            /** @description Response */
+            readonly 200: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content: {
+                    readonly "application/json": {
+                        readonly total_count: number;
+                        readonly images: readonly components["schemas"]["actions-hosted-runner-image"][];
+                    };
+                };
+            };
+        };
+    };
+    readonly "actions/get-hosted-runners-limits-for-org": {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path: {
+                /** @description The organization name. The name is not case sensitive. */
+                readonly org: components["parameters"]["org"];
+            };
+            readonly cookie?: never;
+        };
+        readonly requestBody?: never;
+        readonly responses: {
+            /** @description Response */
+            readonly 200: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content: {
+                    readonly "application/json": components["schemas"]["actions-hosted-runner-limits"];
+                };
+            };
+        };
+    };
+    readonly "actions/get-hosted-runners-machine-specs-for-org": {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path: {
+                /** @description The organization name. The name is not case sensitive. */
+                readonly org: components["parameters"]["org"];
+            };
+            readonly cookie?: never;
+        };
+        readonly requestBody?: never;
+        readonly responses: {
+            /** @description Response */
+            readonly 200: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content: {
+                    readonly "application/json": {
+                        readonly total_count: number;
+                        readonly machine_specs: readonly components["schemas"]["actions-hosted-runner-machine-spec"][];
+                    };
+                };
+            };
+        };
+    };
+    readonly "actions/get-hosted-runners-platforms-for-org": {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path: {
+                /** @description The organization name. The name is not case sensitive. */
+                readonly org: components["parameters"]["org"];
+            };
+            readonly cookie?: never;
+        };
+        readonly requestBody?: never;
+        readonly responses: {
+            /** @description Response */
+            readonly 200: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content: {
+                    readonly "application/json": {
+                        readonly total_count: number;
+                        readonly platforms: readonly string[];
+                    };
+                };
+            };
+        };
+    };
+    readonly "actions/get-hosted-runner-for-org": {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path: {
+                /** @description The organization name. The name is not case sensitive. */
+                readonly org: components["parameters"]["org"];
+                /** @description Unique identifier of the GitHub-hosted runner. */
+                readonly hosted_runner_id: components["parameters"]["hosted-runner-id"];
+            };
+            readonly cookie?: never;
+        };
+        readonly requestBody?: never;
+        readonly responses: {
+            /** @description Response */
+            readonly 200: {
+                headers: {
+                    readonly Link: components["headers"]["link"];
+                    readonly [name: string]: unknown;
+                };
+                content: {
+                    readonly "application/json": components["schemas"]["actions-hosted-runner"];
+                };
+            };
+        };
+    };
+    readonly "actions/delete-hosted-runner-for-org": {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path: {
+                /** @description The organization name. The name is not case sensitive. */
+                readonly org: components["parameters"]["org"];
+                /** @description Unique identifier of the GitHub-hosted runner. */
+                readonly hosted_runner_id: components["parameters"]["hosted-runner-id"];
+            };
+            readonly cookie?: never;
+        };
+        readonly requestBody?: never;
+        readonly responses: {
+            /** @description Response */
+            readonly 202: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content: {
+                    readonly "application/json": components["schemas"]["actions-hosted-runner"];
+                };
+            };
+        };
+    };
+    readonly "actions/update-hosted-runner-for-org": {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path: {
+                /** @description The organization name. The name is not case sensitive. */
+                readonly org: components["parameters"]["org"];
+                /** @description Unique identifier of the GitHub-hosted runner. */
+                readonly hosted_runner_id: components["parameters"]["hosted-runner-id"];
+            };
+            readonly cookie?: never;
+        };
+        readonly requestBody: {
+            readonly content: {
+                readonly "application/json": {
+                    /** @description Name of the runner. Must be between 1 and 64 characters and may only contain upper and lowercase letters a-z, numbers 0-9, '.', '-', and '_'. */
+                    readonly name?: string;
+                    /** @description The existing runner group to add this runner to. */
+                    readonly runner_group_id?: number;
+                    /** @description The maximum amount of runners to scale up to. Runners will not auto-scale above this number. Use this setting to limit your cost. */
+                    readonly maximum_runners?: number;
+                    /** @description Whether this runner should be updated with a static public IP. Note limit on account. To list limits on account, use `GET actions/hosted-runners/limits` */
+                    readonly enable_static_ip?: boolean;
+                    /** @description The version of the runner image to deploy. This is relevant only for runners using custom images. */
+                    readonly image_version?: string | null;
+                };
+            };
+        };
+        readonly responses: {
+            /** @description Response */
+            readonly 200: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content: {
+                    readonly "application/json": components["schemas"]["actions-hosted-runner"];
+                };
+            };
+        };
+    };
     readonly "oidc/get-oidc-custom-sub-template-for-org": {
         readonly parameters: {
             readonly query?: never;
@@ -90967,6 +91977,8 @@ export interface operations {
                     readonly restricted_to_workflows?: boolean;
                     /** @description List of workflows the runner group should be allowed to run. This setting will be ignored unless `restricted_to_workflows` is set to `true`. */
                     readonly selected_workflows?: readonly string[];
+                    /** @description The identifier of a hosted compute network configuration. */
+                    readonly network_configuration_id?: string;
                 };
             };
         };
@@ -91064,6 +92076,8 @@ export interface operations {
                     readonly restricted_to_workflows?: boolean;
                     /** @description List of workflows the runner group should be allowed to run. This setting will be ignored unless `restricted_to_workflows` is set to `true`. */
                     readonly selected_workflows?: readonly string[];
+                    /** @description The identifier of a hosted compute network configuration. */
+                    readonly network_configuration_id?: string | null;
                 };
             };
         };
@@ -91075,6 +92089,40 @@ export interface operations {
                 };
                 content: {
                     readonly "application/json": components["schemas"]["runner-groups-org"];
+                };
+            };
+        };
+    };
+    readonly "actions/list-github-hosted-runners-in-group-for-org": {
+        readonly parameters: {
+            readonly query?: {
+                /** @description The number of results per page (max 100). For more information, see "[Using pagination in the REST API](https://docs.github.com/rest/using-the-rest-api/using-pagination-in-the-rest-api)." */
+                readonly per_page?: components["parameters"]["per-page"];
+                /** @description The page number of the results to fetch. For more information, see "[Using pagination in the REST API](https://docs.github.com/rest/using-the-rest-api/using-pagination-in-the-rest-api)." */
+                readonly page?: components["parameters"]["page"];
+            };
+            readonly header?: never;
+            readonly path: {
+                /** @description The organization name. The name is not case sensitive. */
+                readonly org: components["parameters"]["org"];
+                /** @description Unique identifier of the self-hosted runner group. */
+                readonly runner_group_id: components["parameters"]["runner-group-id"];
+            };
+            readonly cookie?: never;
+        };
+        readonly requestBody?: never;
+        readonly responses: {
+            /** @description Response */
+            readonly 200: {
+                headers: {
+                    readonly Link: components["headers"]["link"];
+                    readonly [name: string]: unknown;
+                };
+                content: {
+                    readonly "application/json": {
+                        readonly total_count: number;
+                        readonly runners: readonly components["schemas"]["actions-hosted-runner"][];
+                    };
                 };
             };
         };
@@ -92201,8 +93249,10 @@ export interface operations {
                 content: {
                     readonly "application/json": {
                         readonly attestations?: readonly {
-                            /** @description The attestation's Sigstore Bundle.
-                             *     Refer to the [Sigstore Bundle Specification](https://github.com/sigstore/protobuf-specs/blob/main/protos/sigstore_bundle.proto) for more information. */
+                            /**
+                             * @description The attestation's Sigstore Bundle.
+                             *     Refer to the [Sigstore Bundle Specification](https://github.com/sigstore/protobuf-specs/blob/main/protos/sigstore_bundle.proto) for more information.
+                             */
                             readonly bundle?: {
                                 readonly mediaType?: string;
                                 readonly verificationMaterial?: {
@@ -92848,9 +93898,11 @@ export interface operations {
                 readonly before?: components["parameters"]["pagination-before"];
                 /** @description A cursor, as given in the [Link header](https://docs.github.com/rest/guides/using-pagination-in-the-rest-api#using-link-headers). If specified, the query only searches for results after this cursor. For more information, see "[Using pagination in the REST API](https://docs.github.com/rest/using-the-rest-api/using-pagination-in-the-rest-api)." */
                 readonly after?: components["parameters"]["pagination-after"];
-                /** @description A comma-separated list of statuses. If specified, only repositories with these attachment statuses will be returned.
+                /**
+                 * @description A comma-separated list of statuses. If specified, only repositories with these attachment statuses will be returned.
                  *
-                 *     Can be: `all`, `attached`, `attaching`, `detached`, `removed`, `enforced`, `failed`, `updating`, `removed_by_enterprise` */
+                 *     Can be: `all`, `attached`, `attaching`, `detached`, `removed`, `enforced`, `failed`, `updating`, `removed_by_enterprise`
+                 */
                 readonly status?: string;
             };
             readonly header?: never;
@@ -93646,25 +94698,43 @@ export interface operations {
     readonly "dependabot/list-alerts-for-org": {
         readonly parameters: {
             readonly query?: {
-                /** @description A comma-separated list of states. If specified, only alerts with these states will be returned.
+                /**
+                 * @description A comma-separated list of states. If specified, only alerts with these states will be returned.
                  *
-                 *     Can be: `auto_dismissed`, `dismissed`, `fixed`, `open` */
+                 *     Can be: `auto_dismissed`, `dismissed`, `fixed`, `open`
+                 */
                 readonly state?: components["parameters"]["dependabot-alert-comma-separated-states"];
-                /** @description A comma-separated list of severities. If specified, only alerts with these severities will be returned.
+                /**
+                 * @description A comma-separated list of severities. If specified, only alerts with these severities will be returned.
                  *
-                 *     Can be: `low`, `medium`, `high`, `critical` */
+                 *     Can be: `low`, `medium`, `high`, `critical`
+                 */
                 readonly severity?: components["parameters"]["dependabot-alert-comma-separated-severities"];
-                /** @description A comma-separated list of ecosystems. If specified, only alerts for these ecosystems will be returned.
+                /**
+                 * @description A comma-separated list of ecosystems. If specified, only alerts for these ecosystems will be returned.
                  *
-                 *     Can be: `composer`, `go`, `maven`, `npm`, `nuget`, `pip`, `pub`, `rubygems`, `rust` */
+                 *     Can be: `composer`, `go`, `maven`, `npm`, `nuget`, `pip`, `pub`, `rubygems`, `rust`
+                 */
                 readonly ecosystem?: components["parameters"]["dependabot-alert-comma-separated-ecosystems"];
                 /** @description A comma-separated list of package names. If specified, only alerts for these packages will be returned. */
                 readonly package?: components["parameters"]["dependabot-alert-comma-separated-packages"];
+                /**
+                 * @description CVE Exploit Prediction Scoring System (EPSS) percentage. Can be specified as:
+                 *     - An exact number (`n`)
+                 *     - Comparators such as `>n`, `<n`, `>=n`, `<=n`
+                 *     - A range like `n..n`, where `n` is a number from 0.0 to 1.0
+                 *
+                 *     Filters the list of alerts based on EPSS percentages. If specified, only alerts with the provided EPSS percentages will be returned.
+                 */
+                readonly epss_percentage?: components["parameters"]["dependabot-alert-comma-separated-epss"];
                 /** @description The scope of the vulnerable dependency. If specified, only alerts with this scope will be returned. */
                 readonly scope?: components["parameters"]["dependabot-alert-scope"];
-                /** @description The property by which to sort the results.
+                /**
+                 * @description The property by which to sort the results.
                  *     `created` means when the alert was created.
-                 *     `updated` means when the alert's state last changed. */
+                 *     `updated` means when the alert's state last changed.
+                 *     `epss_percentage` sorts alerts by the Exploit Prediction Scoring System (EPSS) percentage.
+                 */
                 readonly sort?: components["parameters"]["dependabot-alert-sort"];
                 /** @description The direction to sort the results by. */
                 readonly direction?: components["parameters"]["direction"];
@@ -93672,13 +94742,17 @@ export interface operations {
                 readonly before?: components["parameters"]["pagination-before"];
                 /** @description A cursor, as given in the [Link header](https://docs.github.com/rest/guides/using-pagination-in-the-rest-api#using-link-headers). If specified, the query only searches for results after this cursor. For more information, see "[Using pagination in the REST API](https://docs.github.com/rest/using-the-rest-api/using-pagination-in-the-rest-api)." */
                 readonly after?: components["parameters"]["pagination-after"];
-                /** @description **Deprecated**. The number of results per page (max 100), starting from the first matching result.
+                /**
+                 * @description **Deprecated**. The number of results per page (max 100), starting from the first matching result.
                  *     This parameter must not be used in combination with `last`.
-                 *     Instead, use `per_page` in combination with `after` to fetch the first page of results. */
+                 *     Instead, use `per_page` in combination with `after` to fetch the first page of results.
+                 */
                 readonly first?: components["parameters"]["pagination-first"];
-                /** @description **Deprecated**. The number of results per page (max 100), starting from the last matching result.
+                /**
+                 * @description **Deprecated**. The number of results per page (max 100), starting from the last matching result.
                  *     This parameter must not be used in combination with `first`.
-                 *     Instead, use `per_page` in combination with `before` to fetch the last page of results. */
+                 *     Instead, use `per_page` in combination with `before` to fetch the last page of results.
+                 */
                 readonly last?: components["parameters"]["pagination-last"];
                 /** @description The number of results per page (max 100). For more information, see "[Using pagination in the REST API](https://docs.github.com/rest/using-the-rest-api/using-pagination-in-the-rest-api)." */
                 readonly per_page?: components["parameters"]["per-page"];
@@ -95473,10 +96547,12 @@ export interface operations {
         };
         readonly requestBody?: never;
         readonly responses: {
-            /** @description *   `pending`, which means the migration hasn't started yet.
+            /**
+             * @description *   `pending`, which means the migration hasn't started yet.
              *     *   `exporting`, which means the migration is in progress.
              *     *   `exported`, which means the migration finished successfully.
-             *     *   `failed`, which means the migration failed. */
+             *     *   `failed`, which means the migration failed.
+             */
             readonly 200: {
                 headers: {
                     readonly [name: string]: unknown;
@@ -96036,10 +97112,12 @@ export interface operations {
             readonly query: {
                 /** @description The type of supported package. Packages in GitHub's Gradle registry have the type `maven`. Docker images pushed to GitHub's Container registry (`ghcr.io`) have the type `container`. You can use the type `docker` to find images that were pushed to GitHub's Docker registry (`docker.pkg.github.com`), even if these have now been migrated to the Container registry. */
                 readonly package_type: "npm" | "maven" | "rubygems" | "docker" | "nuget" | "container";
-                /** @description The selected visibility of the packages.  This parameter is optional and only filters an existing result set.
+                /**
+                 * @description The selected visibility of the packages.  This parameter is optional and only filters an existing result set.
                  *
                  *     The `internal` visibility is only supported for GitHub Packages registries that allow for granular permissions. For other ecosystems `internal` is synonymous with `private`.
-                 *     For the list of GitHub Packages registries that support granular permissions, see "[About permissions for GitHub Packages](https://docs.github.com/packages/learn-github-packages/about-permissions-for-github-packages#granular-permissions-for-userorganization-scoped-packages)." */
+                 *     For the list of GitHub Packages registries that support granular permissions, see "[About permissions for GitHub Packages](https://docs.github.com/packages/learn-github-packages/about-permissions-for-github-packages#granular-permissions-for-userorganization-scoped-packages)."
+                 */
                 readonly visibility?: components["parameters"]["package-visibility"];
                 /** @description The page number of the results to fetch. For more information, see "[Using pagination in the REST API](https://docs.github.com/rest/using-the-rest-api/using-pagination-in-the-rest-api)." */
                 readonly page?: number;
@@ -97363,10 +98441,11 @@ export interface operations {
                 readonly per_page?: components["parameters"]["per-page"];
                 /** @description The page number of the results to fetch. For more information, see "[Using pagination in the REST API](https://docs.github.com/rest/using-the-rest-api/using-pagination-in-the-rest-api)." */
                 readonly page?: components["parameters"]["page"];
-                /** @description A comma-separated list of rule targets to filter by.
+                /**
+                 * @description A comma-separated list of rule targets to filter by.
                  *     If provided, only rulesets that apply to the specified targets will be returned.
                  *     For example, `branch,tag,push`.
-                 *      */
+                 */
                 readonly targets?: components["parameters"]["ruleset-targets"];
             };
             readonly header?: never;
@@ -97443,9 +98522,11 @@ export interface operations {
                 readonly ref?: components["parameters"]["ref-in-query"];
                 /** @description The name of the repository to filter on. */
                 readonly repository_name?: components["parameters"]["repository-name-in-query"];
-                /** @description The time period to filter by.
+                /**
+                 * @description The time period to filter by.
                  *
-                 *     For example, `day` will filter for rule suites that occurred in the past 24 hours, and `week` will filter for insights that occurred in the past 7 days (168 hours). */
+                 *     For example, `day` will filter for rule suites that occurred in the past 24 hours, and `week` will filter for insights that occurred in the past 7 days (168 hours).
+                 */
                 readonly time_period?: components["parameters"]["time-period"];
                 /** @description The handle for the GitHub user account to filter on. When specified, only rule evaluations triggered by this actor will be returned. */
                 readonly actor_name?: components["parameters"]["actor-name-in-query"];
@@ -97485,10 +98566,12 @@ export interface operations {
             readonly path: {
                 /** @description The organization name. The name is not case sensitive. */
                 readonly org: components["parameters"]["org"];
-                /** @description The unique identifier of the rule suite result.
+                /**
+                 * @description The unique identifier of the rule suite result.
                  *     To get this ID, you can use [GET /repos/{owner}/{repo}/rulesets/rule-suites](https://docs.github.com/rest/repos/rule-suites#list-repository-rule-suites)
                  *     for repositories and [GET /orgs/{org}/rulesets/rule-suites](https://docs.github.com/rest/orgs/rule-suites#list-organization-rule-suites)
-                 *     for organizations. */
+                 *     for organizations.
+                 */
                 readonly rule_suite_id: components["parameters"]["rule-suite-id"];
             };
             readonly cookie?: never;
@@ -97829,6 +98912,189 @@ export interface operations {
                 };
                 content: {
                     readonly "application/json": components["schemas"]["combined-billing-usage"];
+                };
+            };
+        };
+    };
+    readonly "hosted-compute/list-network-configurations-for-org": {
+        readonly parameters: {
+            readonly query?: {
+                /** @description The number of results per page (max 100). For more information, see "[Using pagination in the REST API](https://docs.github.com/rest/using-the-rest-api/using-pagination-in-the-rest-api)." */
+                readonly per_page?: components["parameters"]["per-page"];
+                /** @description The page number of the results to fetch. For more information, see "[Using pagination in the REST API](https://docs.github.com/rest/using-the-rest-api/using-pagination-in-the-rest-api)." */
+                readonly page?: components["parameters"]["page"];
+            };
+            readonly header?: never;
+            readonly path: {
+                /** @description The organization name. The name is not case sensitive. */
+                readonly org: components["parameters"]["org"];
+            };
+            readonly cookie?: never;
+        };
+        readonly requestBody?: never;
+        readonly responses: {
+            /** @description Response */
+            readonly 200: {
+                headers: {
+                    readonly Link: components["headers"]["link"];
+                    readonly [name: string]: unknown;
+                };
+                content: {
+                    readonly "application/json": {
+                        readonly total_count: number;
+                        readonly network_configurations: readonly components["schemas"]["network-configuration"][];
+                    };
+                };
+            };
+        };
+    };
+    readonly "hosted-compute/create-network-configuration-for-org": {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path: {
+                /** @description The organization name. The name is not case sensitive. */
+                readonly org: components["parameters"]["org"];
+            };
+            readonly cookie?: never;
+        };
+        readonly requestBody: {
+            readonly content: {
+                readonly "application/json": {
+                    /** @description Name of the network configuration. Must be between 1 and 100 characters and may only contain upper and lowercase letters a-z, numbers 0-9, '.', '-', and '_'. */
+                    readonly name: string;
+                    /**
+                     * @description The hosted compute service to use for the network configuration.
+                     * @enum {string}
+                     */
+                    readonly compute_service?: "none" | "actions";
+                    /** @description The identifier of the network settings to use for the network configuration. Exactly one network settings must be specified. */
+                    readonly network_settings_ids: readonly string[];
+                };
+            };
+        };
+        readonly responses: {
+            /** @description Response */
+            readonly 201: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content: {
+                    readonly "application/json": components["schemas"]["network-configuration"];
+                };
+            };
+        };
+    };
+    readonly "hosted-compute/get-network-configuration-for-org": {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path: {
+                /** @description The organization name. The name is not case sensitive. */
+                readonly org: components["parameters"]["org"];
+                /** @description Unique identifier of the hosted compute network configuration. */
+                readonly network_configuration_id: components["parameters"]["network-configuration-id"];
+            };
+            readonly cookie?: never;
+        };
+        readonly requestBody?: never;
+        readonly responses: {
+            /** @description Response */
+            readonly 200: {
+                headers: {
+                    readonly Link: components["headers"]["link"];
+                    readonly [name: string]: unknown;
+                };
+                content: {
+                    readonly "application/json": components["schemas"]["network-configuration"];
+                };
+            };
+        };
+    };
+    readonly "hosted-compute/delete-network-configuration-from-org": {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path: {
+                /** @description The organization name. The name is not case sensitive. */
+                readonly org: components["parameters"]["org"];
+                /** @description Unique identifier of the hosted compute network configuration. */
+                readonly network_configuration_id: components["parameters"]["network-configuration-id"];
+            };
+            readonly cookie?: never;
+        };
+        readonly requestBody?: never;
+        readonly responses: {
+            /** @description Response */
+            readonly 204: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    readonly "hosted-compute/update-network-configuration-for-org": {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path: {
+                /** @description The organization name. The name is not case sensitive. */
+                readonly org: components["parameters"]["org"];
+                /** @description Unique identifier of the hosted compute network configuration. */
+                readonly network_configuration_id: components["parameters"]["network-configuration-id"];
+            };
+            readonly cookie?: never;
+        };
+        readonly requestBody: {
+            readonly content: {
+                readonly "application/json": {
+                    /** @description Name of the network configuration. Must be between 1 and 100 characters and may only contain upper and lowercase letters a-z, numbers 0-9, '.', '-', and '_'. */
+                    readonly name?: string;
+                    /**
+                     * @description The hosted compute service to use for the network configuration.
+                     * @enum {string}
+                     */
+                    readonly compute_service?: "none" | "actions";
+                    /** @description The identifier of the network settings to use for the network configuration. Exactly one network settings must be specified. */
+                    readonly network_settings_ids?: readonly string[];
+                };
+            };
+        };
+        readonly responses: {
+            /** @description Response */
+            readonly 200: {
+                headers: {
+                    readonly [name: string]: unknown;
+                };
+                content: {
+                    readonly "application/json": components["schemas"]["network-configuration"];
+                };
+            };
+        };
+    };
+    readonly "hosted-compute/get-network-settings-for-org": {
+        readonly parameters: {
+            readonly query?: never;
+            readonly header?: never;
+            readonly path: {
+                /** @description The organization name. The name is not case sensitive. */
+                readonly org: components["parameters"]["org"];
+                /** @description Unique identifier of the hosted compute network settings. */
+                readonly network_settings_id: components["parameters"]["network-settings-id"];
+            };
+            readonly cookie?: never;
+        };
+        readonly requestBody?: never;
+        readonly responses: {
+            /** @description Response */
+            readonly 200: {
+                headers: {
+                    readonly Link: components["headers"]["link"];
+                    readonly [name: string]: unknown;
+                };
+                content: {
+                    readonly "application/json": components["schemas"]["network-settings"];
                 };
             };
         };
@@ -99164,10 +100430,12 @@ export interface operations {
                 readonly org: components["parameters"]["org"];
                 /** @description The security feature to enable or disable. */
                 readonly security_product: components["parameters"]["security-product"];
-                /** @description The action to take.
+                /**
+                 * @description The action to take.
                  *
                  *     `enable_all` means to enable the specified security feature for all repositories in the organization.
-                 *     `disable_all` means to disable the specified security feature for all repositories in the organization. */
+                 *     `disable_all` means to disable the specified security feature for all repositories in the organization.
+                 */
                 readonly enablement: components["parameters"]["org-security-product-enablement"];
             };
             readonly cookie?: never;
@@ -100078,14 +101346,16 @@ export interface operations {
                      * @enum {string}
                      */
                     readonly visibility?: "public" | "private";
-                    /** @description Specify which security and analysis features to enable or disable for the repository.
+                    /**
+                     * @description Specify which security and analysis features to enable or disable for the repository.
                      *
                      *     To use this parameter, you must have admin permissions for the repository or be an owner or security manager for the organization that owns the repository. For more information, see "[Managing security managers in your organization](https://docs.github.com/organizations/managing-peoples-access-to-your-organization-with-roles/managing-security-managers-in-your-organization)."
                      *
                      *     For example, to enable GitHub Advanced Security, use this data in the body of the `PATCH` request:
                      *     `{ "security_and_analysis": {"advanced_security": { "status": "enabled" } } }`.
                      *
-                     *     You can check which security and analysis features are currently enabled by using a `GET /repos/{owner}/{repo}` request. */
+                     *     You can check which security and analysis features are currently enabled by using a `GET /repos/{owner}/{repo}` request.
+                     */
                     readonly security_and_analysis?: {
                         /** @description Use the `status` property to enable or disable GitHub Advanced Security for this repository. For more information, see "[About GitHub Advanced Security](/github/getting-started-with-github/learning-about-github/about-github-advanced-security)." */
                         readonly advanced_security?: {
@@ -102437,19 +103707,25 @@ export interface operations {
                 readonly before?: components["parameters"]["pagination-before"];
                 /** @description A cursor, as given in the [Link header](https://docs.github.com/rest/guides/using-pagination-in-the-rest-api#using-link-headers). If specified, the query only searches for results after this cursor. For more information, see "[Using pagination in the REST API](https://docs.github.com/rest/using-the-rest-api/using-pagination-in-the-rest-api)." */
                 readonly after?: components["parameters"]["pagination-after"];
-                /** @description The Git reference for the activities you want to list.
+                /**
+                 * @description The Git reference for the activities you want to list.
                  *
-                 *     The `ref` for a branch can be formatted either as `refs/heads/BRANCH_NAME` or `BRANCH_NAME`, where `BRANCH_NAME` is the name of your branch. */
+                 *     The `ref` for a branch can be formatted either as `refs/heads/BRANCH_NAME` or `BRANCH_NAME`, where `BRANCH_NAME` is the name of your branch.
+                 */
                 readonly ref?: string;
                 /** @description The GitHub username to use to filter by the actor who performed the activity. */
                 readonly actor?: string;
-                /** @description The time period to filter by.
+                /**
+                 * @description The time period to filter by.
                  *
-                 *     For example, `day` will filter for activity that occurred in the past 24 hours, and `week` will filter for activity that occurred in the past 7 days (168 hours). */
+                 *     For example, `day` will filter for activity that occurred in the past 24 hours, and `week` will filter for activity that occurred in the past 7 days (168 hours).
+                 */
                 readonly time_period?: "day" | "week" | "month" | "quarter" | "year";
-                /** @description The activity type to filter by.
+                /**
+                 * @description The activity type to filter by.
                  *
-                 *     For example, you can choose to filter by "force_push", to see all force pushes to the repository. */
+                 *     For example, you can choose to filter by "force_push", to see all force pushes to the repository.
+                 */
                 readonly activity_type?: "push" | "force_push" | "branch_creation" | "branch_deletion" | "pr_merge" | "merge_queue_merge";
             };
             readonly header?: never;
@@ -102556,8 +103832,10 @@ export interface operations {
         readonly requestBody: {
             readonly content: {
                 readonly "application/json": {
-                    /** @description The attestation's Sigstore Bundle.
-                     *     Refer to the [Sigstore Bundle Specification](https://github.com/sigstore/protobuf-specs/blob/main/protos/sigstore_bundle.proto) for more information. */
+                    /**
+                     * @description The attestation's Sigstore Bundle.
+                     *     Refer to the [Sigstore Bundle Specification](https://github.com/sigstore/protobuf-specs/blob/main/protos/sigstore_bundle.proto) for more information.
+                     */
                     readonly bundle: {
                         readonly mediaType?: string;
                         readonly verificationMaterial?: {
@@ -102618,8 +103896,10 @@ export interface operations {
                 content: {
                     readonly "application/json": {
                         readonly attestations?: readonly {
-                            /** @description The attestation's Sigstore Bundle.
-                             *     Refer to the [Sigstore Bundle Specification](https://github.com/sigstore/protobuf-specs/blob/main/protos/sigstore_bundle.proto) for more information. */
+                            /**
+                             * @description The attestation's Sigstore Bundle.
+                             *     Refer to the [Sigstore Bundle Specification](https://github.com/sigstore/protobuf-specs/blob/main/protos/sigstore_bundle.proto) for more information.
+                             */
                             readonly bundle?: {
                                 readonly mediaType?: string;
                                 readonly verificationMaterial?: {
@@ -105293,8 +106573,10 @@ export interface operations {
                     readonly started_at?: string;
                     /** @description The name of the tool used to generate the code scanning analysis. If this parameter is not used, the tool name defaults to "API". If the uploaded SARIF contains a tool GUID, this will be available for filtering using the `tool_guid` parameter of operations such as `GET /repos/{owner}/{repo}/code-scanning/alerts`. */
                     readonly tool_name?: string;
-                    /** @description Whether the SARIF file will be validated according to the code scanning specifications.
-                     *     This parameter is intended to help integrators ensure that the uploaded SARIF files are correctly rendered by code scanning. */
+                    /**
+                     * @description Whether the SARIF file will be validated according to the code scanning specifications.
+                     *     This parameter is intended to help integrators ensure that the uploaded SARIF files are correctly rendered by code scanning.
+                     */
                     readonly validate?: boolean;
                 };
             };
@@ -105947,10 +107229,12 @@ export interface operations {
                     readonly "application/json": components["schemas"]["repository-invitation"];
                 };
             };
-            /** @description Response when:
+            /**
+             * @description Response when:
              *     - an existing collaborator is added as a collaborator
              *     - an organization member is added as an individual collaborator
-             *     - an existing team member (whose team is also a repository collaborator) is added as an individual collaborator */
+             *     - an existing team member (whose team is also a repository collaborator) is added as an individual collaborator
+             */
             readonly 204: {
                 headers: {
                     readonly [name: string]: unknown;
@@ -106897,27 +108181,45 @@ export interface operations {
     readonly "dependabot/list-alerts-for-repo": {
         readonly parameters: {
             readonly query?: {
-                /** @description A comma-separated list of states. If specified, only alerts with these states will be returned.
+                /**
+                 * @description A comma-separated list of states. If specified, only alerts with these states will be returned.
                  *
-                 *     Can be: `auto_dismissed`, `dismissed`, `fixed`, `open` */
+                 *     Can be: `auto_dismissed`, `dismissed`, `fixed`, `open`
+                 */
                 readonly state?: components["parameters"]["dependabot-alert-comma-separated-states"];
-                /** @description A comma-separated list of severities. If specified, only alerts with these severities will be returned.
+                /**
+                 * @description A comma-separated list of severities. If specified, only alerts with these severities will be returned.
                  *
-                 *     Can be: `low`, `medium`, `high`, `critical` */
+                 *     Can be: `low`, `medium`, `high`, `critical`
+                 */
                 readonly severity?: components["parameters"]["dependabot-alert-comma-separated-severities"];
-                /** @description A comma-separated list of ecosystems. If specified, only alerts for these ecosystems will be returned.
+                /**
+                 * @description A comma-separated list of ecosystems. If specified, only alerts for these ecosystems will be returned.
                  *
-                 *     Can be: `composer`, `go`, `maven`, `npm`, `nuget`, `pip`, `pub`, `rubygems`, `rust` */
+                 *     Can be: `composer`, `go`, `maven`, `npm`, `nuget`, `pip`, `pub`, `rubygems`, `rust`
+                 */
                 readonly ecosystem?: components["parameters"]["dependabot-alert-comma-separated-ecosystems"];
                 /** @description A comma-separated list of package names. If specified, only alerts for these packages will be returned. */
                 readonly package?: components["parameters"]["dependabot-alert-comma-separated-packages"];
                 /** @description A comma-separated list of full manifest paths. If specified, only alerts for these manifests will be returned. */
                 readonly manifest?: components["parameters"]["dependabot-alert-comma-separated-manifests"];
+                /**
+                 * @description CVE Exploit Prediction Scoring System (EPSS) percentage. Can be specified as:
+                 *     - An exact number (`n`)
+                 *     - Comparators such as `>n`, `<n`, `>=n`, `<=n`
+                 *     - A range like `n..n`, where `n` is a number from 0.0 to 1.0
+                 *
+                 *     Filters the list of alerts based on EPSS percentages. If specified, only alerts with the provided EPSS percentages will be returned.
+                 */
+                readonly epss_percentage?: components["parameters"]["dependabot-alert-comma-separated-epss"];
                 /** @description The scope of the vulnerable dependency. If specified, only alerts with this scope will be returned. */
                 readonly scope?: components["parameters"]["dependabot-alert-scope"];
-                /** @description The property by which to sort the results.
+                /**
+                 * @description The property by which to sort the results.
                  *     `created` means when the alert was created.
-                 *     `updated` means when the alert's state last changed. */
+                 *     `updated` means when the alert's state last changed.
+                 *     `epss_percentage` sorts alerts by the Exploit Prediction Scoring System (EPSS) percentage.
+                 */
                 readonly sort?: components["parameters"]["dependabot-alert-sort"];
                 /** @description The direction to sort the results by. */
                 readonly direction?: components["parameters"]["direction"];
@@ -106935,13 +108237,17 @@ export interface operations {
                 readonly before?: components["parameters"]["pagination-before"];
                 /** @description A cursor, as given in the [Link header](https://docs.github.com/rest/guides/using-pagination-in-the-rest-api#using-link-headers). If specified, the query only searches for results after this cursor. For more information, see "[Using pagination in the REST API](https://docs.github.com/rest/using-the-rest-api/using-pagination-in-the-rest-api)." */
                 readonly after?: components["parameters"]["pagination-after"];
-                /** @description **Deprecated**. The number of results per page (max 100), starting from the first matching result.
+                /**
+                 * @description **Deprecated**. The number of results per page (max 100), starting from the first matching result.
                  *     This parameter must not be used in combination with `last`.
-                 *     Instead, use `per_page` in combination with `after` to fetch the first page of results. */
+                 *     Instead, use `per_page` in combination with `after` to fetch the first page of results.
+                 */
                 readonly first?: components["parameters"]["pagination-first"];
-                /** @description **Deprecated**. The number of results per page (max 100), starting from the last matching result.
+                /**
+                 * @description **Deprecated**. The number of results per page (max 100), starting from the last matching result.
                  *     This parameter must not be used in combination with `first`.
-                 *     Instead, use `per_page` in combination with `before` to fetch the last page of results. */
+                 *     Instead, use `per_page` in combination with `before` to fetch the last page of results.
+                 */
                 readonly last?: components["parameters"]["pagination-last"];
             };
             readonly header?: never;
@@ -106980,10 +108286,12 @@ export interface operations {
                 readonly owner: components["parameters"]["owner"];
                 /** @description The name of the repository without the `.git` extension. The name is not case sensitive. */
                 readonly repo: components["parameters"]["repo"];
-                /** @description The number that identifies a Dependabot alert in its repository.
+                /**
+                 * @description The number that identifies a Dependabot alert in its repository.
                  *     You can find this at the end of the URL for a Dependabot alert within GitHub,
                  *     or in `number` fields in the response from the
-                 *     `GET /repos/{owner}/{repo}/dependabot/alerts` operation. */
+                 *     `GET /repos/{owner}/{repo}/dependabot/alerts` operation.
+                 */
                 readonly alert_number: components["parameters"]["dependabot-alert-number"];
             };
             readonly cookie?: never;
@@ -107013,10 +108321,12 @@ export interface operations {
                 readonly owner: components["parameters"]["owner"];
                 /** @description The name of the repository without the `.git` extension. The name is not case sensitive. */
                 readonly repo: components["parameters"]["repo"];
-                /** @description The number that identifies a Dependabot alert in its repository.
+                /**
+                 * @description The number that identifies a Dependabot alert in its repository.
                  *     You can find this at the end of the URL for a Dependabot alert within GitHub,
                  *     or in `number` fields in the response from the
-                 *     `GET /repos/{owner}/{repo}/dependabot/alerts` operation. */
+                 *     `GET /repos/{owner}/{repo}/dependabot/alerts` operation.
+                 */
                 readonly alert_number: components["parameters"]["dependabot-alert-number"];
             };
             readonly cookie?: never;
@@ -107320,7 +108630,7 @@ export interface operations {
                 /** @description The name of the task for the deployment (e.g., `deploy` or `deploy:migrations`). */
                 readonly task?: string;
                 /** @description The name of the environment that was deployed to (e.g., `staging` or `production`). */
-                readonly environment?: string;
+                readonly environment?: string | null;
                 /** @description The number of results per page (max 100). For more information, see "[Using pagination in the REST API](https://docs.github.com/rest/using-the-rest-api/using-pagination-in-the-rest-api)." */
                 readonly per_page?: components["parameters"]["per-page"];
                 /** @description The page number of the results to fetch. For more information, see "[Using pagination in the REST API](https://docs.github.com/rest/using-the-rest-api/using-pagination-in-the-rest-api)." */
@@ -109030,17 +110340,23 @@ export interface operations {
                          * @enum {string}
                          */
                         readonly type?: "blob" | "tree" | "commit";
-                        /** @description The SHA1 checksum ID of the object in the tree. Also called `tree.sha`. If the value is `null` then the file will be deleted.
+                        /**
+                         * @description The SHA1 checksum ID of the object in the tree. Also called `tree.sha`. If the value is `null` then the file will be deleted.
                          *
-                         *     **Note:** Use either `tree.sha` or `content` to specify the contents of the entry. Using both `tree.sha` and `content` will return an error. */
+                         *     **Note:** Use either `tree.sha` or `content` to specify the contents of the entry. Using both `tree.sha` and `content` will return an error.
+                         */
                         readonly sha?: string | null;
-                        /** @description The content you want this file to have. GitHub will write this blob out and use that SHA for this entry. Use either this, or `tree.sha`.
+                        /**
+                         * @description The content you want this file to have. GitHub will write this blob out and use that SHA for this entry. Use either this, or `tree.sha`.
                          *
-                         *     **Note:** Use either `tree.sha` or `content` to specify the contents of the entry. Using both `tree.sha` and `content` will return an error. */
+                         *     **Note:** Use either `tree.sha` or `content` to specify the contents of the entry. Using both `tree.sha` and `content` will return an error.
+                         */
                         readonly content?: string;
                     }[];
-                    /** @description The SHA1 of an existing Git tree object which will be used as the base for the new tree. If provided, a new Git tree object will be created from entries in the Git tree object pointed to by `base_tree` and entries defined in the `tree` parameter. Entries defined in the `tree` parameter will overwrite items from `base_tree` with the same `path`. If you're creating new changes on a branch, then normally you'd set `base_tree` to the SHA1 of the Git tree object of the current latest commit on the branch you're working on.
-                     *     If not provided, GitHub will create a new Git tree object from only the entries defined in the `tree` parameter. If you create a new commit pointing to such a tree, then all files which were a part of the parent commit's tree and were not defined in the `tree` parameter will be listed as deleted by the new commit. */
+                    /**
+                     * @description The SHA1 of an existing Git tree object which will be used as the base for the new tree. If provided, a new Git tree object will be created from entries in the Git tree object pointed to by `base_tree` and entries defined in the `tree` parameter. Entries defined in the `tree` parameter will overwrite items from `base_tree` with the same `path`. If you're creating new changes on a branch, then normally you'd set `base_tree` to the SHA1 of the Git tree object of the current latest commit on the branch you're working on.
+                     *     If not provided, GitHub will create a new Git tree object from only the entries defined in the `tree` parameter. If you create a new commit pointing to such a tree, then all files which were a part of the parent commit's tree and were not defined in the `tree` parameter will be listed as deleted by the new commit.
+                     */
                     readonly base_tree?: string;
                 };
             };
@@ -111072,7 +112388,7 @@ export interface operations {
         readonly requestBody: {
             readonly content: {
                 readonly "application/json": {
-                    /** @description The sub-issue to remove */
+                    /** @description The id of the sub-issue to remove */
                     readonly sub_issue_id: number;
                 };
             };
@@ -111145,7 +112461,7 @@ export interface operations {
         readonly requestBody: {
             readonly content: {
                 readonly "application/json": {
-                    /** @description The sub-issue to add */
+                    /** @description The id of the sub-issue to add. The sub-issue must belong to the same repository as the parent issue */
                     readonly sub_issue_id: number;
                     /** @description Option that, when true, instructs the operation to replace the sub-issues current parent issue */
                     readonly replace_parent?: boolean;
@@ -111297,9 +112613,11 @@ export interface operations {
                     readonly title?: string;
                     /** @description The contents of the key. */
                     readonly key: string;
-                    /** @description If `true`, the key will only be able to read repository contents. Otherwise, the key will be able to read and write.
+                    /**
+                     * @description If `true`, the key will only be able to read repository contents. Otherwise, the key will be able to read and write.
                      *
-                     *     Deploy keys with write access can perform the same actions as an organization member with admin access, or a collaborator on a personal repository. For more information, see "[Repository permission levels for an organization](https://docs.github.com/articles/repository-permission-levels-for-an-organization/)" and "[Permission levels for a user account repository](https://docs.github.com/articles/permission-levels-for-a-user-account-repository/)." */
+                     *     Deploy keys with write access can perform the same actions as an organization member with admin access, or a collaborator on a personal repository. For more information, see "[Repository permission levels for an organization](https://docs.github.com/articles/repository-permission-levels-for-an-organization/)" and "[Permission levels for a user account repository](https://docs.github.com/articles/permission-levels-for-a-user-account-repository/)."
+                     */
                     readonly read_only?: boolean;
                 };
             };
@@ -114561,10 +115879,11 @@ export interface operations {
                 readonly page?: components["parameters"]["page"];
                 /** @description Include rulesets configured at higher levels that apply to this repository */
                 readonly includes_parents?: boolean;
-                /** @description A comma-separated list of rule targets to filter by.
+                /**
+                 * @description A comma-separated list of rule targets to filter by.
                  *     If provided, only rulesets that apply to the specified targets will be returned.
                  *     For example, `branch,tag,push`.
-                 *      */
+                 */
                 readonly targets?: components["parameters"]["ruleset-targets"];
             };
             readonly header?: never;
@@ -114643,9 +115962,11 @@ export interface operations {
             readonly query?: {
                 /** @description The name of the ref. Cannot contain wildcard characters. Optionally prefix with `refs/heads/` to limit to branches or `refs/tags/` to limit to tags. Omit the prefix to search across all refs. When specified, only rule evaluations triggered for this ref will be returned. */
                 readonly ref?: components["parameters"]["ref-in-query"];
-                /** @description The time period to filter by.
+                /**
+                 * @description The time period to filter by.
                  *
-                 *     For example, `day` will filter for rule suites that occurred in the past 24 hours, and `week` will filter for insights that occurred in the past 7 days (168 hours). */
+                 *     For example, `day` will filter for rule suites that occurred in the past 24 hours, and `week` will filter for insights that occurred in the past 7 days (168 hours).
+                 */
                 readonly time_period?: components["parameters"]["time-period"];
                 /** @description The handle for the GitHub user account to filter on. When specified, only rule evaluations triggered by this actor will be returned. */
                 readonly actor_name?: components["parameters"]["actor-name-in-query"];
@@ -114689,10 +116010,12 @@ export interface operations {
                 readonly owner: components["parameters"]["owner"];
                 /** @description The name of the repository without the `.git` extension. The name is not case sensitive. */
                 readonly repo: components["parameters"]["repo"];
-                /** @description The unique identifier of the rule suite result.
+                /**
+                 * @description The unique identifier of the rule suite result.
                  *     To get this ID, you can use [GET /repos/{owner}/{repo}/rulesets/rule-suites](https://docs.github.com/rest/repos/rule-suites#list-repository-rule-suites)
                  *     for repositories and [GET /orgs/{org}/rulesets/rule-suites](https://docs.github.com/rest/orgs/rule-suites#list-organization-rule-suites)
-                 *     for organizations. */
+                 *     for organizations.
+                 */
                 readonly rule_suite_id: components["parameters"]["rule-suite-id"];
             };
             readonly cookie?: never;
@@ -115520,9 +116843,11 @@ export interface operations {
                      * @enum {string}
                      */
                     readonly state: "error" | "failure" | "pending" | "success";
-                    /** @description The target URL to associate with this status. This URL will be linked from the GitHub UI to allow users to easily see the source of the status.
+                    /**
+                     * @description The target URL to associate with this status. This URL will be linked from the GitHub UI to allow users to easily see the source of the status.
                      *     For example, if your continuous integration system is posting build status, you would want to provide the deep link for the build output for this specific SHA:
-                     *     `http://ci.example.com/user/repo/build/sha` */
+                     *     `http://ci.example.com/user/repo/build/sha`
+                     */
                     readonly target_url?: string | null;
                     /** @description A short description of the status. */
                     readonly description?: string | null;
@@ -115892,7 +117217,7 @@ export interface operations {
         readonly requestBody: {
             readonly content: {
                 readonly "application/json": {
-                    /** @description An array of topics to add to the repository. Pass one or more topics to _replace_ the set of existing topics. Send an empty array (`[]`) to clear all topics from the repository. **Note:** Topic `names` cannot contain uppercase letters. */
+                    /** @description An array of topics to add to the repository. Pass one or more topics to _replace_ the set of existing topics. Send an empty array (`[]`) to clear all topics from the repository. **Note:** Topic `names` will be saved as lowercase. */
                     readonly names: readonly string[];
                 };
             };
@@ -119659,10 +120984,12 @@ export interface operations {
             readonly query: {
                 /** @description The type of supported package. Packages in GitHub's Gradle registry have the type `maven`. Docker images pushed to GitHub's Container registry (`ghcr.io`) have the type `container`. You can use the type `docker` to find images that were pushed to GitHub's Docker registry (`docker.pkg.github.com`), even if these have now been migrated to the Container registry. */
                 readonly package_type: "npm" | "maven" | "rubygems" | "docker" | "nuget" | "container";
-                /** @description The selected visibility of the packages.  This parameter is optional and only filters an existing result set.
+                /**
+                 * @description The selected visibility of the packages.  This parameter is optional and only filters an existing result set.
                  *
                  *     The `internal` visibility is only supported for GitHub Packages registries that allow for granular permissions. For other ecosystems `internal` is synonymous with `private`.
-                 *     For the list of GitHub Packages registries that support granular permissions, see "[About permissions for GitHub Packages](https://docs.github.com/packages/learn-github-packages/about-permissions-for-github-packages#granular-permissions-for-userorganization-scoped-packages)." */
+                 *     For the list of GitHub Packages registries that support granular permissions, see "[About permissions for GitHub Packages](https://docs.github.com/packages/learn-github-packages/about-permissions-for-github-packages#granular-permissions-for-userorganization-scoped-packages)."
+                 */
                 readonly visibility?: components["parameters"]["package-visibility"];
                 /** @description The page number of the results to fetch. For more information, see "[Using pagination in the REST API](https://docs.github.com/rest/using-the-rest-api/using-pagination-in-the-rest-api)." */
                 readonly page?: components["parameters"]["page"];
@@ -119959,10 +121286,12 @@ export interface operations {
             readonly query?: {
                 /** @description Limit results to repositories with the specified visibility. */
                 readonly visibility?: "all" | "public" | "private";
-                /** @description Comma-separated list of values. Can include:
+                /**
+                 * @description Comma-separated list of values. Can include:
                  *      * `owner`: Repositories that are owned by the authenticated user.
                  *      * `collaborator`: Repositories that the user has been added to as a collaborator.
-                 *      * `organization_member`: Repositories that the user has access to through being a member of an organization. This includes every repository on every team that the user is on. */
+                 *      * `organization_member`: Repositories that the user has access to through being a member of an organization. This includes every repository on every team that the user is on.
+                 */
                 readonly affiliation?: string;
                 /** @description Limit results to repositories of the specified type. Will cause a `422` error if used in the same request as **visibility** or **affiliation**. */
                 readonly type?: "all" | "owner" | "public" | "private" | "member";
@@ -121152,10 +122481,12 @@ export interface operations {
             readonly query: {
                 /** @description The type of supported package. Packages in GitHub's Gradle registry have the type `maven`. Docker images pushed to GitHub's Container registry (`ghcr.io`) have the type `container`. You can use the type `docker` to find images that were pushed to GitHub's Docker registry (`docker.pkg.github.com`), even if these have now been migrated to the Container registry. */
                 readonly package_type: "npm" | "maven" | "rubygems" | "docker" | "nuget" | "container";
-                /** @description The selected visibility of the packages.  This parameter is optional and only filters an existing result set.
+                /**
+                 * @description The selected visibility of the packages.  This parameter is optional and only filters an existing result set.
                  *
                  *     The `internal` visibility is only supported for GitHub Packages registries that allow for granular permissions. For other ecosystems `internal` is synonymous with `private`.
-                 *     For the list of GitHub Packages registries that support granular permissions, see "[About permissions for GitHub Packages](https://docs.github.com/packages/learn-github-packages/about-permissions-for-github-packages#granular-permissions-for-userorganization-scoped-packages)." */
+                 *     For the list of GitHub Packages registries that support granular permissions, see "[About permissions for GitHub Packages](https://docs.github.com/packages/learn-github-packages/about-permissions-for-github-packages#granular-permissions-for-userorganization-scoped-packages)."
+                 */
                 readonly visibility?: components["parameters"]["package-visibility"];
                 /** @description The page number of the results to fetch. For more information, see "[Using pagination in the REST API](https://docs.github.com/rest/using-the-rest-api/using-pagination-in-the-rest-api)." */
                 readonly page?: components["parameters"]["page"];

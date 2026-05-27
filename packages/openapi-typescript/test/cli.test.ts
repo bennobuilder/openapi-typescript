@@ -1,7 +1,7 @@
-import { execa } from "execa";
 import fs from "node:fs";
 import os from "node:os";
 import { fileURLToPath } from "node:url";
+import { execa } from "execa";
 import stripAnsi from "strip-ansi";
 import type { TestCase } from "./test-helpers.js";
 
@@ -76,15 +76,23 @@ describe("CLI", () => {
         ci: { timeout: TIMEOUT },
       },
     ],
+    [
+      "snapshot > enum root types filtering",
+      {
+        given: ["./examples/enum-root-types.yaml", "--root-types", "--root-types-no-schema-prefix", "--enum"],
+        want: new URL("./examples/enum-root-types.ts", root),
+        ci: { timeout: TIMEOUT },
+      },
+    ],
   ];
 
   for (const [testName, { given, want, ci }] of tests) {
     test.skipIf(ci?.skipIf)(
       testName,
       async () => {
-        const { stdout } = await execa(cmd, given, { cwd });
+        const { stdout } = await execa(cmd, given, { cwd, stripFinalNewline: false });
         if (want instanceof URL) {
-          expect(stdout).toMatchFileSnapshot(fileURLToPath(want));
+          await expect(stdout).toMatchFileSnapshot(fileURLToPath(want));
         } else {
           expect(stdout).toBe(`${want}\n`);
         }
@@ -97,8 +105,8 @@ describe("CLI", () => {
     "stdin",
     async () => {
       const input = fs.readFileSync(new URL("./examples/stripe-api.yaml", root));
-      const { stdout } = await execa(cmd, { input, cwd });
-      expect(stdout).toMatchFileSnapshot(fileURLToPath(new URL("./examples/stripe-api.ts", root)));
+      const { stdout } = await execa(cmd, { input, cwd, stripFinalNewline: false });
+      await expect(stdout).toMatchFileSnapshot(fileURLToPath(new URL("./examples/stripe-api.ts", root)));
     },
     TIMEOUT,
   );
@@ -119,8 +127,9 @@ describe("CLI", () => {
       async () => {
         const { stdout } = await execa(cmd, ["--properties-required-by-default=true", "./examples/github-api.yaml"], {
           cwd,
+          stripFinalNewline: false,
         });
-        expect(stdout).toMatchFileSnapshot(fileURLToPath(new URL("./examples/github-api-required.ts", root)));
+        await expect(stdout).toMatchFileSnapshot(fileURLToPath(new URL("./examples/github-api-required.ts", root)));
       },
       TIMEOUT,
     );
@@ -134,7 +143,7 @@ describe("CLI", () => {
         cwd: fileURLToPath(cwd),
       });
       for (const schema of ["a", "b", "c"]) {
-        expect(fs.readFileSync(new URL(`./output/${schema}.ts`, cwd), "utf8")).toMatchFileSnapshot(
+        await expect(fs.readFileSync(new URL(`./output/${schema}.ts`, cwd), "utf8")).toMatchFileSnapshot(
           fileURLToPath(new URL("../../../examples/simple-example.ts", cwd)),
         );
       }
@@ -145,8 +154,23 @@ describe("CLI", () => {
         cwd,
       });
       for (const schema of ["a", "b", "c"]) {
-        expect(
+        await expect(
           fs.readFileSync(new URL(`./test/fixtures/redocly-flag/output/${schema}.ts`, root), "utf8"),
+        ).toMatchFileSnapshot(fileURLToPath(new URL("./examples/simple-example.ts", root)));
+      }
+    });
+
+    test("--redocly explicit config path", async () => {
+      const altOutput = new URL("./test/fixtures/redocly-flag/output-alt/", root);
+      fs.rmSync(altOutput, { recursive: true, force: true });
+
+      await execa(cmd, ["--redocly", "test/fixtures/redocly-flag/redocly.alt.yaml"], {
+        cwd,
+      });
+
+      for (const schema of ["a", "b", "c"]) {
+        await expect(
+          fs.readFileSync(new URL(`./test/fixtures/redocly-flag/output-alt/${schema}.ts`, root), "utf8"),
         ).toMatchFileSnapshot(fileURLToPath(new URL("./examples/simple-example.ts", root)));
       }
     });

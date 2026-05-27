@@ -8,9 +8,7 @@ openapi-fetchを他のフレームワークやライブラリと組み合わせ�
 
 ## React + React Query
 
-[React Query](https://tanstack.com/query/latest) は、Reactでopenapi-fetchを使用するための理想的なラッパーです。わずか13 kBのサイズで、クライアントサイドのキャッシュ機能を提供し、クライアントの負担を増やすことなく利用できます。また、その優れた型推論機能により、openapi-fetchの型が最小限の設定で完全に保持されます。
-
-[GitHubでコード例を見る](https://github.com/openapi-ts/openapi-typescript/tree/main/packages/openapi-fetch/examples/react-query)
+See [openapi-react-query](/ja/openapi-react-query/)
 
 ## Next.js
 
@@ -20,7 +18,7 @@ openapi-fetchを他のフレームワークやライブラリと組み合わせ�
 
 ## Svelte / SvelteKit
 
-[SvelteKit](https://kit.svelte.dev) の自動型推論機能は、クライアントサイドでのデータ取得や[ページデータ](https://kit.svelte.dev/docs/load#page-data)の取得において、openapi-fetchの型を簡単に活用できます。また、追加のライブラリを必要とせずに動作します。SvelteKitは、ロード関数内で[カスタムフェッチ](https://kit.svelte.dev/docs/load#making-fetch-requests)を使用することを推奨しており、これは[フェッチオプション](/ja/openapi-fetch/api#fetch-オプション)で実現できます。
+[SvelteKit](https://svelte.dev/docs/kit) の自動型推論機能は、クライアントサイドでのデータ取得や[ページデータ](https://svelte.dev/docs/kit/load#Page-data)の取得において、openapi-fetchの型を簡単に活用できます。また、追加のライブラリを必要とせずに動作します。SvelteKitは、ロード関数内で[カスタムフェッチ](https://svelte.dev/docs/kit/load#Making-fetch-requests)を使用することを推奨しており、これは[フェッチオプション](/ja/openapi-fetch/api#fetch-オプション)で実現できます。
 
 _注: SvelteKitを使用しない場合でも、`src/routes/+page.svelte` 内のルート例は、SvelteKitの機能を使用しておらず、どのようなセットアップにも適用可能です。_
 

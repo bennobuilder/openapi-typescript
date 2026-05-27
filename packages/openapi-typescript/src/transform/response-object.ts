@@ -1,13 +1,13 @@
 import ts from "typescript";
 import {
+  addJSDocComment,
   NEVER,
+  oapiRef,
   QUESTION_TOKEN,
   STRING,
-  UNKNOWN,
-  addJSDocComment,
-  oapiRef,
   tsModifiers,
   tsPropertyIndex,
+  UNKNOWN,
 } from "../lib/ts.js";
 import { createRef, getEntries } from "../lib/utils.js";
 import type { ResponseObject, TransformNodeOptions } from "../types.js";
@@ -84,6 +84,7 @@ export default function transformResponseObject(
           path: createRef([options.path, "content", contentType]),
         }),
       );
+      addJSDocComment(mediaTypeObject, property);
       contentObject.push(property);
     }
   }

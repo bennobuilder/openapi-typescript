@@ -1,5 +1,133 @@
 # openapi-typescript
 
+## 7.13.0
+
+### Minor Changes
+
+- [#2549](https://github.com/openapi-ts/openapi-typescript/pull/2549) [`a690e52`](https://github.com/openapi-ts/openapi-typescript/commit/a690e526b7693479bc2f2f002d71a020fa5e4e16) Thanks [@abumalick](https://github.com/abumalick)! - Add readOnly/writeOnly support via `--read-write-markers` flag. When enabled, readOnly properties are wrapped with `$Read<T>` and writeOnly properties with `$Write<T>`. openapi-fetch uses `Readable<T>` and `Writable<T>` helpers to exclude these properties from responses and request bodies respectively.
+
+## 7.12.0
+
+### Minor Changes
+
+- [#2524](https://github.com/openapi-ts/openapi-typescript/pull/2524) [`697f7fe`](https://github.com/openapi-ts/openapi-typescript/commit/697f7fe8bf3f23bfa36cb29c093a359b562a377e) Thanks [@gunnarvelle](https://github.com/gunnarvelle)! - Added flag to keep casing for exported root types
+
+### Patch Changes
+
+- [#2536](https://github.com/openapi-ts/openapi-typescript/pull/2536) [`e3c05a4`](https://github.com/openapi-ts/openapi-typescript/commit/e3c05a40752b02fcabe63fda88d7e0afae00ab6d) Thanks [@darkbasic](https://github.com/darkbasic)! - Fix `enumValues: true` output for schemas that use `oneOf`/`anyOf` unions by narrowing union types with `Extract<>` before accessing variant-specific properties. This prevents invalid type paths when an accessed property only exists on some union members.
+
+## 7.11.0
+
+### Minor Changes
+
+- [#2433](https://github.com/openapi-ts/openapi-typescript/pull/2433) [`27c9370`](https://github.com/openapi-ts/openapi-typescript/commit/27c9370911b50a981d146fa5c561b90d66dd2c0d) Thanks [@danitt](https://github.com/danitt)! - Conditionally generate TS enums
+
+## 7.10.2
+
+### Patch Changes
+
+- [#2139](https://github.com/openapi-ts/openapi-typescript/pull/2139) [`12f9c29`](https://github.com/openapi-ts/openapi-typescript/commit/12f9c29b7653db3ab5d6beb4ac698ce5b58177aa) Thanks [@darkbasic](https://github.com/darkbasic)! - All kinds of enum related fixes (enums in arrays, in optional props, in unions, in request body, with record types...)
+
+- [#2548](https://github.com/openapi-ts/openapi-typescript/pull/2548) [`4385590`](https://github.com/openapi-ts/openapi-typescript/commit/438559038baa931144768f186e8825f9e84cdb85) Thanks [@mynnx](https://github.com/mynnx)! - Fixes the `--redocly` flag so that it no longer hangs and is able to lookup the Redocly file at a custom path
+
+## 7.10.1
+
+### Patch Changes
+
+- [#2480](https://github.com/openapi-ts/openapi-typescript/pull/2480) [`e04dc65`](https://github.com/openapi-ts/openapi-typescript/commit/e04dc65817a91eb7ceaea1992f0e674e5d885bb2) Thanks [@MatissJanis](https://github.com/MatissJanis)! - Fix multi-line jsdoc comments
+
+## 7.10.0
+
+### Minor Changes
+
+- [#2449](https://github.com/openapi-ts/openapi-typescript/pull/2449) [`bdd5ddb`](https://github.com/openapi-ts/openapi-typescript/commit/bdd5ddb7d5f8463bd0515f0b2d5c98a8a394dabf) Thanks [@kristianjf](https://github.com/kristianjf)! - Add transformProperty hook for property signature modification
+
+- [#2288](https://github.com/openapi-ts/openapi-typescript/pull/2288) [`0f22be2`](https://github.com/openapi-ts/openapi-typescript/commit/0f22be218f0c8050a96f35a6a271b959b2c5a23f) Thanks [@hontas](https://github.com/hontas)! - Add support for patternProperties
+
+## 7.9.1
+
+### Patch Changes
+
+- [#2393](https://github.com/openapi-ts/openapi-typescript/pull/2393) [`6943ccf`](https://github.com/openapi-ts/openapi-typescript/commit/6943ccf216f602f004eb178dd652ffcbafc05346) Thanks [@simon-curtis](https://github.com/simon-curtis)! - Now checking for null & empty string when generating enum description
+
+- [#2375](https://github.com/openapi-ts/openapi-typescript/pull/2375) [`5be22d7`](https://github.com/openapi-ts/openapi-typescript/commit/5be22d7adc8bc36fdfa91f1aa3473919107060f2) Thanks [@ParkerVR](https://github.com/ParkerVR)! - Fix behavior when using enum and export-type flags
+
+## 7.9.0
+
+### Minor Changes
+
+- [#2374](https://github.com/openapi-ts/openapi-typescript/pull/2374) [`c5ebbb8`](https://github.com/openapi-ts/openapi-typescript/commit/c5ebbb8d5a0945c2360a2a147a3256d7e8585020) Thanks [@cmlee-accelins](https://github.com/cmlee-accelins)! - Add JSDoc support for the recommended examples array on JSON Schema objects.
+
+## 7.8.0
+
+### Minor Changes
+
+- [#2310](https://github.com/openapi-ts/openapi-typescript/pull/2310) [`e66b5ce`](https://github.com/openapi-ts/openapi-typescript/commit/e66b5ce63bfcdc57c6ee942e5ed4e7667e64c290) Thanks [@drwpow](https://github.com/drwpow)! - Build package with unbuild to improve CJS support
+
+## 7.7.3
+
+### Patch Changes
+
+- [#2185](https://github.com/openapi-ts/openapi-typescript/pull/2185) [`67889ba`](https://github.com/openapi-ts/openapi-typescript/commit/67889baf7832188f6589e0fb2e3d31a2e6ede257) Thanks [@duncanbeevers](https://github.com/duncanbeevers)! - Fix invalid $ref index into path
+
+## 7.7.2
+
+### Patch Changes
+
+- [#2145](https://github.com/openapi-ts/openapi-typescript/pull/2145) [`d79efae`](https://github.com/openapi-ts/openapi-typescript/commit/d79efaea3385d2421d3d295f69d7036cddb106b5) Thanks [@luhn](https://github.com/luhn)! - Don't remove `null` type if a default is present.
+
+## 7.7.1
+
+### Patch Changes
+
+- [#2260](https://github.com/openapi-ts/openapi-typescript/pull/2260) [`7205e12`](https://github.com/openapi-ts/openapi-typescript/commit/7205e12e07e5fd36a6bb3be44ea911f57bbbeb60) Thanks [@zrosenbauer](https://github.com/zrosenbauer)! - Prevents a `TypeError` due to a bad in operator for `type: "array"` when a `boolean` is set on `items`
+
+## 7.7.0
+
+### Minor Changes
+
+- [#2249](https://github.com/openapi-ts/openapi-typescript/pull/2249) [`7f3f7b6`](https://github.com/openapi-ts/openapi-typescript/commit/7f3f7b65da5ef8caf5304486184118352665eb3f) Thanks [@gzm0](https://github.com/gzm0)! - Add jsdoc comments to response object
+
+### Patch Changes
+
+- [#2199](https://github.com/openapi-ts/openapi-typescript/pull/2199) [`fc3f7f8`](https://github.com/openapi-ts/openapi-typescript/commit/fc3f7f8b9cf52f0d4daf31ed4579d588c5b0f3e6) Thanks [@StefanTerdell](https://github.com/StefanTerdell)! - Fix boolean object property schemas
+
+- [#2152](https://github.com/openapi-ts/openapi-typescript/pull/2152) [`47e4b5e`](https://github.com/openapi-ts/openapi-typescript/commit/47e4b5eb86adc59e3de2a4179741d35a26db61c0) Thanks [@insertmike](https://github.com/insertmike)! - - Fixed --make-paths-enum option transforming the paths URL (`:id` instead of `{id}`)
+
+- [#2241](https://github.com/openapi-ts/openapi-typescript/pull/2241) [`ef23947`](https://github.com/openapi-ts/openapi-typescript/commit/ef239479b5f15fc4c98dd15c72974d4cb8722fb0) Thanks [@stanleyk](https://github.com/stanleyk)! - Replacing `any` with `unknown` in the `ReadonlyArray` type declaration.
+
+## 7.6.1
+
+### Patch Changes
+
+- [#2131](https://github.com/openapi-ts/openapi-typescript/pull/2131) [`41bed98`](https://github.com/openapi-ts/openapi-typescript/commit/41bed98f2ff6b41f4f4759724af2d9582f8c4449) Thanks [@htunnicliff](https://github.com/htunnicliff)! - Update @redocly/openapi-core to fix punycode deprecation bug
+
+## 7.6.0
+
+### Minor Changes
+
+- [#2102](https://github.com/openapi-ts/openapi-typescript/pull/2102) [`0cdfc47`](https://github.com/openapi-ts/openapi-typescript/commit/0cdfc479b981c26ead188f8883b856c0c8e3c841) Thanks [@ViktorPontinen](https://github.com/ViktorPontinen)! - Support generating path params for flaky schemas using --generate-path-params option
+
+## 7.5.2
+
+### Patch Changes
+
+- [#2085](https://github.com/openapi-ts/openapi-typescript/pull/2085) [`2bffe2a`](https://github.com/openapi-ts/openapi-typescript/commit/2bffe2a652864a54c8dc969327e4a8eb4081eb25) Thanks [@drwpow](https://github.com/drwpow)! - Update @redocly/openapi-core to 1.27.0
+
+## 7.5.1
+
+### Patch Changes
+
+- [#2049](https://github.com/openapi-ts/openapi-typescript/pull/2049) [`39f9b2f`](https://github.com/openapi-ts/openapi-typescript/commit/39f9b2fb913eb13817592b22f1bbe35de1bc4c33) Thanks [@duncanbeevers](https://github.com/duncanbeevers)! - Add schema to postTransform options
+
+## 7.5.0
+
+### Minor Changes
+
+- [#2052](https://github.com/openapi-ts/openapi-typescript/pull/2052) [`d2de5c7`](https://github.com/openapi-ts/openapi-typescript/commit/d2de5c7e596d1b427d6d5d629974627456623305) Thanks [@laurenz-glueck](https://github.com/laurenz-glueck)! - brings back --make-paths-enum option to generate ApiPaths enum
+
+- [#2059](https://github.com/openapi-ts/openapi-typescript/pull/2059) [`9e4f61c`](https://github.com/openapi-ts/openapi-typescript/commit/9e4f61c530fe634051fa5c9b25e18a5f9ff1f76f) Thanks [@gduliscouet-ubitransport](https://github.com/gduliscouet-ubitransport)! - Allow all types except UNKNOWN to be nullable
+
 ## 7.4.4
 
 ### Patch Changes
@@ -143,7 +271,6 @@
   Also see [AST Explorer](https://astexplorer.net/)’s `typescript` parser to inspect how TypeScript is interpreted as an AST.
 
 - [`6d1eb32`](https://github.com/openapi-ts/openapi-typescript/commit/6d1eb32e610cb62effbd1a817ae8fc93337126a6) Thanks [@drwpow](https://github.com/drwpow)! - ⚠️ **Breaking**: Changing of several CLI flags and Node.js API options
-
   - The `--auth`, `--httpHeaders`, `--httpMethod`, and `fetch` (Node.js-only) options were all removed from the CLI and Node.js API
     - To migrate, you’ll need to create a [redocly.yaml config](https://redocly.com/docs/cli/configuration/) that specifies your auth options [in the http setting](https://redocly.com/docs/cli/configuration/#resolve-non-public-or-non-remote-urls)
     - You can also set your fetch client in redocly.yaml as well.
@@ -163,12 +290,10 @@
 ### Minor Changes
 
 - [`6d1eb32`](https://github.com/openapi-ts/openapi-typescript/commit/6d1eb32e610cb62effbd1a817ae8fc93337126a6) Thanks [@drwpow](https://github.com/drwpow)! - ✨ **Feature**: automatically validate schemas with Redocly CLI ([docs](https://redocly.com/docs/cli/)). No more need for external tools to report errors! 🎉
-
   - By default, it will only throw on actual schema errors (uses Redocly’s default settings)
   - For stricter linting or custom rules, you can create a [redocly.yaml config](https://redocly.com/docs/cli/configuration/)
 
 - [`312b7ba`](https://github.com/openapi-ts/openapi-typescript/commit/312b7ba03fc0334153d4eeb51d6159f3fc63934e) Thanks [@drwpow](https://github.com/drwpow)! - ✨ **Feature:** allow configuration of schemas via `apis` key in redocly.config.yaml. [See docs](https://openapi-ts.dev/cli/) for more info.
-
   - Any options passed into your [redocly.yaml config](https://redocly.com/docs/cli/configuration/) are respected
 
 - [`6d1eb32`](https://github.com/openapi-ts/openapi-typescript/commit/6d1eb32e610cb62effbd1a817ae8fc93337126a6) Thanks [@drwpow](https://github.com/drwpow)! - ✨ **Feature**: add `enum` option to export top-level enums from schemas

@@ -1,5 +1,5 @@
 import { fileURLToPath } from "node:url";
-import openapiTS, { type OpenAPITSOptions, astToString } from "../src/index.js";
+import openapiTS, { astToString, type OpenAPITSOptions } from "../src/index.js";
 import type { TestCase } from "./test-helpers.js";
 
 describe("3.1 discriminators", () => {
@@ -635,7 +635,7 @@ export type operations = Record<string, never>;`,
       async () => {
         const result = astToString(await openapiTS(given, options));
         if (want instanceof URL) {
-          expect(result).toMatchFileSnapshot(fileURLToPath(want));
+          await expect(result).toMatchFileSnapshot(fileURLToPath(want));
         } else {
           expect(result).toBe(`${want}\n`);
         }

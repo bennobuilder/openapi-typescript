@@ -19,6 +19,7 @@ createClient<paths>(options);
 | `fetch`           | `fetch`         | Fetch instance used for requests (default: `globalThis.fetch`)                                                                          |
 | `querySerializer` | QuerySerializer | (optional) Provide a [querySerializer](#queryserializer)                                                                                |
 | `bodySerializer`  | BodySerializer  | (optional) Provide a [bodySerializer](#bodyserializer)                                                                                  |
+| `pathSerializer`  | PathSerializer  | (optional) Provide a [pathSerializer](#pathserializer)                                                                                  |
 | (Fetch options)   |                 | Any valid fetch option (`headers`, `mode`, `cache`, `signal` …) ([docs](https://developer.mozilla.org/en-US/docs/Web/API/fetch#options) |
 
 ## Fetch options
@@ -35,8 +36,9 @@ client.GET("/my-url", options);
 | `body`            | `{ [name]:value }`                                                | [requestBody](https://spec.openapis.org/oas/latest.html#request-body-object) data for the endpoint                                                                                                                                |
 | `querySerializer` | QuerySerializer                                                   | (optional) Provide a [querySerializer](#queryserializer)                                                                                                                                                                          |
 | `bodySerializer`  | BodySerializer                                                    | (optional) Provide a [bodySerializer](#bodyserializer)                                                                                                                                                                            |
+| `pathSerializer`  | PathSerializer                                                    | (optional) Provide a [pathSerializer](#pathserializer)                                                                                                                                                                            |
 | `parseAs`         | `"json"` \| `"text"` \| `"arrayBuffer"` \| `"blob"` \| `"stream"` | (optional) Parse the response using [a built-in instance method](https://developer.mozilla.org/en-US/docs/Web/API/Response#instance_methods) (default: `"json"`). `"stream"` skips parsing altogether and returns the raw stream. |
-| `baseUrl`         | `string`                                                          | Prefix the fetch URL with this option (e.g. `"https://myapi.dev/v1/"`)                                                                                                                                                              |
+| `baseUrl`         | `string`                                                          | Prefix the fetch URL with this option (e.g. `"https://myapi.dev/v1/"`)                                                                                                                                                            |
 | `fetch`           | `fetch`                                                           | Fetch instance used for requests (default: fetch from `createClient`)                                                                                                                                                             |
 | `middleware`      | `Middleware[]`                                                    | [See docs](/openapi-fetch/middleware-auth)                                                                                                                                                                                        |
 | (Fetch options)   |                                                                   | Any valid fetch option (`headers`, `mode`, `cache`, `signal`, …) ([docs](https://developer.mozilla.org/en-US/docs/Web/API/fetch#options))                                                                                         |
@@ -192,7 +194,49 @@ or when instantiating the client.
 
 :::
 
-## Path serialization
+### URL-encoded body
+
+To send a body request in `application/x-www-form-urlencoded` format, which is commonly used to transmit key-value pairs in APIs like OAuth 2.0, pass the appropriate header and body as an object. `openapi-fetch` will automatically encode the body to the correct format.
+
+```ts
+const { data, error } = await client.POST("/tokens", {
+  body: {
+    clientId: "someClientId",
+    clientSecret: "someClientSecret",
+  },
+  headers: {
+    "Content-Type": "application/x-www-form-urlencoded",
+  },
+});
+```
+
+## pathSerializer
+
+Similar to [querySerializer](#queryserializer) and [bodySerializer](#bodyserializer), `pathSerializer` allows you to customize how path parameters are serialized. This is useful when your API uses a non-standard path serialization format, or you want to change the default behavior.
+
+### Custom Path Serializer
+
+You can provide a custom path serializer when creating the client:
+
+```ts
+const client = createClient({
+  pathSerializer(pathname, pathParams) {
+    let result = pathname;
+    for (const [key, value] of Object.entries(pathParams)) {
+      result = result.replace(`{${key}}`, `[${value}]`);
+    }
+    return result;
+  },
+});
+
+const { data, error } = await client.GET("/users/{id}", {
+  params: { path: { id: 5 } },
+});
+
+// URL: `/users/[5]`
+```
+
+### Default Path Serializer
 
 openapi-fetch supports path serialization as [outlined in the 3.1 spec](https://swagger.io/docs/specification/serialization/#path). This happens automatically, based on the specific format in your OpenAPI schema:
 
@@ -226,9 +270,7 @@ const myMiddleware: Middleware = {
   },
   async onError({ error }) {
     // wrap errors thrown by fetch
-    onError({ error }) {
-      return new Error("Oops, fetch failed", { cause: error });
-    },
+    return new Error("Oops, fetch failed", { cause: error });
   },
 };
 
@@ -268,7 +310,7 @@ And the `onError` callback receives an additional `error` property:
 
 Each middleware callback can return:
 
-- **onRequest**: Either a `Request` to modify the request, or `undefined` to leave it untouched (skip)
+- **onRequest**: A `Request` to modify the request, a `Response` to short-circuit the middleware chain, or `undefined` to leave request untouched (skip)
 - **onResponse**: Either a `Response` to modify the response, or `undefined` to leave it untouched (skip)
 - **onError**: Either an `Error` to modify the error that is thrown, a `Response` which means that the `fetch` call will proceed as successful, or `undefined` to leave the error untouched (skip)
 

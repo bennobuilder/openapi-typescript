@@ -1,26 +1,19 @@
 {
   "name": "openapi-react-query",
   "description": "Fast, type-safe @tanstack/react-query client to work with your OpenAPI schema.",
-  "version": "0.2.8",
+  "version": "0.5.4",
   "author": {
     "name": "Martin Paucot",
     "email": "contact@martin-paucot.fr"
   },
   "license": "MIT",
   "type": "module",
-  "main": "./dist/index.js",
-  "module": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "main": "./dist/index.mjs",
   "exports": {
     ".": {
-      "import": {
-        "types": "./dist/index.d.ts",
-        "default": "./dist/index.js"
-      },
-      "require": {
-        "types": "./dist/index.d.cts",
-        "default": "./dist/index.cjs"
-      }
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs",
+      "default": "./dist/index.mjs"
     },
     "./*": "./*"
   },
@@ -47,39 +40,36 @@
     "tanstack"
   ],
   "scripts": {
-    "build": "pnpm run build:clean && pnpm run build:esm && pnpm run build:cjs",
-    "build:clean": "del-cli dist",
-    "build:esm": "tsc -p tsconfig.build.json",
-    "build:cjs": "esbuild --bundle --platform=node --target=es2019 --outfile=dist/index.cjs --external:typescript src/index.ts",
+    "build": "unbuild",
     "dev": "tsc -p tsconfig.build.json --watch",
     "format": "biome format . --write",
-    "lint": "biome check .",
+    "lint": "pnpm run lint:js && pnpm run lint:ts",
+    "lint:js": "biome check .",
+    "lint:ts": "tsc --noEmit",
     "generate-types": "openapi-typescript test/fixtures/api.yaml -o test/fixtures/api.d.ts",
-    "pretest": "pnpm run generate-types",
-    "test": "pnpm run \"/^test:/\"",
+    "prepack": "pnpm run build",
+    "test": "pnpm run generate-types && pnpm run test:js && pnpm run test:exports",
     "test:js": "vitest run",
-    "test:ts": "tsc --noEmit",
+    "test:exports": "pnpm run build && attw --pack .",
     "version": "pnpm run prepare && pnpm run build"
   },
   "dependencies": {
     "openapi-typescript-helpers": "workspace:^"
   },
   "devDependencies": {
-    "@tanstack/react-query": "^5.62.8",
-    "@testing-library/react": "^16.1.0",
-    "@types/react": "18.3.1",
-    "@vitejs/plugin-react": "^4.3.4",
-    "del-cli": "^5.1.0",
-    "esbuild": "^0.24.0",
-    "execa": "^8.0.1",
-    "msw": "^2.7.0",
+    "@tanstack/react-query": "5.100.9",
+    "@testing-library/react": "16.3.2",
+    "@types/react": "18.3.21",
+    "@vitejs/plugin-react": "5.2.0",
+    "execa": "catalog:",
+    "msw": "2.14.3",
     "openapi-fetch": "workspace:^",
     "openapi-typescript": "workspace:^",
-    "react": "^18.3.1",
-    "react-error-boundary": "^4.1.2"
+    "react": "18.3.1",
+    "react-error-boundary": "6.0.0"
   },
   "peerDependencies": {
-    "@tanstack/react-query": "^5.25.0",
+    "@tanstack/react-query": "^5.80.0",
     "openapi-fetch": "workspace:^"
   }
 }

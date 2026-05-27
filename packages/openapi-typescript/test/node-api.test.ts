@@ -1,6 +1,6 @@
 import { fileURLToPath } from "node:url";
 import ts from "typescript";
-import openapiTS, { COMMENT_HEADER, astToString } from "../src/index.js";
+import openapiTS, { astToString, COMMENT_HEADER } from "../src/index.js";
 import type { OpenAPITSOptions } from "../src/types.js";
 import type { TestCase } from "./test-helpers.js";
 
@@ -58,7 +58,8 @@ export type operations = Record<string, never>;`,
     [
       "input > string > URL",
       {
-        given: "https://raw.githubusercontent.com/Redocly/redocly-cli/main/__tests__/lint/oas3.1/openapi.yaml",
+        given:
+          "https://raw.githubusercontent.com/Redocly/redocly-cli/13e753a4ca008293dab212ad3b70109166bf93c5/__tests__/lint/oas3.1/openapi.yaml",
         want: new URL("simple-example.ts", EXAMPLES_DIR),
         // options: DEFAULT_OPTIONS,
       },
@@ -66,7 +67,9 @@ export type operations = Record<string, never>;`,
     [
       "input > URL > remote",
       {
-        given: new URL("https://raw.githubusercontent.com/Redocly/redocly-cli/main/__tests__/lint/oas3.1/openapi.yaml"),
+        given: new URL(
+          "https://raw.githubusercontent.com/Redocly/redocly-cli/13e753a4ca008293dab212ad3b70109166bf93c5/__tests__/lint/oas3.1/openapi.yaml",
+        ),
         want: new URL("simple-example.ts", EXAMPLES_DIR),
         // options: DEFAULT_OPTIONS,
       },
@@ -537,6 +540,11 @@ export type operations = Record<string, never>;`,
           components: {
             schemas: {
               Date: { type: "string", format: "date-time" },
+              Set: {
+                "x-string-enum-to-set": true,
+                type: "string",
+                enum: ["low", "medium", "high"],
+              },
             },
           },
         },
@@ -546,6 +554,8 @@ export interface components {
     schemas: {
         /** Format: date-time */
         Date: DateOrTime;
+        /** @enum {string} */
+        Set: Set<"low" | "medium" | "high">;
     };
     responses: never;
     parameters: never;
@@ -556,7 +566,7 @@ export interface components {
 export type $defs = Record<string, never>;
 export type operations = Record<string, never>;`,
         options: {
-          postTransform(type, options) {
+          postTransform(_type, options) {
             if (options.path?.includes("Date")) {
               /**
                * Tip: use astexplorer.net to first type out the desired TypeScript,
@@ -565,6 +575,189 @@ export type operations = Record<string, never>;`,
                */
               return ts.factory.createTypeReferenceNode(ts.factory.createIdentifier("DateOrTime"));
             }
+
+            // Previously, in order to access the schema in postTransform,
+            // you could resolve the schema using the path.
+            // Now, the schema is made available directly on the options.
+            // const schema = options.path
+            //   ? options.ctx.resolve<ReferenceObject | SchemaObject>(options.path)
+            //   : undefined;
+            const schema = options.schema;
+
+            if (
+              schema &&
+              !("$ref" in schema) &&
+              Object.hasOwn(schema, "x-string-enum-to-set") &&
+              schema.type === "string" &&
+              schema.enum?.every((enumMember) => {
+                return typeof enumMember === "string";
+              })
+            ) {
+              return ts.factory.createTypeReferenceNode(ts.factory.createIdentifier("Set"), [
+                ts.factory.createUnionTypeNode(
+                  schema.enum.map((value) => {
+                    return ts.factory.createLiteralTypeNode(ts.factory.createStringLiteral(value));
+                  }),
+                ),
+              ]);
+            }
+          },
+        },
+      },
+    ],
+    [
+      "options > transformProperty > JSDoc validation annotations",
+      {
+        given: {
+          openapi: "3.1",
+          info: { title: "Test", version: "1.0" },
+          components: {
+            schemas: {
+              User: {
+                type: "object",
+                properties: {
+                  name: {
+                    type: "string",
+                    minLength: 1,
+                    pattern: "^[a-zA-Z0-9]+$",
+                  },
+                  email: {
+                    type: "string",
+                    format: "email",
+                  },
+                  age: {
+                    type: "integer",
+                    minimum: 0,
+                    maximum: 120,
+                  },
+                },
+                required: ["name", "email"],
+              },
+            },
+          },
+        },
+        want: `export type paths = Record<string, never>;
+export type webhooks = Record<string, never>;
+export interface components {
+    schemas: {
+        User: {
+            /**
+             * @minLength 1
+             * @pattern ^[a-zA-Z0-9]+$
+             */
+            name: string;
+            /**
+             * @format email
+             */
+            /** Format: email */
+            email: string;
+            /**
+             * @minimum 0
+             * @maximum 120
+             */
+            age?: number;
+        };
+    };
+    responses: never;
+    parameters: never;
+    requestBodies: never;
+    headers: never;
+    pathItems: never;
+}
+export type $defs = Record<string, never>;
+export type operations = Record<string, never>;`,
+        options: {
+          transformProperty(property, schemaObject, _options) {
+            const validationTags: string[] = [];
+            const schema = schemaObject as any; // Cast to access validation properties
+
+            if (schema.minLength !== undefined) {
+              validationTags.push(`@minLength ${schema.minLength}`);
+            }
+            if (schema.maxLength !== undefined) {
+              validationTags.push(`@maxLength ${schema.maxLength}`);
+            }
+            if (schema.minimum !== undefined) {
+              validationTags.push(`@minimum ${schema.minimum}`);
+            }
+            if (schema.maximum !== undefined) {
+              validationTags.push(`@maximum ${schema.maximum}`);
+            }
+            if (schema.pattern !== undefined) {
+              validationTags.push(`@pattern ${schema.pattern}`);
+            }
+            if (schema.format !== undefined) {
+              validationTags.push(`@format ${schema.format}`);
+            }
+
+            if (validationTags.length > 0) {
+              // Create a new property signature
+              const newProperty = ts.factory.updatePropertySignature(
+                property,
+                property.modifiers,
+                property.name,
+                property.questionToken,
+                property.type,
+              );
+
+              // Add JSDoc comment using the same format as addJSDocComment
+              const jsDocText = `*\n * ${validationTags.join("\n * ")}\n `;
+
+              ts.addSyntheticLeadingComment(newProperty, ts.SyntaxKind.MultiLineCommentTrivia, jsDocText, true);
+
+              return newProperty;
+            }
+
+            return property;
+          },
+        },
+      },
+    ],
+    [
+      "options > transformProperty > no-op when returning undefined",
+      {
+        given: {
+          openapi: "3.1",
+          info: { title: "Test", version: "1.0" },
+          components: {
+            schemas: {
+              User: {
+                type: "object",
+                properties: {
+                  name: { type: "string" },
+                  email: { type: "string", format: "email" },
+                },
+                required: ["name"],
+              },
+            },
+          },
+        },
+        want: `export type paths = Record<string, never>;
+export type webhooks = Record<string, never>;
+export interface components {
+    schemas: {
+        User: {
+            name: string;
+            /** Format: email */
+            email?: string;
+        };
+    };
+    responses: never;
+    parameters: never;
+    requestBodies: never;
+    headers: never;
+    pathItems: never;
+}
+export type $defs = Record<string, never>;
+export type operations = Record<string, never>;`,
+        options: {
+          transformProperty(property, schemaObject, _options) {
+            const schema = schemaObject as any; // Cast to access validation properties
+            // Only transform properties with minLength, return undefined for others
+            if (schema.minLength === undefined) {
+              return undefined; // Should leave property unchanged
+            }
+            return property;
           },
         },
       },
@@ -797,15 +990,257 @@ export interface components {
     pathItems: never;
 }
 export type $defs = Record<string, never>;
+type FlattenedDeepRequired<T> = {
+    [K in keyof T]-?: FlattenedDeepRequired<T[K] extends unknown[] | undefined | null ? Extract<T[K], unknown[]>[number] : T[K]>;
+};
 type ReadonlyArray<T> = [
     Exclude<T, undefined>
 ] extends [
-    any[]
+    unknown[]
 ] ? Readonly<Exclude<T, undefined>> : Readonly<Exclude<T, undefined>[]>;
-export const pathsUrlGetParametersQueryStatusValues: ReadonlyArray<paths["/url"]["get"]["parameters"]["query"]["status"]> = ["active", "inactive"];
-export const statusValues: ReadonlyArray<components["schemas"]["Status"]> = ["active", "inactive"];
-export const errorCodeValues: ReadonlyArray<components["schemas"]["ErrorCode"]> = [100, 101, 102, 103, 104, 105];
+export const pathsUrlGetParametersQueryStatusValues: ReadonlyArray<FlattenedDeepRequired<paths>["/url"]["get"]["parameters"]["query"]["status"]> = ["active", "inactive"];
+export const statusValues: ReadonlyArray<FlattenedDeepRequired<components>["schemas"]["Status"]> = ["active", "inactive"];
+export const errorCodeValues: ReadonlyArray<FlattenedDeepRequired<components>["schemas"]["ErrorCode"]> = [100, 101, 102, 103, 104, 105];
 export type operations = Record<string, never>;`,
+        options: { enumValues: true },
+      },
+    ],
+    [
+      "options > enumValues with record types",
+      {
+        given: {
+          openapi: "3.1",
+          info: { title: "Test", version: "1.0" },
+          components: {
+            schemas: {
+              ComplexEditKeyDto: {
+                type: "object",
+                properties: {
+                  states: {
+                    type: "object",
+                    additionalProperties: {
+                      type: "string",
+                      enum: ["TRANSLATED", "REVIEWED"],
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+        want: `export type paths = Record<string, never>;
+export type webhooks = Record<string, never>;
+export interface components {
+    schemas: {
+        ComplexEditKeyDto: {
+            states?: {
+                [key: string]: "TRANSLATED" | "REVIEWED";
+            };
+        };
+    };
+    responses: never;
+    parameters: never;
+    requestBodies: never;
+    headers: never;
+    pathItems: never;
+}
+export type $defs = Record<string, never>;
+type FlattenedDeepRequired<T> = {
+    [K in keyof T]-?: FlattenedDeepRequired<T[K] extends unknown[] | undefined | null ? Extract<T[K], unknown[]>[number] : T[K]>;
+};
+type ReadonlyArray<T> = [
+    Exclude<T, undefined>
+] extends [
+    unknown[]
+] ? Readonly<Exclude<T, undefined>> : Readonly<Exclude<T, undefined>[]>;
+export const complexEditKeyDtoStatesValues: ReadonlyArray<FlattenedDeepRequired<components>["schemas"]["ComplexEditKeyDto"]["states"][string]> = ["TRANSLATED", "REVIEWED"];
+export type operations = Record<string, never>;`,
+        options: { enumValues: true },
+      },
+    ],
+    [
+      "options > enumValues with unions",
+      {
+        given: {
+          openapi: "3.1.0",
+          info: {
+            title: "API Portal",
+            version: "1.0.0",
+            description: "This is the **Analytics API** description",
+          },
+          paths: {
+            "/analytics/data": {
+              get: {
+                operationId: "analytics.data",
+                tags: ["Analytics"],
+                responses: {
+                  "400": {
+                    description: "",
+                    content: {
+                      "application/json": {
+                        schema: {
+                          anyOf: [
+                            {
+                              type: "object",
+                              properties: {
+                                message: {
+                                  type: "string",
+                                  enum: ["Bad request. (InvalidFilterException)"],
+                                },
+                                errors: {
+                                  type: "object",
+                                  properties: {
+                                    filters: {
+                                      type: "string",
+                                    },
+                                  },
+                                  required: ["filters"],
+                                },
+                              },
+                              required: ["message", "errors"],
+                            },
+                            {
+                              type: "object",
+                              properties: {
+                                message: {
+                                  type: "string",
+                                  enum: ["Bad request. (InvalidDimensionException)"],
+                                },
+                                errors: {
+                                  type: "object",
+                                  properties: {
+                                    dimensions: {
+                                      type: "array",
+                                      prefixItems: [
+                                        {
+                                          type: "string",
+                                        },
+                                      ],
+                                      minItems: 1,
+                                      maxItems: 1,
+                                      additionalItems: false,
+                                    },
+                                  },
+                                  required: ["dimensions"],
+                                },
+                              },
+                              required: ["message", "errors"],
+                            },
+                            {
+                              type: "object",
+                              properties: {
+                                message: {
+                                  type: "string",
+                                  enum: ["Bad request. (InvalidMetricException)"],
+                                },
+                                errors: {
+                                  type: "object",
+                                  properties: {
+                                    metrics: {
+                                      type: "string",
+                                    },
+                                  },
+                                  required: ["metrics"],
+                                },
+                              },
+                              required: ["message", "errors"],
+                            },
+                          ],
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+        want: `export interface paths {
+    "/analytics/data": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["analytics.data"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+}
+export type webhooks = Record<string, never>;
+export interface components {
+    schemas: never;
+    responses: never;
+    parameters: never;
+    requestBodies: never;
+    headers: never;
+    pathItems: never;
+}
+export type $defs = Record<string, never>;
+export interface operations {
+    "analytics.data": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @enum {string} */
+                        message: "Bad request. (InvalidFilterException)";
+                        errors: {
+                            filters: string;
+                        };
+                    } | {
+                        /** @enum {string} */
+                        message: "Bad request. (InvalidDimensionException)";
+                        errors: {
+                            dimensions: [
+                                string
+                            ];
+                        };
+                    } | {
+                        /** @enum {string} */
+                        message: "Bad request. (InvalidMetricException)";
+                        errors: {
+                            metrics: string;
+                        };
+                    };
+                };
+            };
+        };
+    };
+}
+type FlattenedDeepRequired<T> = {
+    [K in keyof T]-?: FlattenedDeepRequired<T[K] extends unknown[] | undefined | null ? Extract<T[K], unknown[]>[number] : T[K]>;
+};
+type ReadonlyArray<T> = [
+    Exclude<T, undefined>
+] extends [
+    unknown[]
+] ? Readonly<Exclude<T, undefined>> : Readonly<Exclude<T, undefined>[]>;
+export const pathsAnalyticsDataGetResponses400ContentApplicationJsonAnyOf0MessageValues: ReadonlyArray<Extract<FlattenedDeepRequired<paths>["/analytics/data"]["get"]["responses"]["400"]["content"]["application/json"], {
+    message: unknown;
+}>["message"]> = ["Bad request. (InvalidFilterException)"];
+export const pathsAnalyticsDataGetResponses400ContentApplicationJsonAnyOf1MessageValues: ReadonlyArray<Extract<FlattenedDeepRequired<paths>["/analytics/data"]["get"]["responses"]["400"]["content"]["application/json"], {
+    message: unknown;
+}>["message"]> = ["Bad request. (InvalidDimensionException)"];
+export const pathsAnalyticsDataGetResponses400ContentApplicationJsonAnyOf2MessageValues: ReadonlyArray<Extract<FlattenedDeepRequired<paths>["/analytics/data"]["get"]["responses"]["400"]["content"]["application/json"], {
+    message: unknown;
+}>["message"]> = ["Bad request. (InvalidMetricException)"];`,
         options: { enumValues: true },
       },
     ],
@@ -941,6 +1376,433 @@ export type operations = Record<string, never>;`,
         ci: { timeout: 30_000 },
       },
     ],
+    [
+      "options > enumValues with request body enum",
+      {
+        given: {
+          openapi: "3.1",
+          info: { title: "Test", version: "1.0" },
+          paths: {
+            "/test": {
+              get: {
+                requestBody: {
+                  content: {
+                    "application/json": {
+                      schema: {
+                        properties: {
+                          status: {
+                            type: "string",
+                            enum: ["active", "inactive"],
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
+                responses: { 200: { description: "OK" } },
+              },
+            },
+          },
+        },
+        want: `export interface paths {
+    "/test": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": {
+                        /** @enum {string} */
+                        status?: "active" | "inactive";
+                    };
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+}
+export type webhooks = Record<string, never>;
+export interface components {
+    schemas: never;
+    responses: never;
+    parameters: never;
+    requestBodies: never;
+    headers: never;
+    pathItems: never;
+}
+export type $defs = Record<string, never>;
+type FlattenedDeepRequired<T> = {
+    [K in keyof T]-?: FlattenedDeepRequired<T[K] extends unknown[] | undefined | null ? Extract<T[K], unknown[]>[number] : T[K]>;
+};
+type ReadonlyArray<T> = [
+    Exclude<T, undefined>
+] extends [
+    unknown[]
+] ? Readonly<Exclude<T, undefined>> : Readonly<Exclude<T, undefined>[]>;
+export const pathsTestGetRequestBodyContentApplicationJsonStatusValues: ReadonlyArray<FlattenedDeepRequired<paths>["/test"]["get"]["requestBody"]["content"]["application/json"]["status"]> = ["active", "inactive"];
+export type operations = Record<string, never>;`,
+        options: { enumValues: true },
+      },
+    ],
+    // When an enum is within a oneOf/anyOf variant, the generated enumValues type path uses
+    // Extract<> to narrow union types before accessing variant-specific properties.
+    // For example, accessing "nested" on a union where only one variant has that property:
+    // Extract<FlattenedDeepRequired<...>["items"], { nested: unknown }>["nested"]
+    // This ensures valid TypeScript when properties don't exist on all union variants.
+    [
+      "options > enumValues with nested union types",
+      {
+        given: {
+          openapi: "3.1",
+          info: { title: "Test", version: "1.0" },
+          components: {
+            schemas: {
+              Resource: {
+                type: "object",
+                properties: {
+                  items: {
+                    type: "array",
+                    items: {
+                      type: "object",
+                      required: ["id", "type"],
+                      properties: {
+                        id: { type: "string" },
+                      },
+                      oneOf: [
+                        {
+                          type: "object",
+                          properties: {
+                            type: { type: "string", enum: ["simple"] },
+                          },
+                        },
+                        {
+                          type: "object",
+                          properties: {
+                            type: { type: "string", enum: ["complex"] },
+                            nested: {
+                              type: "object",
+                              required: ["code"],
+                              properties: {
+                                code: { type: "string", enum: ["a", "b"] },
+                              },
+                            },
+                          },
+                        },
+                      ],
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+        // The enumValues are exported with type paths that properly handle union types.
+        // The path for "nested.code" uses Extract<> to narrow to the union variant
+        // that has the "nested" property before accessing "code".
+        want: `export type paths = Record<string, never>;
+export type webhooks = Record<string, never>;
+export interface components {
+    schemas: {
+        Resource: {
+            items?: ({
+                id: string;
+            } & ({
+                /** @enum {string} */
+                type?: "simple";
+            } | {
+                /** @enum {string} */
+                type?: "complex";
+                nested?: {
+                    /** @enum {string} */
+                    code: "a" | "b";
+                };
+            }))[];
+        };
+    };
+    responses: never;
+    parameters: never;
+    requestBodies: never;
+    headers: never;
+    pathItems: never;
+}
+export type $defs = Record<string, never>;
+type FlattenedDeepRequired<T> = {
+    [K in keyof T]-?: FlattenedDeepRequired<T[K] extends unknown[] | undefined | null ? Extract<T[K], unknown[]>[number] : T[K]>;
+};
+type ReadonlyArray<T> = [
+    Exclude<T, undefined>
+] extends [
+    unknown[]
+] ? Readonly<Exclude<T, undefined>> : Readonly<Exclude<T, undefined>[]>;
+export const resourceItemsOneOf0TypeValues: ReadonlyArray<Extract<FlattenedDeepRequired<components>["schemas"]["Resource"]["items"], {
+    type: unknown;
+}>["type"]> = ["simple"];
+export const resourceItemsOneOf1TypeValues: ReadonlyArray<Extract<FlattenedDeepRequired<components>["schemas"]["Resource"]["items"], {
+    type: unknown;
+}>["type"]> = ["complex"];
+export const resourceItemsOneOf1NestedCodeValues: ReadonlyArray<Extract<Extract<FlattenedDeepRequired<components>["schemas"]["Resource"]["items"], {
+    nested: unknown;
+}>["nested"], {
+    code: unknown;
+}>["code"]> = ["a", "b"];
+export type operations = Record<string, never>;`,
+        options: { enumValues: true },
+      },
+    ],
+    // Test case: Same property name with different inner schemas.
+    // Both variants have "nested" but with different inner structures.
+    // Extract<> is applied at each property level to handle cases where the inner
+    // schemas differ (e.g., one has "type", the other has "code").
+    [
+      "options > enumValues with same property different inner schemas",
+      {
+        given: {
+          openapi: "3.1",
+          info: { title: "Test", version: "1.0" },
+          components: {
+            schemas: {
+              Resource: {
+                type: "object",
+                properties: {
+                  items: {
+                    type: "array",
+                    items: {
+                      oneOf: [
+                        {
+                          type: "object",
+                          properties: {
+                            nested: {
+                              type: "object",
+                              properties: {
+                                type: { type: "string", enum: ["simple"] },
+                              },
+                              required: ["type"],
+                            },
+                          },
+                          required: ["nested"],
+                        },
+                        {
+                          type: "object",
+                          properties: {
+                            nested: {
+                              type: "object",
+                              properties: {
+                                code: { type: "string", enum: ["a", "b"] },
+                              },
+                              required: ["code"],
+                            },
+                          },
+                          required: ["nested"],
+                        },
+                      ],
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+        want: `export type paths = Record<string, never>;
+export type webhooks = Record<string, never>;
+export interface components {
+    schemas: {
+        Resource: {
+            items?: ({
+                nested: {
+                    /** @enum {string} */
+                    type: "simple";
+                };
+            } | {
+                nested: {
+                    /** @enum {string} */
+                    code: "a" | "b";
+                };
+            })[];
+        };
+    };
+    responses: never;
+    parameters: never;
+    requestBodies: never;
+    headers: never;
+    pathItems: never;
+}
+export type $defs = Record<string, never>;
+type FlattenedDeepRequired<T> = {
+    [K in keyof T]-?: FlattenedDeepRequired<T[K] extends unknown[] | undefined | null ? Extract<T[K], unknown[]>[number] : T[K]>;
+};
+type ReadonlyArray<T> = [
+    Exclude<T, undefined>
+] extends [
+    unknown[]
+] ? Readonly<Exclude<T, undefined>> : Readonly<Exclude<T, undefined>[]>;
+export const resourceItemsOneOf0NestedTypeValues: ReadonlyArray<Extract<Extract<FlattenedDeepRequired<components>["schemas"]["Resource"]["items"], {
+    nested: unknown;
+}>["nested"], {
+    type: unknown;
+}>["type"]> = ["simple"];
+export const resourceItemsOneOf1NestedCodeValues: ReadonlyArray<Extract<Extract<FlattenedDeepRequired<components>["schemas"]["Resource"]["items"], {
+    nested: unknown;
+}>["nested"], {
+    code: unknown;
+}>["code"]> = ["a", "b"];
+export type operations = Record<string, never>;`,
+        options: { enumValues: true },
+      },
+    ],
+    // Test case: Deeply nested unions (UnionA -> UnionB -> Prop).
+    // Validates that Extract<> is applied correctly at multiple levels of nesting,
+    // producing chains like Extract<Extract<Extract<...>["outer"], ...>["inner"], ...>["code"].
+    [
+      "options > enumValues with deeply nested unions",
+      {
+        given: {
+          openapi: "3.1",
+          info: { title: "Test", version: "1.0" },
+          components: {
+            schemas: {
+              Resource: {
+                type: "object",
+                properties: {
+                  outer: {
+                    oneOf: [
+                      {
+                        type: "object",
+                        properties: {
+                          kind: { type: "string", enum: ["typeA"] },
+                          inner: {
+                            oneOf: [
+                              {
+                                type: "object",
+                                properties: {
+                                  variant: { type: "string", enum: ["v1"] },
+                                },
+                                required: ["variant"],
+                              },
+                              {
+                                type: "object",
+                                properties: {
+                                  variant: { type: "string", enum: ["v2"] },
+                                  deep: {
+                                    type: "object",
+                                    properties: {
+                                      code: { type: "string", enum: ["x", "y"] },
+                                    },
+                                    required: ["code"],
+                                  },
+                                },
+                                required: ["variant"],
+                              },
+                            ],
+                          },
+                        },
+                        required: ["kind"],
+                      },
+                      {
+                        type: "object",
+                        properties: {
+                          kind: { type: "string", enum: ["typeB"] },
+                        },
+                        required: ["kind"],
+                      },
+                    ],
+                  },
+                },
+              },
+            },
+          },
+        },
+        want: `export type paths = Record<string, never>;
+export type webhooks = Record<string, never>;
+export interface components {
+    schemas: {
+        Resource: {
+            outer?: {
+                /** @enum {string} */
+                kind: "typeA";
+                inner?: {
+                    /** @enum {string} */
+                    variant: "v1";
+                } | {
+                    /** @enum {string} */
+                    variant: "v2";
+                    deep?: {
+                        /** @enum {string} */
+                        code: "x" | "y";
+                    };
+                };
+            } | {
+                /** @enum {string} */
+                kind: "typeB";
+            };
+        };
+    };
+    responses: never;
+    parameters: never;
+    requestBodies: never;
+    headers: never;
+    pathItems: never;
+}
+export type $defs = Record<string, never>;
+type FlattenedDeepRequired<T> = {
+    [K in keyof T]-?: FlattenedDeepRequired<T[K] extends unknown[] | undefined | null ? Extract<T[K], unknown[]>[number] : T[K]>;
+};
+type ReadonlyArray<T> = [
+    Exclude<T, undefined>
+] extends [
+    unknown[]
+] ? Readonly<Exclude<T, undefined>> : Readonly<Exclude<T, undefined>[]>;
+export const resourceOuterOneOf0KindValues: ReadonlyArray<Extract<FlattenedDeepRequired<components>["schemas"]["Resource"]["outer"], {
+    kind: unknown;
+}>["kind"]> = ["typeA"];
+export const resourceOuterOneOf0InnerOneOf0VariantValues: ReadonlyArray<Extract<Extract<FlattenedDeepRequired<components>["schemas"]["Resource"]["outer"], {
+    inner: unknown;
+}>["inner"], {
+    variant: unknown;
+}>["variant"]> = ["v1"];
+export const resourceOuterOneOf0InnerOneOf1VariantValues: ReadonlyArray<Extract<Extract<FlattenedDeepRequired<components>["schemas"]["Resource"]["outer"], {
+    inner: unknown;
+}>["inner"], {
+    variant: unknown;
+}>["variant"]> = ["v2"];
+export const resourceOuterOneOf0InnerOneOf1DeepCodeValues: ReadonlyArray<Extract<Extract<Extract<FlattenedDeepRequired<components>["schemas"]["Resource"]["outer"], {
+    inner: unknown;
+}>["inner"], {
+    deep: unknown;
+}>["deep"], {
+    code: unknown;
+}>["code"]> = ["x", "y"];
+export const resourceOuterOneOf1KindValues: ReadonlyArray<Extract<FlattenedDeepRequired<components>["schemas"]["Resource"]["outer"], {
+    kind: unknown;
+}>["kind"]> = ["typeB"];
+export type operations = Record<string, never>;`,
+        options: { enumValues: true },
+      },
+    ],
   ];
 
   for (const [testName, { given, want, options, ci }] of tests) {
@@ -949,7 +1811,7 @@ export type operations = Record<string, never>;`,
       async () => {
         const result = astToString(await openapiTS(given, options));
         if (want instanceof URL) {
-          expect(`${COMMENT_HEADER}${result}`).toMatchFileSnapshot(fileURLToPath(want));
+          await expect(`${COMMENT_HEADER}${result}`).toMatchFileSnapshot(fileURLToPath(want));
         } else {
           expect(result).toBe(`${want}\n`);
         }

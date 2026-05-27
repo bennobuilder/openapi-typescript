@@ -102,21 +102,32 @@ describe("transformSchemaObject > string", () => {
       "default + nullable",
       {
         given: { type: ["string", "null"], default: "en" },
-        want: "string",
+        want: "string | null",
       },
     ],
     [
       "default + nullable + enum",
       {
         given: { type: ["string", "null"], enum: ["en", "es", "fr", "de"], default: "en" },
-        want: '"en" | "es" | "fr" | "de"',
+        want: '"en" | "es" | "fr" | "de" | null',
       },
     ],
     [
       "default + nullable (deprecated syntax)",
       {
         given: { type: "string", default: "en", nullable: true },
-        want: "string",
+        want: "string | null",
+      },
+    ],
+    [
+      "enum + additionalProperties",
+      {
+        given: {
+          type: "string",
+          enum: ["A", "B", "C"],
+          additionalProperties: true,
+        },
+        want: `("A" | "B" | "C") | (string & {})`,
       },
     ],
   ];
@@ -127,7 +138,7 @@ describe("transformSchemaObject > string", () => {
       async () => {
         const result = astToString(transformSchemaObject(given, options));
         if (want instanceof URL) {
-          expect(result).toMatchFileSnapshot(fileURLToPath(want));
+          await expect(result).toMatchFileSnapshot(fileURLToPath(want));
         } else {
           expect(result).toBe(`${want}\n`);
         }

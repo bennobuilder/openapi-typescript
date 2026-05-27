@@ -28,13 +28,14 @@ export default function createClient(clientOptions) {
     fetch: baseFetch = globalThis.fetch,
     querySerializer: globalQuerySerializer,
     bodySerializer: globalBodySerializer,
+    pathSerializer: globalPathSerializer,
     headers: baseHeaders,
     requestInitExt = undefined,
     ...baseOptions
   } = { ...clientOptions };
   requestInitExt = supportsRequestInitExt() ? requestInitExt : undefined;
   baseUrl = removeTrailingSlash(baseUrl);
-  const middlewares = [];
+  const globalMiddlewares = [];
 
   /**
    * Per-request fetch (keeps settings created in createClient()
@@ -51,11 +52,14 @@ export default function createClient(clientOptions) {
       parseAs = "json",
       querySerializer: requestQuerySerializer,
       bodySerializer = globalBodySerializer ?? defaultBodySerializer,
+      pathSerializer: requestPathSerializer,
       body,
+      middleware: requestMiddlewares = [],
       ...init
     } = fetchOptions || {};
+    let finalBaseUrl = baseUrl;
     if (localBaseUrl) {
-      baseUrl = removeTrailingSlash(localBaseUrl);
+      finalBaseUrl = removeTrailingSlash(localBaseUrl) ?? baseUrl;
     }
 
     let querySerializer =
@@ -72,29 +76,52 @@ export default function createClient(clientOptions) {
             });
     }
 
-    const serializedBody = body === undefined ? undefined : bodySerializer(body);
+    const pathSerializer = requestPathSerializer || globalPathSerializer || defaultPathSerializer;
 
-    const defaultHeaders =
+    const serializedBody =
+      body === undefined
+        ? undefined
+        : bodySerializer(
+            body,
+            // Note: we declare mergeHeaders() both here and below because it’s a bit of a chicken-or-egg situation:
+            // bodySerializer() needs all headers so we aren’t dropping ones set by the user, however,
+            // the result of this ALSO sets the lowest-priority content-type header. So we re-merge below,
+            // setting the content-type at the very beginning to be overwritten.
+            // Lastly, based on the way headers work, it’s not a simple “present-or-not” check becauase null intentionally un-sets headers.
+            mergeHeaders(baseHeaders, headers, params.header),
+          );
+    const finalHeaders = mergeHeaders(
       // with no body, we should not to set Content-Type
       serializedBody === undefined ||
-      // if serialized body is FormData; browser will correctly set Content-Type & boundary expression
-      serializedBody instanceof FormData
+        // if serialized body is FormData; browser will correctly set Content-Type & boundary expression
+        serializedBody instanceof FormData
         ? {}
         : {
             "Content-Type": "application/json",
-          };
+          },
+      baseHeaders,
+      headers,
+      params.header,
+    );
+
+    // Client level middleware take priority over request-level middleware
+    const finalMiddlewares = [...globalMiddlewares, ...requestMiddlewares];
 
     const requestInit = {
       redirect: "follow",
       ...baseOptions,
       ...init,
       body: serializedBody,
-      headers: mergeHeaders(defaultHeaders, baseHeaders, headers, params.header),
+      headers: finalHeaders,
     };
 
     let id;
     let options;
-    let request = new CustomRequest(createFinalURL(schemaPath, { baseUrl, params, querySerializer }), requestInit);
+    let request = new Request(
+      createFinalURL(schemaPath, { baseUrl: finalBaseUrl, params, querySerializer, pathSerializer }),
+      requestInit,
+    );
+    let response;
 
     /** Add custom parameters to Request object */
     for (const key in init) {
@@ -103,18 +130,19 @@ export default function createClient(clientOptions) {
       }
     }
 
-    if (middlewares.length) {
+    if (finalMiddlewares.length) {
       id = randomID();
 
       // middleware (request)
       options = Object.freeze({
-        baseUrl,
+        baseUrl: finalBaseUrl,
         fetch,
         parseAs,
         querySerializer,
         bodySerializer,
+        pathSerializer,
       });
-      for (const m of middlewares) {
+      for (const m of finalMiddlewares) {
         if (m && typeof m === "object" && typeof m.onRequest === "function") {
           const result = await m.onRequest({
             request,
@@ -124,109 +152,137 @@ export default function createClient(clientOptions) {
             id,
           });
           if (result) {
-            if (!(result instanceof CustomRequest)) {
-              throw new Error("onRequest: must return new Request() when modifying the request");
+            if (result instanceof Request) {
+              request = result;
+            } else if (result instanceof Response) {
+              response = result;
+              break;
+            } else {
+              throw new Error("onRequest: must return new Request() or Response() when modifying the request");
             }
-            request = result;
           }
         }
       }
     }
 
-    // fetch!
-    let response;
-    try {
-      response = await fetch(request, requestInitExt);
-    } catch (error) {
-      let errorAfterMiddleware = error;
-      // middleware (error)
+    if (!response) {
+      // fetch!
+      try {
+        response = await fetch(request, requestInitExt);
+      } catch (error) {
+        let errorAfterMiddleware = error;
+        // middleware (error)
+        // execute in reverse-array order (first priority gets last transform)
+        if (finalMiddlewares.length) {
+          for (let i = finalMiddlewares.length - 1; i >= 0; i--) {
+            const m = finalMiddlewares[i];
+            if (m && typeof m === "object" && typeof m.onError === "function") {
+              const result = await m.onError({
+                request,
+                error: errorAfterMiddleware,
+                schemaPath,
+                params,
+                options,
+                id,
+              });
+              if (result) {
+                // if error is handled by returning a response, skip remaining middleware
+                if (result instanceof Response) {
+                  errorAfterMiddleware = undefined;
+                  response = result;
+                  break;
+                }
+
+                if (result instanceof Error) {
+                  errorAfterMiddleware = result;
+                  continue;
+                }
+
+                throw new Error("onError: must return new Response() or instance of Error");
+              }
+            }
+          }
+        }
+
+        // rethrow error if not handled by middleware
+        if (errorAfterMiddleware) {
+          throw errorAfterMiddleware;
+        }
+      }
+
+      // middleware (response)
       // execute in reverse-array order (first priority gets last transform)
-      if (middlewares.length) {
-        for (let i = middlewares.length - 1; i >= 0; i--) {
-          const m = middlewares[i];
-          if (m && typeof m === "object" && typeof m.onError === "function") {
-            const result = await m.onError({
+      if (finalMiddlewares.length) {
+        for (let i = finalMiddlewares.length - 1; i >= 0; i--) {
+          const m = finalMiddlewares[i];
+          if (m && typeof m === "object" && typeof m.onResponse === "function") {
+            const result = await m.onResponse({
               request,
-              error: errorAfterMiddleware,
+              response,
               schemaPath,
               params,
               options,
               id,
             });
             if (result) {
-              // if error is handled by returning a response, skip remaining middleware
-              if (result instanceof Response) {
-                errorAfterMiddleware = undefined;
-                response = result;
-                break;
+              if (!(result instanceof Response)) {
+                throw new Error("onResponse: must return new Response() when modifying the response");
               }
-
-              if (result instanceof Error) {
-                errorAfterMiddleware = result;
-                continue;
-              }
-
-              throw new Error("onError: must return new Response() or instance of Error");
+              response = result;
             }
-          }
-        }
-      }
-
-      // rethrow error if not handled by middleware
-      if (errorAfterMiddleware) {
-        throw errorAfterMiddleware;
-      }
-    }
-
-    // middleware (response)
-    // execute in reverse-array order (first priority gets last transform)
-    if (middlewares.length) {
-      for (let i = middlewares.length - 1; i >= 0; i--) {
-        const m = middlewares[i];
-        if (m && typeof m === "object" && typeof m.onResponse === "function") {
-          const result = await m.onResponse({
-            request,
-            response,
-            schemaPath,
-            params,
-            options,
-            id,
-          });
-          if (result) {
-            if (!(result instanceof Response)) {
-              throw new Error("onResponse: must return new Response() when modifying the response");
-            }
-            response = result;
           }
         }
       }
     }
 
+    const contentLength = response.headers.get("Content-Length");
     // handle empty content
-    if (response.status === 204 || response.headers.get("Content-Length") === "0") {
+    if (
+      response.status === 204 ||
+      request.method === "HEAD" ||
+      (contentLength === "0" && !response.headers.get("Transfer-Encoding")?.includes("chunked"))
+    ) {
       return response.ok ? { data: undefined, response } : { error: undefined, response };
     }
 
     // parse response (falling back to .text() when necessary)
     if (response.ok) {
-      // if "stream", skip parsing entirely
-      if (parseAs === "stream") {
-        return { data: response.body, response };
-      }
-      return { data: await response[parseAs](), response };
+      const getResponseData = async () => {
+        // if "stream", skip parsing entirely
+        if (parseAs === "stream") {
+          return response.body;
+        }
+
+        if (parseAs === "json" && !contentLength) {
+          // use text() when no content-length is provided to avoid errors parsing empty bodies (200 with no content)
+          const raw = await response.text();
+          return raw ? JSON.parse(raw) : undefined;
+        }
+
+        return await response[parseAs]();
+      };
+      return { data: await getResponseData(), response };
     }
 
-    // handle errors
-    let error = await response.text();
+    // handle errors (use text() when no content-length to safely handle empty bodies from proxies)
+    const raw = await response.text();
+    if (!raw) {
+      // empty error body - return undefined to be consistent with status 204 handling
+      return { error: undefined, response };
+    }
+    let error = raw;
     try {
-      error = JSON.parse(error); // attempt to parse as JSON
+      error = JSON.parse(raw); // attempt to parse as JSON
     } catch {
-      // noop
+      // noop - keep as raw text
     }
     return { error, response };
   }
 
   return {
+    request(method, url, init) {
+      return coreFetch(url, { ...init, method: method.toUpperCase() });
+    },
     /** Call a GET endpoint */
     GET(url, init) {
       return coreFetch(url, { ...init, method: "GET" });
@@ -268,15 +324,15 @@ export default function createClient(clientOptions) {
         if (typeof m !== "object" || !("onRequest" in m || "onResponse" in m || "onError" in m)) {
           throw new Error("Middleware must be an object with one of `onRequest()`, `onResponse() or `onError()`");
         }
-        middlewares.push(m);
+        globalMiddlewares.push(m);
       }
     },
     /** Unregister middleware */
     eject(...middleware) {
       for (const m of middleware) {
-        const i = middlewares.indexOf(m);
+        const i = globalMiddlewares.indexOf(m);
         if (i !== -1) {
-          middlewares.splice(i, 1);
+          globalMiddlewares.splice(i, 1);
         }
       }
     },
@@ -289,30 +345,30 @@ class PathCallForwarder {
     this.url = url;
   }
 
-  GET(init) {
+  GET = (init) => {
     return this.client.GET(this.url, init);
-  }
-  PUT(init) {
+  };
+  PUT = (init) => {
     return this.client.PUT(this.url, init);
-  }
-  POST(init) {
+  };
+  POST = (init) => {
     return this.client.POST(this.url, init);
-  }
-  DELETE(init) {
+  };
+  DELETE = (init) => {
     return this.client.DELETE(this.url, init);
-  }
-  OPTIONS(init) {
+  };
+  OPTIONS = (init) => {
     return this.client.OPTIONS(this.url, init);
-  }
-  HEAD(init) {
+  };
+  HEAD = (init) => {
     return this.client.HEAD(this.url, init);
-  }
-  PATCH(init) {
+  };
+  PATCH = (init) => {
     return this.client.PATCH(this.url, init);
-  }
-  TRACE(init) {
+  };
+  TRACE = (init) => {
     return this.client.TRACE(this.url, init);
-  }
+  };
 }
 
 class PathClientProxyHandler {
@@ -565,9 +621,18 @@ export function defaultPathSerializer(pathname, pathParams) {
  * Serialize body object to string
  * @type {import("./index.js").defaultBodySerializer}
  */
-export function defaultBodySerializer(body) {
+export function defaultBodySerializer(body, headers) {
   if (body instanceof FormData) {
     return body;
+  }
+  if (headers) {
+    const contentType =
+      headers.get instanceof Function
+        ? (headers.get("Content-Type") ?? headers.get("content-type"))
+        : (headers["Content-Type"] ?? headers["content-type"]);
+    if (contentType === "application/x-www-form-urlencoded") {
+      return new URLSearchParams(body).toString();
+    }
   }
   return JSON.stringify(body);
 }
@@ -579,7 +644,7 @@ export function defaultBodySerializer(body) {
 export function createFinalURL(pathname, options) {
   let finalURL = `${options.baseUrl}${pathname}`;
   if (options.params?.path) {
-    finalURL = defaultPathSerializer(finalURL, options.params.path);
+    finalURL = options.pathSerializer(finalURL, options.params.path);
   }
   let search = options.querySerializer(options.params.query ?? {});
   if (search.startsWith("?")) {

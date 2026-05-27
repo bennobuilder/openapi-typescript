@@ -37,7 +37,6 @@ export default defineConfig({
             { text: "Testing", link: "/openapi-fetch/testing" },
             { text: "Examples", link: "/openapi-fetch/examples" },
             { text: "API", link: "/openapi-fetch/api" },
-            { text: "About", link: "/openapi-fetch/about" },
           ],
         },
       ],
@@ -52,7 +51,6 @@ export default defineConfig({
             { text: "Examples", link: "/examples" },
             { text: "Migrating from 6.x", link: "/migration-guide" },
             { text: "Advanced", link: "/advanced" },
-            { text: "About", link: "/about" },
           ],
         },
         {
@@ -66,7 +64,6 @@ export default defineConfig({
             { text: "Testing", link: "/openapi-fetch/testing" },
             { text: "Examples", link: "/openapi-fetch/examples" },
             { text: "API", link: "/openapi-fetch/api" },
-            { text: "About", link: "/openapi-fetch/about" },
           ],
         },
         {
@@ -76,51 +73,12 @@ export default defineConfig({
             { text: "Getting Started", link: "/" },
             { text: "useQuery", link: "/use-query" },
             { text: "useMutation", link: "/use-mutation" },
-            {
-              text: "useSuspenseQuery",
-              link: "/use-suspense-query",
-            },
-            {
-              text: "queryOptions",
-              link: "/query-options",
-            },
-            { text: "About", link: "/about" },
+            { text: "useSuspenseQuery", link: "/use-suspense-query" },
+            { text: "useInfiniteQuery", link: "/use-infinite-query" },
+            { text: "queryOptions", link: "/query-options" },
           ],
         },
-        {
-          text: "swr-openapi",
-          base: "/swr-openapi",
-          items: [
-            { text: "Getting Started", link: "/" },
-            { text: "Hook Builders", link: "/hook-builders" },
-            { text: "useQuery", link: "/use-query" },
-            { text: "useImmutable", link: "/use-immutable" },
-            { text: "useInfinite", link: "/use-infinite" },
-            { text: "useMutate", link: "/use-mutate" },
-            { text: "About", link: "/about" },
-          ],
-        },
-        {
-          text: "openapi-metadata",
-          items: [
-            { text: "Getting Started", link: "/openapi-metadata" },
-            { text: "Decorators", link: "/openapi-metadata/decorators" },
-            { text: "Metadata", link: "/openapi-metadata/metadata" },
-            { text: "Type loader", link: "/openapi-metadata/type-loader" },
-            { text: "UI Integrations", link: "/openapi-metadata/ui" },
-            {
-              text: "Integrations",
-              items: [
-                {
-                  text: "AdonisJS",
-                  link: "https://friendsofadonis.com/docs/openapi",
-                },
-              ],
-            },
-            { text: "Examples", link: "/openapi-metadata/examples" },
-            { text: "About", link: "/openapi-metadata/about" },
-          ],
-        },
+        { text: "About", link: "/about" },
       ],
     },
     search: {
@@ -139,7 +97,7 @@ export default defineConfig({
     ],
     footer: {
       message:
-        'Released under the <a href="https://github.com/openapi-ts/openapi-typescript/blob/main/packages/openapi-typescript/LICENSE">MIT License</a>.',
+        'Released under the <a href="https://github.com/openapi-ts/openapi-typescript/blob/main/packages/openapi-typescript/LICENSE">MIT License</a>. Powered by <a href="https://netlify.com">Netlify</a>.',
     },
   },
 });

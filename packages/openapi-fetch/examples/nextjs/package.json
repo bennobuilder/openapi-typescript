@@ -6,15 +6,15 @@
     "dev": "next dev"
   },
   "dependencies": {
-    "next": "15.0.3",
+    "next": "^15.5.12",
     "openapi-fetch": "workspace:^",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },
   "devDependencies": {
-    "@types/react": "^18.3.12",
-    "@types/react-dom": "^18.3.1",
+    "@types/react": "^18.3.28",
+    "@types/react-dom": "^18.3.7",
     "openapi-typescript": "workspace:^",
-    "typescript": "^5.7.2"
+    "typescript": "catalog:"
   }
 }
